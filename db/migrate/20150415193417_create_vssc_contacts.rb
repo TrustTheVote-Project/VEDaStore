@@ -16,5 +16,6 @@ class CreateVsscContacts < ActiveRecord::Migration
       t.string :hours
       t.timestamps null: false
     end
+    add_index :vssc_contacts, :object_id
   end
 end

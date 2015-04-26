@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-
+gem 'nokogiri'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 # Use sqlite3 as the database for Active Record
@@ -41,5 +41,8 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  
+  gem 'equivalent-xml', "~> 0.5.1", :git => "https://github.com/mbklein/equivalent-xml"
+  gem 'rspec-rails', '~> 3.0'
 end
 

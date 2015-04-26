@@ -14,6 +14,7 @@ class CreateVsscOffices < ActiveRecord::Migration
       t.boolean :unexpired_term
       t.timestamps null: false
     end
+    add_index :vssc_offices, :object_id
     # for office gp scope
     add_reference :vssc_offices, :vssc_gp_unit, index: true
     

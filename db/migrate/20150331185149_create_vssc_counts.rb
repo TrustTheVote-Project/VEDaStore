@@ -2,11 +2,12 @@ class CreateVsscCounts < ActiveRecord::Migration
   def change
     create_table :vssc_counts do |t|
       t.string :type
+      t.string :gp_unit
       t.string :object_id
-      t.integer :ballot_type_id
+      t.integer :ballot_type
       t.string :device_manufacturer
       t.string :device_model
-      t.integer :device_type_id
+      t.integer :device_type
       
       t.integer :ballots_cast
       t.integer :overvotes
@@ -17,5 +18,6 @@ class CreateVsscCounts < ActiveRecord::Migration
       
       t.timestamps null: false
     end
+    add_index :vssc_counts, :object_id
   end
 end

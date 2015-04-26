@@ -12,8 +12,10 @@ class CreateVsscPeople < ActiveRecord::Migration
       t.string :title
       t.string :profession
       t.string :nickname
+      t.string :party
       t.timestamps null: false
     end
+    add_index :vssc_people, :object_id
     add_reference :vssc_people, :vssc_party, index: true
   end
 end

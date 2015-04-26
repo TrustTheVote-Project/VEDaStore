@@ -5,6 +5,7 @@ class CreateVsscContests < ActiveRecord::Migration
       t.string :name
       
       t.string :object_id
+      t.string :contest_gp_scope
       t.string :abbreviation
       t.string :local_contest_code
       t.string :national_contest_code
@@ -16,12 +17,13 @@ class CreateVsscContests < ActiveRecord::Migration
       t.integer :number_elected
       t.integer :votes_allowed
       
-      t.integer :vote_variation_id, index: true
+      t.integer :vote_variation
       
       t.text :full_text
       t.text :summary_text
       
       t.timestamps null: false
     end
+    add_index :vssc_contests, :object_id
   end
 end

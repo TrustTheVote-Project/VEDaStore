@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150415200208) do
+ActiveRecord::Schema.define(version: 20150426200144) do
 
   create_table "districts", force: :cascade do |t|
     t.string   "name"
@@ -101,6 +101,22 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.datetime "updated_at",          null: false
   end
 
+  create_table "vssc_ballot_selections_contests", id: false, force: :cascade do |t|
+    t.integer "ballot_selection_id"
+    t.integer "contest_id"
+  end
+
+  add_index "vssc_ballot_selections_contests", ["ballot_selection_id"], name: "index_vssc_ballot_selections_contests_on_ballot_selection_id"
+  add_index "vssc_ballot_selections_contests", ["contest_id"], name: "index_vssc_ballot_selections_contests_on_contest_id"
+
+  create_table "vssc_ballot_selections_counts", id: false, force: :cascade do |t|
+    t.integer "ballot_selection_id"
+    t.integer "vote_count_id"
+  end
+
+  add_index "vssc_ballot_selections_counts", ["ballot_selection_id"], name: "index_vssc_ballot_selections_counts_on_ballot_selection_id"
+  add_index "vssc_ballot_selections_counts", ["vote_count_id"], name: "index_vssc_ballot_selections_counts_on_vote_count_id"
+
   create_table "vssc_ballot_styles", force: :cascade do |t|
     t.string   "object_id"
     t.string   "ballot_style_id"
@@ -109,12 +125,61 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.integer  "vssc_gp_unit_id"
   end
 
+  add_index "vssc_ballot_styles", ["object_id"], name: "index_vssc_ballot_styles_on_object_id"
   add_index "vssc_ballot_styles", ["vssc_gp_unit_id"], name: "index_vssc_ballot_styles_on_vssc_gp_unit_id"
+
+  create_table "vssc_ballot_styles_elections", id: false, force: :cascade do |t|
+    t.integer "election_id"
+    t.integer "ballot_style_id"
+  end
+
+  add_index "vssc_ballot_styles_elections", ["ballot_style_id"], name: "index_vssc_ballot_styles_elections_on_ballot_style_id"
+  add_index "vssc_ballot_styles_elections", ["election_id"], name: "index_vssc_ballot_styles_elections_on_election_id"
+
+  create_table "vssc_ballot_styles_ordered_contests", id: false, force: :cascade do |t|
+    t.integer "ballot_style_id"
+    t.integer "ordered_contest_id"
+  end
+
+  add_index "vssc_ballot_styles_ordered_contests", ["ballot_style_id"], name: "bsoc_ballot_style_id"
+  add_index "vssc_ballot_styles_ordered_contests", ["ordered_contest_id"], name: "bsoc_ordered_contest_id"
+
+  create_table "vssc_candidate_office_refs", force: :cascade do |t|
+    t.string   "object_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "vssc_offices_id"
+  end
+
+  add_index "vssc_candidate_office_refs", ["object_id"], name: "index_vssc_candidate_office_refs_on_object_id"
+  add_index "vssc_candidate_office_refs", ["vssc_offices_id"], name: "index_vssc_candidate_office_refs_on_vssc_offices_id"
+
+  create_table "vssc_candidate_selection_candidate_refs", force: :cascade do |t|
+    t.string   "object_id"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "vssc_candidate_selection_id"
+  end
+
+  add_index "vssc_candidate_selection_candidate_refs", ["object_id"], name: "cscr_object_id"
+  add_index "vssc_candidate_selection_candidate_refs", ["vssc_candidate_selection_id"], name: "cscr_candidate_selection_id"
+
+  create_table "vssc_candidate_selection_party_refs", force: :cascade do |t|
+    t.string   "national_party_code"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "vssc_candidate_selection_id"
+  end
+
+  add_index "vssc_candidate_selection_party_refs", ["national_party_code"], name: "cspr_national_party_code"
+  add_index "vssc_candidate_selection_party_refs", ["vssc_candidate_selection_id"], name: "cspr_candidate_selection_id"
 
   create_table "vssc_candidates", force: :cascade do |t|
     t.string   "object_id"
     t.string   "ballot_name"
     t.string   "candidate_id"
+    t.string   "party"
+    t.string   "person"
     t.datetime "file_date"
     t.boolean  "is_incumbent"
     t.boolean  "is_top_ticket"
@@ -126,8 +191,17 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.integer  "vssc_person_id"
   end
 
+  add_index "vssc_candidates", ["object_id"], name: "index_vssc_candidates_on_object_id"
   add_index "vssc_candidates", ["vssc_party_id"], name: "index_vssc_candidates_on_vssc_party_id"
   add_index "vssc_candidates", ["vssc_person_id"], name: "index_vssc_candidates_on_vssc_person_id"
+
+  create_table "vssc_candidates_elections", id: false, force: :cascade do |t|
+    t.integer "election_id"
+    t.integer "candidate_id"
+  end
+
+  add_index "vssc_candidates_elections", ["candidate_id"], name: "index_vssc_candidates_elections_on_candidate_id"
+  add_index "vssc_candidates_elections", ["election_id"], name: "index_vssc_candidates_elections_on_election_id"
 
   create_table "vssc_contacts", force: :cascade do |t|
     t.string   "object_id"
@@ -147,10 +221,49 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.datetime "updated_at",         null: false
   end
 
+  add_index "vssc_contacts", ["object_id"], name: "index_vssc_contacts_on_object_id"
+
+  create_table "vssc_contacts_gp_units", id: false, force: :cascade do |t|
+    t.integer "contact_id"
+    t.integer "gp_unit_id"
+  end
+
+  add_index "vssc_contacts_gp_units", ["contact_id"], name: "index_vssc_contacts_gp_units_on_contact_id"
+  add_index "vssc_contacts_gp_units", ["gp_unit_id"], name: "index_vssc_contacts_gp_units_on_gp_unit_id"
+
+  create_table "vssc_contacts_people", id: false, force: :cascade do |t|
+    t.integer "contact_id"
+    t.integer "person_id"
+  end
+
+  add_index "vssc_contacts_people", ["contact_id"], name: "index_vssc_contacts_people_on_contact_id"
+  add_index "vssc_contacts_people", ["person_id"], name: "index_vssc_contacts_people_on_person_id"
+
+  create_table "vssc_contest_total_counts", force: :cascade do |t|
+    t.integer  "contest_id"
+    t.integer  "total_count_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "vssc_contest_total_counts", ["contest_id"], name: "index_vssc_contest_total_counts_on_contest_id"
+  add_index "vssc_contest_total_counts", ["total_count_id"], name: "index_vssc_contest_total_counts_on_total_count_id"
+
+  create_table "vssc_contest_total_counts_by_gp_units", force: :cascade do |t|
+    t.integer  "contest_id"
+    t.integer  "total_count_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "vssc_contest_total_counts_by_gp_units", ["contest_id"], name: "index_vssc_contest_total_counts_by_gp_units_on_contest_id"
+  add_index "vssc_contest_total_counts_by_gp_units", ["total_count_id"], name: "index_vssc_contest_total_counts_by_gp_units_on_total_count_id"
+
   create_table "vssc_contests", force: :cascade do |t|
     t.string   "type"
     t.string   "name"
     t.string   "object_id"
+    t.string   "contest_gp_scope"
     t.string   "abbreviation"
     t.string   "local_contest_code"
     t.string   "national_contest_code"
@@ -160,22 +273,31 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.integer  "total_precincts"
     t.integer  "number_elected"
     t.integer  "votes_allowed"
-    t.integer  "vote_variation_id"
+    t.integer  "vote_variation"
     t.text     "full_text"
     t.text     "summary_text"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
   end
 
-  add_index "vssc_contests", ["vote_variation_id"], name: "index_vssc_contests_on_vote_variation_id"
+  add_index "vssc_contests", ["object_id"], name: "index_vssc_contests_on_object_id"
+
+  create_table "vssc_contests_elections", id: false, force: :cascade do |t|
+    t.integer "election_id"
+    t.integer "contest_id"
+  end
+
+  add_index "vssc_contests_elections", ["contest_id"], name: "index_vssc_contests_elections_on_contest_id"
+  add_index "vssc_contests_elections", ["election_id"], name: "index_vssc_contests_elections_on_election_id"
 
   create_table "vssc_counts", force: :cascade do |t|
     t.string   "type"
+    t.string   "gp_unit"
     t.string   "object_id"
-    t.integer  "ballot_type_id"
+    t.integer  "ballot_type"
     t.string   "device_manufacturer"
     t.string   "device_model"
-    t.integer  "device_type_id"
+    t.integer  "device_type"
     t.integer  "ballots_cast"
     t.integer  "overvotes"
     t.integer  "undervotes"
@@ -184,6 +306,16 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
   end
+
+  add_index "vssc_counts", ["object_id"], name: "index_vssc_counts_on_object_id"
+
+  create_table "vssc_counts_gp_units", id: false, force: :cascade do |t|
+    t.integer "gp_unit_id"
+    t.integer "total_count_id"
+  end
+
+  add_index "vssc_counts_gp_units", ["gp_unit_id"], name: "index_vssc_counts_gp_units_on_gp_unit_id"
+  add_index "vssc_counts_gp_units", ["total_count_id"], name: "index_vssc_counts_gp_units_on_total_count_id"
 
   create_table "vssc_election_reports", force: :cascade do |t|
     t.text     "message"
@@ -201,10 +333,45 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.datetime "updated_at",            null: false
   end
 
+  add_index "vssc_election_reports", ["object_id"], name: "index_vssc_election_reports_on_object_id"
+
+  create_table "vssc_election_reports_gp_units", id: false, force: :cascade do |t|
+    t.integer "election_report_id"
+    t.integer "gp_unit_id"
+  end
+
+  add_index "vssc_election_reports_gp_units", ["election_report_id"], name: "index_vssc_election_reports_gp_units_on_election_report_id"
+  add_index "vssc_election_reports_gp_units", ["gp_unit_id"], name: "index_vssc_election_reports_gp_units_on_gp_unit_id"
+
+  create_table "vssc_election_reports_offices", id: false, force: :cascade do |t|
+    t.integer "election_report_id"
+    t.integer "office_id"
+  end
+
+  add_index "vssc_election_reports_offices", ["election_report_id"], name: "index_vssc_election_reports_offices_on_election_report_id"
+  add_index "vssc_election_reports_offices", ["office_id"], name: "index_vssc_election_reports_offices_on_office_id"
+
+  create_table "vssc_election_reports_parties", id: false, force: :cascade do |t|
+    t.integer "election_report_id"
+    t.integer "party_id"
+  end
+
+  add_index "vssc_election_reports_parties", ["election_report_id"], name: "index_vssc_election_reports_parties_on_election_report_id"
+  add_index "vssc_election_reports_parties", ["party_id"], name: "index_vssc_election_reports_parties_on_party_id"
+
+  create_table "vssc_election_reports_people", id: false, force: :cascade do |t|
+    t.integer "election_report_id"
+    t.integer "person_id"
+  end
+
+  add_index "vssc_election_reports_people", ["election_report_id"], name: "index_vssc_election_reports_people_on_election_report_id"
+  add_index "vssc_election_reports_people", ["person_id"], name: "index_vssc_election_reports_people_on_person_id"
+
   create_table "vssc_elections", force: :cascade do |t|
     t.string   "object_id"
     t.string   "name"
     t.string   "type"
+    t.string   "election_gp_scope"
     t.date     "date"
     t.string   "url"
     t.string   "absentee_count_status"
@@ -214,14 +381,26 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.string   "write_in_count_status"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.integer  "vssc_gp_unit_id"
+    t.integer  "election_report_id"
   end
 
-  add_index "vssc_elections", ["vssc_gp_unit_id"], name: "index_vssc_elections_on_vssc_gp_unit_id"
+  add_index "vssc_elections", ["election_report_id"], name: "index_vssc_elections_on_election_report_id"
+  add_index "vssc_elections", ["object_id"], name: "index_vssc_elections_on_object_id"
+
+  create_table "vssc_gp_sub_unit_refs", force: :cascade do |t|
+    t.string   "object_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "gp_unit_id"
+  end
+
+  add_index "vssc_gp_sub_unit_refs", ["gp_unit_id"], name: "index_vssc_gp_sub_unit_refs_on_gp_unit_id"
+  add_index "vssc_gp_sub_unit_refs", ["object_id"], name: "index_vssc_gp_sub_unit_refs_on_object_id"
 
   create_table "vssc_gp_units", force: :cascade do |t|
     t.string   "type"
     t.string   "object_id"
+    t.string   "gp_unit_id"
     t.string   "url"
     t.string   "local_geo_code"
     t.string   "name"
@@ -230,16 +409,31 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.boolean  "has_reported"
     t.integer  "registered_voters"
     t.integer  "reported_precincts"
-    t.integer  "reporting_unit_type_id"
+    t.integer  "reporting_unit_type"
     t.integer  "total_participating_voters"
     t.integer  "total_precincts"
-    t.integer  "device_type_id"
+    t.integer  "device_type"
     t.string   "manufacturer"
     t.string   "serial_number"
-    t.integer  "district_type_id"
+    t.integer  "district_type"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.integer  "vssc_party_registration_id"
+    t.integer  "vssc_gp_unit_id"
   end
+
+  add_index "vssc_gp_units", ["gp_unit_id"], name: "index_vssc_gp_units_on_gp_unit_id"
+  add_index "vssc_gp_units", ["object_id"], name: "index_vssc_gp_units_on_object_id"
+  add_index "vssc_gp_units", ["vssc_gp_unit_id"], name: "index_vssc_gp_units_on_vssc_gp_unit_id"
+  add_index "vssc_gp_units", ["vssc_party_registration_id"], name: "index_vssc_gp_units_on_vssc_party_registration_id"
+
+  create_table "vssc_gp_units_spatial_dimensions", id: false, force: :cascade do |t|
+    t.integer "gp_unit_id"
+    t.integer "spatial_dimension_id"
+  end
+
+  add_index "vssc_gp_units_spatial_dimensions", ["gp_unit_id"], name: "index_vssc_gp_units_spatial_dimensions_on_gp_unit_id"
+  add_index "vssc_gp_units_spatial_dimensions", ["spatial_dimension_id"], name: "index_vssc_gp_units_spatial_dimensions_on_spatial_dimension_id"
 
   create_table "vssc_offices", force: :cascade do |t|
     t.string   "object_id"
@@ -258,7 +452,18 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.integer  "vssc_gp_unit_id"
   end
 
+  add_index "vssc_offices", ["object_id"], name: "index_vssc_offices_on_object_id"
   add_index "vssc_offices", ["vssc_gp_unit_id"], name: "index_vssc_offices_on_vssc_gp_unit_id"
+
+  create_table "vssc_ordered_contest_ballot_selection_refs", force: :cascade do |t|
+    t.string   "object_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "vssc_ordered_contest_id"
+  end
+
+  add_index "vssc_ordered_contest_ballot_selection_refs", ["object_id"], name: "ocbsr_object_id"
+  add_index "vssc_ordered_contest_ballot_selection_refs", ["vssc_ordered_contest_id"], name: "ocbsr_ordered_contest_id"
 
   create_table "vssc_ordered_contests", force: :cascade do |t|
     t.string   "object_id"
@@ -267,6 +472,7 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.integer  "vssc_contest_id"
   end
 
+  add_index "vssc_ordered_contests", ["object_id"], name: "index_vssc_ordered_contests_on_object_id"
   add_index "vssc_ordered_contests", ["vssc_contest_id"], name: "index_vssc_ordered_contests_on_vssc_contest_id"
 
   create_table "vssc_parties", force: :cascade do |t|
@@ -287,6 +493,7 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.integer  "vssc_party_id"
   end
 
+  add_index "vssc_party_registrations", ["object_id"], name: "index_vssc_party_registrations_on_object_id"
   add_index "vssc_party_registrations", ["vssc_party_id"], name: "index_vssc_party_registrations_on_vssc_party_id"
 
   create_table "vssc_people", force: :cascade do |t|
@@ -301,12 +508,24 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.string   "title"
     t.string   "profession"
     t.string   "nickname"
+    t.string   "party"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "vssc_party_id"
   end
 
+  add_index "vssc_people", ["object_id"], name: "index_vssc_people_on_object_id"
   add_index "vssc_people", ["vssc_party_id"], name: "index_vssc_people_on_vssc_party_id"
+
+  create_table "vssc_reporting_unit_authority_refs", force: :cascade do |t|
+    t.string   "object_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "vssc_gp_unit_id"
+  end
+
+  add_index "vssc_reporting_unit_authority_refs", ["object_id"], name: "ruar_object_id"
+  add_index "vssc_reporting_unit_authority_refs", ["vssc_gp_unit_id"], name: "ruar_reporting_unit_id"
 
   create_table "vssc_spatial_dimensions", force: :cascade do |t|
     t.string   "object_id"
@@ -316,14 +535,19 @@ ActiveRecord::Schema.define(version: 20150415200208) do
     t.integer  "vssc_spatial_extent_id"
   end
 
+  add_index "vssc_spatial_dimensions", ["object_id"], name: "index_vssc_spatial_dimensions_on_object_id"
   add_index "vssc_spatial_dimensions", ["vssc_spatial_extent_id"], name: "index_vssc_spatial_dimensions_on_vssc_spatial_extent_id"
 
   create_table "vssc_spatial_extents", force: :cascade do |t|
     t.string   "object_id"
     t.string   "format"
     t.text     "coordinates"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "vssc_spatial_dimension_id"
   end
+
+  add_index "vssc_spatial_extents", ["object_id"], name: "index_vssc_spatial_extents_on_object_id"
+  add_index "vssc_spatial_extents", ["vssc_spatial_dimension_id"], name: "index_vssc_spatial_extents_on_vssc_spatial_dimension_id"
 
 end

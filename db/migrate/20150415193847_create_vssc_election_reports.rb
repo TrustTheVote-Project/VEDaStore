@@ -14,5 +14,6 @@ class CreateVsscElectionReports < ActiveRecord::Migration
       t.string :vendor_application_id
       t.timestamps null: false
     end
+    add_index :vssc_election_reports, :object_id
   end
 end

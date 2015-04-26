@@ -4,6 +4,7 @@ class CreateVsscElections < ActiveRecord::Migration
       t.string :object_id
       t.string :name
       t.string :type
+      t.string :election_gp_scope
       t.date :date
       t.string :url
       t.string :absentee_count_status
@@ -13,7 +14,7 @@ class CreateVsscElections < ActiveRecord::Migration
       t.string :write_in_count_status
       t.timestamps null: false
     end
-    # for election gp scope
-    add_reference :vssc_elections, :vssc_gp_unit, index: true
+    add_index :vssc_elections, :object_id
+    add_reference :vssc_elections, :election_report, index: true
   end
 end

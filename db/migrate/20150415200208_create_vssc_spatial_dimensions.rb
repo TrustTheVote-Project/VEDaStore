@@ -5,6 +5,8 @@ class CreateVsscSpatialDimensions < ActiveRecord::Migration
       t.text :map
       t.timestamps null: false
     end
+    add_index :vssc_spatial_dimensions, :object_id
+    
     add_reference :vssc_spatial_dimensions, :vssc_spatial_extent, index: true
   end
 end
