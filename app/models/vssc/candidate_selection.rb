@@ -1,6 +1,6 @@
-class Vssc::CandidateSelection < VSSC::BallotSelection
+class Vssc::CandidateSelection < Vssc::BallotSelection
   
-  define_element("Candidate", type: String, method: parties)
+  define_element("Candidate", type: Vssc::CandidateSelectionCandidateRef, method: :candidate_selection_candidate_refs)
   has_many :candidate_selection_candidate_refs
   has_many :candidates, through: :candidate_selection_candidate_refs
   
@@ -9,6 +9,6 @@ class Vssc::CandidateSelection < VSSC::BallotSelection
   has_many :parties, through: :candidate_selection_party_refs
   
   
-  define_attribute("isWriteIn", type: "xsd:boolean")
+  define_attribute("isWriteIn", type: "xsd:boolean", method: :is_write_in)
   
 end

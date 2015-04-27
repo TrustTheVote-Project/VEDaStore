@@ -6,6 +6,6 @@ class CreateVsscCandidateSelectionCandidateRefs < ActiveRecord::Migration
     end
     add_index :vssc_candidate_selection_candidate_refs, :object_id, name: :cscr_object_id
     
-    add_reference :vssc_candidate_selection_candidate_refs, :vssc_candidate_selection, index: {name: :cscr_candidate_selection_id}
+    add_reference :vssc_candidate_selection_candidate_refs, :candidate_selection, index: {name: :cscr_candidate_selection_id}
   end
 end

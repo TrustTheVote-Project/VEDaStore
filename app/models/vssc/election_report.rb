@@ -3,18 +3,18 @@ class Vssc::ElectionReport < ActiveRecord::Base
   include VsscFunctions
   
   define_element("Message")
-  define_element("GPUnitCollection", type: Vssc::GpUnit, method: :gp_units, passthrough: "GPUnit")
-  has_and_belongs_to_many :gp_units
+  define_element("GPUnitCollection", type: Vssc::GPUnit, method: :gp_units, passthrough: "GPUnit")
+  has_and_belongs_to_many :gp_units, :class_name=>"Vssc::GPUnit"
   
-  define_element("PersonCollection", type: Vssc::Person, method: :people, passthrough: "Person")
-  has_and_belongs_to_many :people
   define_element("PartyCollection", type: Vssc::Party, method: :parties, passthrough: "Party")
   has_and_belongs_to_many :parties
+  define_element("PersonCollection", type: Vssc::Person, method: :people, passthrough: "Person")
+  has_and_belongs_to_many :people
   define_element("OfficeCollection", type: Vssc::Office, method: :offices, passthrough: "Office")
   has_and_belongs_to_many :offices
   
   
-  define_element("Election", method: :elections, multiple: true, type: Vssc::Election)
+  define_element("Election", method: :elections, type: Vssc::Election)
   has_many :elections
   
   

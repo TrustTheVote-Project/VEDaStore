@@ -1,4 +1,4 @@
-class Vssc::ReportingUnit < Vssc::GpUnit
+class Vssc::ReportingUnit < Vssc::GPUnit
   define_element("Authority", type: String, method: :reporting_unit_authority_refs)
   #TODO should Authority be it's own class?
   # has_many :authorities, through: :reporting_unit_authority_refs

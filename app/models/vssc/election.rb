@@ -16,7 +16,7 @@ class Vssc::Election < ActiveRecord::Base
   
   define_attribute("object_id", required: true)
   define_attribute("name", required: true)
-  define_attribute("type", required: true, type: Vssc::ElectionType)
+  define_attribute("type", required: true, type: Vssc::ElectionType, method: "election_type")
   define_attribute("date", required: true, type: Date)
   define_attribute("URL")
   

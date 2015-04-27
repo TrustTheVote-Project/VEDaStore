@@ -4,10 +4,10 @@ class CreateVsscCounts < ActiveRecord::Migration
       t.string :type
       t.string :gp_unit
       t.string :object_id
-      t.integer :ballot_type
+      t.string :ballot_type
       t.string :device_manufacturer
       t.string :device_model
-      t.integer :device_type
+      t.string :device_type
       
       t.integer :ballots_cast
       t.integer :overvotes

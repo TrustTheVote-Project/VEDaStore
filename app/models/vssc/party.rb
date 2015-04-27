@@ -3,6 +3,7 @@ class Vssc::Party < ActiveRecord::Base
   
   has_and_belongs_to_many :election_reports
   
+  define_attribute("object_id")
   define_attribute("abbreviation")
   define_attribute("localPartyCode")
   define_attribute("name")

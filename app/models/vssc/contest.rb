@@ -11,7 +11,7 @@ class Vssc::Contest < ActiveRecord::Base
   
   
   define_element("ContestTotalCountsByGPUnit", type: Vssc::TotalCount, method: :total_counts_by_gp_unit)
-  has_many :contest_total_counts_by_gp_unit
+  has_many :contest_total_counts_by_gp_unit, class_name: "Vssc::ContestTotalCountsByGPUnit"
   has_many :total_counts_by_gp_unit, through: :contest_total_counts_by_gp_unit, source: :total_count
   
   define_attribute("object_id", required: true)

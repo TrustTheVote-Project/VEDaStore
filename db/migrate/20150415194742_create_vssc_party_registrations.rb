@@ -6,6 +6,6 @@ class CreateVsscPartyRegistrations < ActiveRecord::Migration
       t.timestamps null: false
     end
     add_index :vssc_party_registrations, :object_id
-    add_reference :vssc_party_registrations, :vssc_party, index: true
+    add_reference :vssc_party_registrations, :party, index: true
   end
 end

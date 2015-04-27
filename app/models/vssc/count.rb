@@ -2,7 +2,7 @@ class Vssc::Count < ActiveRecord::Base
   include VsscFunctions
   
   define_element("GPUnit")
-  #has_one :gp_unit_ref - via GpUnit string object_id
+  #has_one :gp_unit_ref - via GPUnit string object_id
   
   
   define_attribute("object_id", required: true)

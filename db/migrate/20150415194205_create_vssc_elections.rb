@@ -3,7 +3,7 @@ class CreateVsscElections < ActiveRecord::Migration
     create_table :vssc_elections do |t|
       t.string :object_id
       t.string :name
-      t.string :type
+      t.string :election_type
       t.string :election_gp_scope
       t.date :date
       t.string :url

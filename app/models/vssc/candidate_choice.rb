@@ -1,4 +1,4 @@
-class Vssc::CandidateChoice < VSSC::Contest
+class Vssc::CandidateChoice < Vssc::Contest
   define_element("Office")
   define_element("PrimaryParty")
   

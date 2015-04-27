@@ -2,7 +2,10 @@ module VsscFunctions
 	extend ActiveSupport::Concern
   
   included do
-    class_attribute :elements, :xml_attributes, {instance_accessor: false}
+    #class_attribute :elements, :xml_attributes, {instance_accessor: false}
+    class << self
+      attr_accessor :elements, :xml_attributes
+    end
   end
   
   module ClassMethods
@@ -20,63 +23,6 @@ module VsscFunctions
       # this is for those "collections"
       self.send(accessor_group)[element_name][:passthrough] = opts[:passthrough]
       
-      # the rest of this should fall out of AR basics
-      # self.send(accessor_group)[element_name][:type] = element_type
-      # self.send(accessor_group)[element_name][:multiple] = !!opts[:multiple]
-      #
-      # if opts[:required]
-      #   validates_presence_of method_name
-      # end
-      #
-      # if opts[:type]
-      #   validate("#{method_name}_type_validation")
-      #
-      #   define_method "#{method_name}_type_validation" do
-      #     return true if self.send(method_name).blank?
-      #     valid_value = false
-      #     if element_type == "xsd:dateTime" || element_type == "xsd:date"
-      #       valid_value = is_valid_date_time?(self.send(method_name))
-      #     elsif element_type == "xsd:boolean"
-      #       valid_value = [true, false].include?(self.send(method_name))
-      #     else
-      #       valid_value = self.send(method_name).is_a?(element_type)
-      #     end
-      #     if !valid_value
-      #       errors.add(method_name, "All #{element_name} must be #{element_type}")
-      #     end
-      #   end
-      # end
-      #
-      # if opts[:multiple]
-      #   if opts[:min_size]
-      #     validates_length_of method_name, is: opts[:min_size]
-      #   end
-      #   validate("#{method_name}_type_validation")
-      #
-      #   define_method "#{method_name}_type_validation" do
-      #     valid_value = true
-      #     self.send(method_name).each {|val| valid_value = (valid_value && val.is_a?(element_type)) }
-      #     if !valid_value
-      #       errors.add(method_name, "All #{element_name} must be #{element_type}")
-      #     end
-      #   end
-      #
-      #   define_method method_name do
-      #     instance_variable_set("@#{method_name}", instance_variable_get("@#{method_name}") || [])
-      #     instance_variable_get("@#{method_name}")
-      #   end
-      #
-      #   # define_method method_name.pluralize do
-      #   #   self.send(method_name)
-      #   # end
-      #
-      #   define_method "#{method_name}=" do |val|
-      #     raise 'Must be an array' if !val.is_a?(Array)
-      #     instance_variable_set("@#{method_name}", val)
-      #   end
-      # else
-      #   attr_accessor method_name
-      # end
     end
   
     def define_element(element_name, opts={})
@@ -111,8 +57,6 @@ module VsscFunctions
       e = self.new
       e.set_vssc_attributes(node.attributes)
       e.set_vssc_elements(node.elements)
-      puts e.class
-      e.save!
       e
     end
     
@@ -184,7 +128,6 @@ module VsscFunctions
     else
       self.send("#{method}=", value)
     end
-    
   end
   
   def set_vssc_elements(xml_elements)
@@ -196,8 +139,9 @@ module VsscFunctions
           element.elements.each do |pass_through_element|
             set_vssc_element_value(pass_through_element, element.name, method, type)
           end
+        else
+          set_vssc_element_value(element, element.name, method, type)
         end
-        set_vssc_element_value(element, element.name, method, type)
       else
         parse_error "Element #{element.name} not part of #{self.class}"
       end
@@ -205,7 +149,6 @@ module VsscFunctions
   end
   
   def convert_element_to_type(element, element_name, obj_type)
-    puts "CONVERTING"
     if obj_type.to_s == "String"
       element.children.first.to_s
     else
@@ -218,13 +161,12 @@ module VsscFunctions
         elsif element.attributes && element.attributes["xsi:type"]
           specific_type = element.attributes["xsi:type"].value
         end
-        puts specific_type, klass
         if specific_type
           klass = "Vssc::#{specific_type}".constantize
         # klass = "Vssc::#{(element.xml_attributes['type'].value || element.xml_attributes['xsi:type'].value || element_name)}".constantize
         end
       rescue Exception => e
-        puts e
+        puts "Didn't parse element: #{e}"
         klass = obj_type
         klass = klass.constantize if klass.is_a?(String)
       end
@@ -282,29 +224,45 @@ module VsscFunctions
     self.class.name.split('::').last
   end
   
+  def element_xml_node(r, k, options, value)
+    node_name = k
+    if options[:passthrough]
+      node_name = options[:passthrough]
+    end
+    if !value.nil? && (!is_many?(options[:method]) || !value.empty?)       
+      if options[:type].to_s =~ /Vssc::/
+        if !is_many?(options[:method])
+          value = [value]
+        end
+        value.each do |v|
+          v.to_xml_node(r, node_name)
+        end
+      else
+        if !is_many?(options[:method])
+          value = [value]
+        end
+        value.each do |v|
+          r.send(node_name, convert_type_to_value(v, options[:type]))
+        end
+      end
+    end
+  end
+  
   def to_xml_node(xml = nil, node_name = nil)
     node_name ||= class_node_name
     xml ||= Nokogiri::XML::Builder.new
+    
     xml.send(node_name, xml_attributes_hash(node_name)) do |r|
       elements.each do |k, options|
-        puts node_name, self.class, options[:method]
-        value = self.send(options[:method])           
-        if !value.nil? && (!is_many?(options[:method]) || !value.empty?)       
-          if options[:type].to_s =~ /Vssc::/
-            if !is_many?(options[:method])
-              value = [value]
-            end
-            value.each do |v|
-              v.to_xml_node(r, k)
-            end
-          else
-            if !is_many?(options[:method])
-              value = [value]
-            end
-            value.each do |v|
-              r.send(k, convert_type_to_value(v, options[:type]))
+        value = self.send(options[:method])
+        if options[:passthrough] && k != options[:passthrough]
+          if value.any? #passthroughs are always for collections/multiples
+            xml.send(k) do |pr|            
+              self.element_xml_node(pr, k, options, value)
             end
           end
+        else 
+          self.element_xml_node(r, k, options, value)
         end
       end
     end

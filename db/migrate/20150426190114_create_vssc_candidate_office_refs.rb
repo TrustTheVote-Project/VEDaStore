@@ -4,7 +4,7 @@ class CreateVsscCandidateOfficeRefs < ActiveRecord::Migration
       t.string :object_id
       t.timestamps null: false
     end
-    add_reference :vssc_candidate_office_refs, :vssc_offices, index: true
+    add_reference :vssc_candidate_office_refs, :candidate, index: true
     add_index :vssc_candidate_office_refs, :object_id
   end
 end

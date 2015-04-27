@@ -14,7 +14,7 @@ class CreateVsscCandidates < ActiveRecord::Migration
       t.timestamps null: false
     end
     add_index :vssc_candidates, :object_id
-    add_reference :vssc_candidates, :vssc_party, index: true
-    add_reference :vssc_candidates, :vssc_person, index: true
+    add_reference :vssc_candidates, :party, index: true
+    add_reference :vssc_candidates, :person, index: true
   end
 end

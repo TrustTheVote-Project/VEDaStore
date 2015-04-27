@@ -55,8 +55,8 @@ RSpec.describe Vssc::ElectionReport, type: :model do
   
   describe 'XML import/export' do
     it "should import/export equivalent files" do
-      xml_file = './spec/fixtures/ohio2014-simplified.xml'
-      #xml_file = './spec/fixtures/ohio2014.p1622-v29.xml'
+      #xml_file = './spec/fixtures/ohio2014-simplified.xml'
+      xml_file = './spec/fixtures/ohio2014.p1622-v29.xml'
       doc = nil
       e = nil
       File.open(xml_file) do |f|
@@ -65,7 +65,7 @@ RSpec.describe Vssc::ElectionReport, type: :model do
       File.open(xml_file) do |f|
         e = Vssc::ElectionReport.parse_vssc_file(f)
       end
-            
+      
       expect(e.to_xml_node.doc.root).to be_equivalent_to(doc.root)
     end
   end

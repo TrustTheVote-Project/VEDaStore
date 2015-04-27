@@ -16,7 +16,7 @@ class CreateVsscOffices < ActiveRecord::Migration
     end
     add_index :vssc_offices, :object_id
     # for office gp scope
-    add_reference :vssc_offices, :vssc_gp_unit, index: true
+    add_reference :vssc_offices, :gp_unit, index: true
     
   end
 end

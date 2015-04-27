@@ -14,10 +14,12 @@ class CreateVsscContests < ActiveRecord::Migration
       t.integer :sequence_order
       t.integer :total_precincts
       
+      t.string :office
+      t.string :primary_party
       t.integer :number_elected
       t.integer :votes_allowed
       
-      t.integer :vote_variation
+      t.string :vote_variation
       
       t.text :full_text
       t.text :summary_text
