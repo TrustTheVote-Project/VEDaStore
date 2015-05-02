@@ -1,0 +1,29 @@
+%h1= @jurisdiction.name
+%p= @jurisdiction.contact_info
+
+.districts
+  %h3 Districts
+  - @jurisdiction.districts.each do |d|
+    %div[d]
+      .row
+        .name.col-md-3= d.name
+        .district_type.col-md-3= d.district_type
+        .ocd_id.col-md-6= d.ocd_object.try(:ocd_id)
+      .reporting_units.accordion{data: {accodrion: true }}
+        %a{data: {toggle: :collapse}, href: "#district-#{d.id}"} Precincts
+        .well.collapse{id: "district-#{d.id}"}
+          - d.reporting_units.each do |ru|
+            .row[ru]
+              .col-md-3 &nbsp;
+              .name.col-md-3= ru.name
+              .ocd_id.col-md-6= ru.ocd_object.try(:ocd_id)
+    
+
+
+
+= semantic_form_for @jurisdiction do |f|
+  = f.inputs do
+    = f.input :background_csv, as: :file
+  = f.actions do
+    = f.action :submit, :label=>"Upload"
+
