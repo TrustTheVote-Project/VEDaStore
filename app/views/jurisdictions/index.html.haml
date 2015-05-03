@@ -1,8 +1,13 @@
-%h1 Jurisdictions
-= link_to "Add jurisdiction", new_jurisdiction_path
+.container
+  .row
+    .col-md-12
+      %h1 Jurisdictions
+    .col-md-12
+      = link_to "Add jurisdiction", new_jurisdiction_path
 
-- @jurisdictions.each do |j|
-  %div[j]= j.name
+  - @jurisdictions.each do |j|
+    .row[j]
+      .col-md-12= link_to j.name, jurisdiction_path(j)
   
 
     

@@ -1,0 +1,2 @@
+module Vssc::ElectionReportsControllerHelper
+end

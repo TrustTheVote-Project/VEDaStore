@@ -27,9 +27,14 @@ class JurisdictionsController < ApplicationController
     @jurisdiction=Jurisdiction.find(params[:id])
   end
   
+  def vssc_export
+    render xml: Jurisdiction.find(params[:id]).to_vssc_xml.to_xml
+  end
+  
 private
     def jurisdiction_params
-      params.require(:jurisdiction).permit(:name, :contact_info, :background_csv)
+      params.require(:jurisdiction).permit(:name, :state, :contact_info, 
+      :background_csv, :vssc_election_report, :hart_election_report)
     end
   
 end

@@ -1,10 +1,15 @@
 require 'csv'
+require 'fileutils'
+require 'zip'
 
 class Jurisdiction < ActiveRecord::Base
+  
+  belongs_to :state
   
   has_many :districts, :dependent=>:destroy
   has_many :reporting_units, :dependent=>:destroy
   
+  has_many :election_report_uploads, :dependent=>:destroy
   
   CSV_HEADERs = [
     "TYPE", #ignored
@@ -48,13 +53,35 @@ class Jurisdiction < ActiveRecord::Base
   # t.datetime "updated_at",    null: false
   # t.integer  "ocd_object_id" - this is for "parent" levels (maybe unnecessary)
 
-  def background_csv
-    @background_csv
-  end
-    
+  attr_reader :background_csv, :hart_election_report, :vssc_election_report
   def background_csv=(file)
     @background_csv=file
     load_from_csv(file.read)
+  end
+  def vssc_election_report=(file)
+    eru = ElectionReportUpload.new(source_type: "VSSC XML", file_name: file.original_filename)
+    eru.election_report = Vssc::ElectionReport.parse_vssc_file(file)
+    self.election_report_uploads << eru
+    self.save!
+  end
+  def hart_election_report=(zip_file)
+    # TODO: handle zip-file differences better
+    dest = Rails.root.join('zip_uploads', Time.now.getutc.to_s)
+    FileUtils.mkdir_p(dest)
+    Zip::File.open(zip_file.path) do |zip_file|
+      zip_file.each do |entry|
+        puts "Extracting #{entry.name}"
+        entry.extract(dest.join(entry.name))
+      end
+    end
+    eru = ElectionReportUpload.new(source_type: "Hart ZIP", file_name: zip_file.original_filename)
+
+    eru.jurisdiction = self
+    eru.build_election_report
+    eru.election_report.parse_hart_dir(dest.join(zip_file.original_filename.gsub(".zip", '')))
+    eru.save!
+    
+    # delete from the hart file
   end
     
   def load_from_csv_file(filename)
@@ -141,6 +168,14 @@ class Jurisdiction < ActiveRecord::Base
     end
     
     self.save!
+  end
+  
+  def state_abbreviation
+    state ? state.abbreviation : nil
+  end
+  
+  def to_vssc_xml
+    Vssc::ElectionReport.from_jurisdiction(self).to_xml_node
   end
   
 end

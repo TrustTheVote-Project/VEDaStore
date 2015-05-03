@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150426200144) do
+ActiveRecord::Schema.define(version: 20150503012731) do
 
   create_table "districts", force: :cascade do |t|
     t.string   "name"
@@ -34,12 +34,25 @@ ActiveRecord::Schema.define(version: 20150426200144) do
   add_index "districts_reporting_units", ["district_id"], name: "index_districts_reporting_units_on_district_id"
   add_index "districts_reporting_units", ["reporting_unit_id"], name: "index_districts_reporting_units_on_reporting_unit_id"
 
+  create_table "election_report_uploads", force: :cascade do |t|
+    t.integer  "election_report_id"
+    t.integer  "jurisdiction_id"
+    t.string   "file_name"
+    t.string   "source_type"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
   create_table "jurisdictions", force: :cascade do |t|
     t.string   "name"
+    t.string   "abbreviation"
     t.text     "contact_info"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.integer  "state_id"
   end
+
+  add_index "jurisdictions", ["state_id"], name: "index_jurisdictions_on_state_id"
 
   create_table "ocd_objects", force: :cascade do |t|
     t.string   "name"
@@ -86,20 +99,29 @@ ActiveRecord::Schema.define(version: 20150426200144) do
   add_index "shapes", ["ocd_object_id"], name: "index_shapes_on_ocd_object_id"
   add_index "shapes", ["shape_source_id"], name: "index_shapes_on_shape_source_id"
 
+  create_table "states", force: :cascade do |t|
+    t.string   "abbreviation"
+    t.string   "name"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
   create_table "vssc_ballot_selections", force: :cascade do |t|
     t.string   "object_id"
     t.string   "ballot_selection_id"
     t.string   "type"
-    t.string   "abbreviation"
-    t.string   "localPartyCode"
-    t.string   "name"
-    t.string   "nationalPartyCode"
-    t.string   "statePartyCode"
     t.string   "selection"
     t.boolean  "is_write_in"
+    t.string   "abbreviation"
+    t.string   "local_party_code"
+    t.string   "name"
+    t.string   "national_party_code"
+    t.string   "state_party_code"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
   end
+
+  add_index "vssc_ballot_selections", ["object_id"], name: "index_vssc_ballot_selections_on_object_id"
 
   create_table "vssc_ballot_selections_contests", id: false, force: :cascade do |t|
     t.integer "ballot_selection_id"
@@ -116,6 +138,14 @@ ActiveRecord::Schema.define(version: 20150426200144) do
 
   add_index "vssc_ballot_selections_counts", ["ballot_selection_id"], name: "index_vssc_ballot_selections_counts_on_ballot_selection_id"
   add_index "vssc_ballot_selections_counts", ["vote_count_id"], name: "index_vssc_ballot_selections_counts_on_vote_count_id"
+
+  create_table "vssc_ballot_selections_election_reports", id: false, force: :cascade do |t|
+    t.integer "election_report_id"
+    t.integer "party_id"
+  end
+
+  add_index "vssc_ballot_selections_election_reports", ["election_report_id"], name: "bser_election_report_id"
+  add_index "vssc_ballot_selections_election_reports", ["party_id"], name: "bser_party_id"
 
   create_table "vssc_ballot_styles", force: :cascade do |t|
     t.string   "object_id"
@@ -187,12 +217,10 @@ ActiveRecord::Schema.define(version: 20150426200144) do
     t.string   "status"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-    t.integer  "party_id"
     t.integer  "person_id"
   end
 
   add_index "vssc_candidates", ["object_id"], name: "index_vssc_candidates_on_object_id"
-  add_index "vssc_candidates", ["party_id"], name: "index_vssc_candidates_on_party_id"
   add_index "vssc_candidates", ["person_id"], name: "index_vssc_candidates_on_person_id"
 
   create_table "vssc_candidates_elections", id: false, force: :cascade do |t|
@@ -353,14 +381,6 @@ ActiveRecord::Schema.define(version: 20150426200144) do
   add_index "vssc_election_reports_offices", ["election_report_id"], name: "index_vssc_election_reports_offices_on_election_report_id"
   add_index "vssc_election_reports_offices", ["office_id"], name: "index_vssc_election_reports_offices_on_office_id"
 
-  create_table "vssc_election_reports_parties", id: false, force: :cascade do |t|
-    t.integer "election_report_id"
-    t.integer "party_id"
-  end
-
-  add_index "vssc_election_reports_parties", ["election_report_id"], name: "index_vssc_election_reports_parties_on_election_report_id"
-  add_index "vssc_election_reports_parties", ["party_id"], name: "index_vssc_election_reports_parties_on_party_id"
-
   create_table "vssc_election_reports_people", id: false, force: :cascade do |t|
     t.integer "election_report_id"
     t.integer "person_id"
@@ -438,6 +458,7 @@ ActiveRecord::Schema.define(version: 20150426200144) do
   create_table "vssc_offices", force: :cascade do |t|
     t.string   "object_id"
     t.string   "name"
+    t.string   "office_gp_scope"
     t.datetime "filing_date"
     t.boolean  "incumbent_running"
     t.string   "local_office_code"
@@ -449,10 +470,8 @@ ActiveRecord::Schema.define(version: 20150426200144) do
     t.boolean  "unexpired_term"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
-    t.integer  "gp_unit_id"
   end
 
-  add_index "vssc_offices", ["gp_unit_id"], name: "index_vssc_offices_on_gp_unit_id"
   add_index "vssc_offices", ["object_id"], name: "index_vssc_offices_on_object_id"
 
   create_table "vssc_ordered_contest_ballot_selection_refs", force: :cascade do |t|
@@ -490,14 +509,13 @@ ActiveRecord::Schema.define(version: 20150426200144) do
 
   create_table "vssc_party_registrations", force: :cascade do |t|
     t.string   "object_id"
+    t.string   "party"
     t.integer  "count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "party_id"
   end
 
   add_index "vssc_party_registrations", ["object_id"], name: "index_vssc_party_registrations_on_object_id"
-  add_index "vssc_party_registrations", ["party_id"], name: "index_vssc_party_registrations_on_party_id"
 
   create_table "vssc_people", force: :cascade do |t|
     t.string   "object_id"
@@ -514,11 +532,9 @@ ActiveRecord::Schema.define(version: 20150426200144) do
     t.string   "party"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.integer  "party_id"
   end
 
   add_index "vssc_people", ["object_id"], name: "index_vssc_people_on_object_id"
-  add_index "vssc_people", ["party_id"], name: "index_vssc_people_on_party_id"
 
   create_table "vssc_reporting_unit_authority_refs", force: :cascade do |t|
     t.string   "object_id"

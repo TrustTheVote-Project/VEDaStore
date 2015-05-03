@@ -3,6 +3,7 @@ class CreateVsscOffices < ActiveRecord::Migration
     create_table :vssc_offices do |t|
       t.string :object_id
       t.string :name
+      t.string :office_gp_scope
       t.datetime :filing_date
       t.boolean :incumbent_running
       t.string :local_office_code
@@ -16,7 +17,7 @@ class CreateVsscOffices < ActiveRecord::Migration
     end
     add_index :vssc_offices, :object_id
     # for office gp scope
-    add_reference :vssc_offices, :gp_unit, index: true
+    # add_reference :vssc_offices, :gp_unit, index: true
     
   end
 end

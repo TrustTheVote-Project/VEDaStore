@@ -1,4 +1,4 @@
-class Vssc::Party < ActiveRecord::Base
+class Vssc::Party < Vssc::BallotSelection
   include VsscFunctions
   
   has_and_belongs_to_many :election_reports

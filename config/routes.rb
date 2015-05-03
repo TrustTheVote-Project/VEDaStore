@@ -1,6 +1,13 @@
 Rails.application.routes.draw do
   
-  resources :jurisdictions
+  resources :jurisdictions do
+    member do 
+      get :vssc_export, format: :xml
+    end
+  end
+  namespace :vssc do
+    resources :election_reports, only: :show
+  end
   root 'jurisdictions#index'
   
   # The priority is based upon order of creation: first created -> highest priority.

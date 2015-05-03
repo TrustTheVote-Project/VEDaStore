@@ -2,7 +2,7 @@ class Vssc::Contest < ActiveRecord::Base
   include VsscFunctions
   
   define_element("BallotSelection", type: Vssc::BallotSelection, method: :ballot_selections)
-  has_and_belongs_to_many :ballot_selections
+  has_and_belongs_to_many :ballot_selections, class_name: "Vssc::BallotSelection"
   
   define_element("ContestGPScope")
   define_element("ContestTotalCounts", type: Vssc::TotalCount, method: :total_counts)

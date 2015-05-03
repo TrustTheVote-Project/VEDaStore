@@ -3,19 +3,21 @@ class CreateVsscBallotSelections < ActiveRecord::Migration
     create_table :vssc_ballot_selections do |t|
       t.string :object_id
       t.string :ballot_selection_id
-      t.string :type
-      
-      t.string :abbreviation
-      t.string :localPartyCode
-      t.string :name
-      t.string :nationalPartyCode
-      t.string :statePartyCode
+      t.string :type      
       
       t.string :selection
       
       t.boolean :is_write_in
       
+      t.string :abbreviation
+      t.string :local_party_code
+      t.string :name
+      t.string :national_party_code
+      t.string :state_party_code
+      
+      
       t.timestamps null: false
     end
-  end
+    add_index :vssc_ballot_selections, :object_id
+  end  
 end

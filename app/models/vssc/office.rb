@@ -3,7 +3,7 @@ class Vssc::Office < ActiveRecord::Base
   
   has_and_belongs_to_many :election_reports
   
-  define_element("OfficeGPScope", type: String)
+  define_element("OfficeGPScope", type: String, method: :office_gp_scope)
   
   define_attribute("object_id", required: true)
   define_attribute("name", required: true)
