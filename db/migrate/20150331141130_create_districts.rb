@@ -8,5 +8,6 @@ class CreateDistricts < ActiveRecord::Migration
     end
     add_reference :districts, :ocd_object, index: true
     add_reference :districts, :jurisdiction, index: true
+    add_reference :districts, :background_source, index: true
   end
 end

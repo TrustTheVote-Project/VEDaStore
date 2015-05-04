@@ -11,18 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150503012731) do
+ActiveRecord::Schema.define(version: 20150504150515) do
+
+  create_table "background_sources", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "jurisdiction_id"
+  end
+
+  add_index "background_sources", ["jurisdiction_id"], name: "index_background_sources_on_jurisdiction_id"
 
   create_table "districts", force: :cascade do |t|
     t.string   "name"
     t.string   "internal_id"
     t.string   "district_type"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.integer  "ocd_object_id"
     t.integer  "jurisdiction_id"
+    t.integer  "background_source_id"
   end
 
+  add_index "districts", ["background_source_id"], name: "index_districts_on_background_source_id"
   add_index "districts", ["jurisdiction_id"], name: "index_districts_on_jurisdiction_id"
   add_index "districts", ["ocd_object_id"], name: "index_districts_on_ocd_object_id"
 
@@ -70,12 +81,14 @@ ActiveRecord::Schema.define(version: 20150503012731) do
   create_table "reporting_units", force: :cascade do |t|
     t.string   "name"
     t.string   "internal_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.integer  "ocd_object_id"
     t.integer  "jurisdiction_id"
+    t.integer  "background_source_id"
   end
 
+  add_index "reporting_units", ["background_source_id"], name: "index_reporting_units_on_background_source_id"
   add_index "reporting_units", ["jurisdiction_id"], name: "index_reporting_units_on_jurisdiction_id"
   add_index "reporting_units", ["ocd_object_id"], name: "index_reporting_units_on_ocd_object_id"
 

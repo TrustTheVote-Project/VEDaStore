@@ -2,63 +2,100 @@
 %p= @jurisdiction.contact_info
 
 .container
-  .row
-    .col-md-12= link_to "Export Jurisdiction VSSC", vssc_export_jurisdiction_path(format: :xml)
 
-  - @jurisdiction.election_report_uploads.each do |eru|
-    .row
-      .col-md-3= eru.file_name
-      .col-md-3= eru.created_at
-      .col-md-3= eru.source_type
-      .col-md-3= link_to "Export Election Report VSSC", vssc_election_report_path(eru.election_report, format: :xml)
-
-  
-
-  .row
-    .col-md-6
-      %h3 Upload VSSC Election Report
-      = semantic_form_for @jurisdiction do |f|
-        = f.inputs do
-          = f.input :vssc_election_report, as: :file
-        = f.actions do
-          = f.action :submit, :label=>"Upload"
-      
-    .col-md-y
-      %h3 Upload Hart Election Report (ZIP)
-      = semantic_form_for @jurisdiction do |f|
-        = f.inputs do
-          = f.input :hart_election_report, as: :file
-        = f.actions do
-          = f.action :submit, :label=>"Upload"
-      
-
-  .districts
-    %h3 Districts
-    - @jurisdiction.districts.each do |d|
-      %div[d]
-        .row
-          .name.col-md-3= d.name
-          .district_type.col-md-3= d.district_type
-          .ocd_id.col-md-6= d.ocd_object.try(:ocd_id)
-        .reporting_units.accordion{data: {accodrion: true }}
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title
+        = "Jurisdiction Districts (#{@jurisdiction.districts.count}) and Precincts (#{@jurisdiction.reporting_units.count})"
+    .panel-body
+      .row
+        .col-md-12= link_to "Export Jurisdiction VSSC XML", vssc_export_jurisdiction_path(format: :xml)
+      - if @jurisdiction.background_sources.any?
+        - @jurisdiction.background_sources.each do |s|
           .row
-            .col-md-1
-            .col-md-11
-              %a{data: {toggle: :collapse}, href: "#district-#{d.id}"} Precincts
-          .well.collapse{id: "district-#{d.id}"}
-            - d.reporting_units.each do |ru|
-              .row[ru]
-                .col-md-3 &nbsp;
-                .name.col-md-3= ru.name
-                .ocd_id.col-md-6= ru.ocd_object.try(:ocd_id)
-    
+            .col-md-12
+              %a{data: {toggle: :collapse}, href: "#districts"} 
+                = "Show Districts from #{s.name} | #{s.created_at}"
+          %table.table.collapse#districts
+            - s.districts.each do |d|
+              %tr[d]
+                %td.name= d.name
+                %td.district_type= d.district_type
+                %td.ocd_id= d.ocd_object.try(:ocd_id)
+              %tr
+                %td
+                %td{colspan: 2}
+                  - if d.reporting_units.empty?
+                    0 Precincts
+                  - else
+                    %a{data: {toggle: :collapse}, href: "#district-#{d.id}"}= "#{d.reporting_units.count} Precincts"
+                    .collapse{id: "district-#{d.id}"}
+                      %table.table.table-striped
+                        - d.reporting_units.each do |ru|
+                          %tr[ru]
+                            %td.name= ru.name
+                            %td.ocd_id= ru.ocd_object.try(:ocd_id)
+  
+      .row
+        .col-md-12
+          %h4 Upload district and precinct definitinos
+          = semantic_form_for @jurisdiction do |f|
+            = f.inputs do
+              = f.input :background_csv, as: :file, label: "Jurisdiction definition CSV"
+            = f.actions do
+              = f.action :submit, :label=>"Upload"
 
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title Election Reports
+    .panel-body
+      %table.table.table-striped
+        - @jurisdiction.election_report_uploads.each do |eru|
+          %tr
+            %td.file_name= eru.file_name
+            %td.date= eru.created_at
+            %td.source= eru.source_type
+            %td.report
+              Issuer:
+              = eru.election_report.issuer
+              %br
+              Date:
+              = eru.election_report.date
+              %br
+              Status:
+              = eru.election_report.status
+              %br
+              = "# Elections:"
+              = eru.election_report.elections.count
+            %td
+              = link_to "Export Election Report VSSC", vssc_election_report_path(eru.election_report, format: :xml)
+              %br
+              Upload Election Results
+              = semantic_form_for eru.election_report do |f|
+                = f.inputs do
+                  = f.input :election_results_csv, as: :file
+                = f.actions do
+                  = f.action :submit, :label=>"Upload"
+            
 
-.row
-  .col-md-12
-    = semantic_form_for @jurisdiction do |f|
-      = f.inputs do
-        = f.input :background_csv, as: :file
-      = f.actions do
-        = f.action :submit, :label=>"Upload"
-
+      .row
+        .col-md-6
+          %h3 Upload VSSC Election Report
+          = semantic_form_for @jurisdiction do |f|
+            = f.inputs do
+              = f.input :vssc_election_report, as: :file
+            = f.actions do
+              = f.action :submit, :label=>"Upload"
+      
+        .col-md-6
+          %h3 Upload Hart Election Report (ZIP)
+          - if @jurisdiction.background_sources.empty?
+            You must upload jurisdiction district and precinct definitions in order
+            to process Hart data.
+          = semantic_form_for @jurisdiction do |f|
+            = f.inputs do
+              = f.input :selected_source_for_hart, collection: @jurisdiction.background_sources.pluck(:name, :id)
+              = f.input :hart_election_report, as: :file
+            = f.actions do
+              = f.action :submit, :label=>"Upload"
+      

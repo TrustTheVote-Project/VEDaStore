@@ -7,9 +7,12 @@ class CreateReportingUnits < ActiveRecord::Migration
     end
     add_reference :reporting_units, :ocd_object, index: true
     add_reference :reporting_units, :jurisdiction, index: true
+    add_reference :reporting_units, :background_source, index: true
+    
     create_join_table :reporting_units, :districts do |t|
       t.index :reporting_unit_id
       t.index :district_id
     end
+    
   end
 end

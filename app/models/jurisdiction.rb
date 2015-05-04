@@ -3,13 +3,15 @@ require 'fileutils'
 require 'zip'
 
 class Jurisdiction < ActiveRecord::Base
+  before_save :process_hart_upload
   
   belongs_to :state
   
-  has_many :districts, :dependent=>:destroy
-  has_many :reporting_units, :dependent=>:destroy
+  has_many :districts, dependent: :destroy
+  has_many :reporting_units, dependent: :destroy
   
-  has_many :election_report_uploads, :dependent=>:destroy
+  has_many :background_sources, dependent: :destroy
+  has_many :election_report_uploads, dependent: :destroy
   
   CSV_HEADERs = [
     "TYPE", #ignored
@@ -56,7 +58,7 @@ class Jurisdiction < ActiveRecord::Base
   attr_reader :background_csv, :hart_election_report, :vssc_election_report
   def background_csv=(file)
     @background_csv=file
-    load_from_csv(file.read)
+    load_from_csv(file.read, file.original_filename)
   end
   def vssc_election_report=(file)
     eru = ElectionReportUpload.new(source_type: "VSSC XML", file_name: file.original_filename)
@@ -64,33 +66,42 @@ class Jurisdiction < ActiveRecord::Base
     self.election_report_uploads << eru
     self.save!
   end
-  def hart_election_report=(zip_file)
-    # TODO: handle zip-file differences better
-    dest = Rails.root.join('zip_uploads', Time.now.getutc.to_s)
-    FileUtils.mkdir_p(dest)
-    Zip::File.open(zip_file.path) do |zip_file|
-      zip_file.each do |entry|
-        puts "Extracting #{entry.name}"
-        entry.extract(dest.join(entry.name))
+  
+  attr_accessor :selected_source_for_hart, :hart_election_report
+  def process_hart_upload
+    if zip_file = self.hart_election_report
+      # TODO: handle zip-file differences better
+      dest = Rails.root.join('zip_uploads', Time.now.getutc.to_s)
+      FileUtils.mkdir_p(dest)
+      Zip::File.open(zip_file.path) do |zip_file|
+        zip_file.each do |entry|
+          puts "Extracting #{entry.name}"
+          entry.extract(dest.join(entry.name))
+        end
       end
-    end
-    eru = ElectionReportUpload.new(source_type: "Hart ZIP", file_name: zip_file.original_filename)
+      eru = ElectionReportUpload.new(source_type: "Hart ZIP", file_name: zip_file.original_filename)
 
-    eru.jurisdiction = self
-    eru.build_election_report
-    eru.election_report.parse_hart_dir(dest.join(zip_file.original_filename.gsub(".zip", '')))
-    eru.save!
+      eru.jurisdiction = self
+      eru.build_election_report
+      eru.election_report.parse_hart_dir(
+        dest.join(zip_file.original_filename.gsub(".zip", '')),
+        self.selected_source_for_hart
+      )
+      eru.save!
     
-    # delete from the hart file
+      # delete from the hart file      
+    end
   end
     
   def load_from_csv_file(filename)
     File.open(filename, "r") do |f|
-      load_from_csv(f.read)
+      load_from_csv(f.read, filename)
     end
   end
   
-  def load_from_csv(filedata)
+  def load_from_csv(filedata, filename)
+    source = BackgroundSource.new(name: filename)
+    self.background_sources << source
     enclosings = {} # ru.id => [district]
     mappings = []
     internal_objects = {"precinct" => {}}    
@@ -100,6 +111,7 @@ class Jurisdiction < ActiveRecord::Base
       case row["TYPE"].to_s.downcase
       when "", "district"
         d = self.districts.build
+        d.background_source = source
         d.name = row["NAME"]
         d.internal_id = row["ID"]
         d.district_type = row["DISTRICT_TYPE"]
@@ -110,6 +122,7 @@ class Jurisdiction < ActiveRecord::Base
         districts[d.internal_id] = d
       when "precinct"
         r = self.reporting_units.build
+        r.background_source = source
         r.internal_id = row["ID"]
         r.name = row["NAME"]
         r.build_ocd_object

@@ -33,8 +33,8 @@ class Vssc::ElectionReport < ActiveRecord::Base
   define_attribute("vendorApplicationID", required: true)
   
   
-  def parse_hart_dir(dest)
-    Hart::Parser.parse(dest, self)
+  def parse_hart_dir(dest, source_id)
+    Hart::Parser.parse(dest, self, source_id)
   end
   
   def self.from_jurisdiction(j)

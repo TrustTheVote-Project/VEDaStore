@@ -2,10 +2,11 @@ require 'nokogiri'
 
 module Hart
   class Parser
-    def self.parse(dest, report, include_results=false)
+    def self.parse(dest, report, source_id, include_results=false)
       
+      source = BackgroundSource.find(source_id)
+
       Hart::Mapper.map(dest)      
-      
       
       er = DMap::ModelRegister.classes[:election_report].all.values.first
     
@@ -22,36 +23,24 @@ module Hart
       report.sequence_end = 0
       report.vendor_application_id = "OSET-VSSC-RUBY-HART-MAPPER"
       report.format = er.format == 'Precinct' ? Vssc::ReportFormat.precinct_level : Vssc::ReportFormat.summary_contest
-      report.status = Vssc::ReportStatus.test    
+      
+      # Hart data is always pre-election
+      report.status = Vssc::ReportStatus.pre_election    
     
       report.date = DateTime.iso8601(Date.parse(er.date).iso8601)
       report.state_abbreviation = er.state_abbreviation
     
-      # put in all the districts in with the related precinct-splits
-      # Make a hash of districts based on set of sub-gpus
-      district_from_gpus = {}
-      
-      # districts also need extra data to be complete. this should come from *background* data
-      district_meta = {}
-      jurisdiction.districts.each do |d|
-        district_meta[d.internal_id] = d
-      end
-      # district_rows = CSV.read('./doc/hart/G12/MODIFIED_DISTRICT.csv', :headers=>true)
-      # district_rows.each do |row|
-      #  district_meta[row['ID']] = row
-      # end
-      
-      
       DMap::ModelRegister.classes[:district].all.values.each do |d|
         district = Vssc::District.new
         district.object_id = "district-#{d.attributes[:id]}"
         district.name = d.attributes[:name]
-        bd = district_meta[d.id]
-        if bd.nil?
-          raise "District #{d} not found!"
+        source_district = source.districts.where(internal_id: d.id).first
+        if source_district.nil?
+          raise "District #{d} not found in background data from source #{source}!"
         end
-        district.district_type = bd.district_type
-        bd.reporting_units.each do |ru|
+        
+        district.district_type = source_district.district_type
+        source_district.reporting_units.each do |ru|
           district.gp_sub_unit_refs << Vssc::GPSubUnitRef.new(object_id: ru.object_id)
         end
             
@@ -62,8 +51,11 @@ module Hart
       # put all the precincts in with the related precinct-splits
       DMap::ModelRegister.classes[:precinct].all.values.each do |p|
         precinct = Vssc::ReportingUnit.new
-        bp = jurisdiction.reporting_units.where(:internal_id=>p.id).first
-        precinct.object_id = bp.object_id
+        source_precinct = source.reporting_units.where(:internal_id=>p.id).first
+        if source_precinct.nil?
+          raise "Precinct #{p} not found in source #{source}"
+        end
+        precinct.object_id = source_precinct.object_id
       
         report.gp_units << precinct      
       end
@@ -86,7 +78,7 @@ module Hart
         election.candidates << candidate
       end
     
-      # CUSTOM  pullng results from CSV
+      # TODO: CUSTOM  pullng results from CSV - move to separate results uploader
       # results = CSV.read("./doc/hart/20121106results-mod.csv", :headers=>true)
       # contest_candidates = {}
       # results.each do |row|
@@ -192,15 +184,13 @@ module Hart
       
         # For whatever the contest, look at all the precinct-splits in the contest/precinct-split
         # and detect an exatly-matching district
-        # puts c.relations(:district_contest).collect(&:district_id).join(", ")
         district_id = c.relations(:district_contest).last.district_id
-        contest.contest_gp_scope = jurisdiction.districts.where(internal_id: district_id).first.object_id
+        contest.contest_gp_scope = source.districts.where(internal_id: district_id).first.object_id
 
         contest.object_id = "contest-#{c.id}"
         contest.name = c.office
         contest.sequence_order = c.order
         #:order, :id, :office, :contest_type, :instruction_text, :ballot_measure_title
-      
       
         election.contests << contest
       end
@@ -209,12 +199,6 @@ module Hart
       puts report.errors.messages.collect{|k,v|"#{k}: #{v}"}.join("\n")
       
       return report
-      
-      #File.open(report.object_id + "#{include_results ? '-results' : ''}-vssc.xml", "w+") do |f|
-      #  f.write report.to_xml_node.doc.to_s
-      #end
-    
-      
       
     end
   end

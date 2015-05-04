@@ -1,7 +1,8 @@
 class District < ActiveRecord::Base
   
   belongs_to :jursidiction
-
+  belongs_to :background_source
+  
   belongs_to :ocd_object
   delegate :ocd_id, to: :ocd_object
   

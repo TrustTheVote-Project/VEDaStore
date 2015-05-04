@@ -26,6 +26,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'formtastic', '~> 3.0'
+gem 'formtastic-bootstrap'
 
 gem "haml-rails", "~> 0.9"
 
