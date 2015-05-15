@@ -19,5 +19,6 @@ class CreateVsscBallotSelections < ActiveRecord::Migration
       t.timestamps null: false
     end
     add_index :vssc_ballot_selections, :object_id
+    add_reference :vssc_ballot_selections, :contest, index: true
   end  
 end

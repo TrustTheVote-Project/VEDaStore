@@ -1,0 +1,2 @@
+module Vssc::ElectionsHelper
+end

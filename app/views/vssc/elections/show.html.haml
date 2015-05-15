@@ -1,0 +1,13 @@
+.container
+  %h1
+    = @election.name
+    in Jurisdiction
+    = link_to @election.election_report.jurisdiction.name, @election.election_report.jurisdiction
+
+  %h3 Contests
+  %ul
+    - @election.contests.each do |contest|
+      %li
+        = link_to contest.name, vssc_contest_path(contest)
+        = "in #{contest.contest_gp_scope_object.name}"
+  

@@ -5,6 +5,7 @@ class Vssc::Count < ActiveRecord::Base
   #has_one :gp_unit_ref - via GPUnit string object_id
   
   
+  
   define_attribute("object_id", required: true)
   define_attribute("ballotType", type: Vssc::BallotType)
   

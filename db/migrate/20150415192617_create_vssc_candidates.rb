@@ -15,5 +15,6 @@ class CreateVsscCandidates < ActiveRecord::Migration
     end
     add_index :vssc_candidates, :object_id
     add_reference :vssc_candidates, :person, index: true
+    add_reference :vssc_candidates, :election, index: true
   end
 end

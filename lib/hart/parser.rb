@@ -17,6 +17,7 @@ module Hart
     
       report.object_id = "election-report-#{er.name}"
       election.object_id = "election-#{er.name}"
+      election.name = er.name
     
       report.issuer = er.locality
       report.sequence = 0
@@ -32,60 +33,103 @@ module Hart
     
       DMap::ModelRegister.classes[:district].all.values.each do |d|
         district = Vssc::District.new
-        district.object_id = "district-#{d.attributes[:id]}"
+
+        district.local_geo_code = d.id
         district.name = d.attributes[:name]
         source_district = source.districts.where(internal_id: d.id).first
         if source_district.nil?
           raise "District #{d} not found in background data from source #{source}!"
         end
         
+        district.object_id = source_district.object_id
+        district.national_geo_code = source_district.ocd_id
         district.district_type = source_district.district_type
-        source_district.reporting_units.each do |ru|
-          district.gp_sub_unit_refs << Vssc::GPSubUnitRef.new(object_id: ru.object_id)
-        end
+        
+        # In this eleciton report, only the used sub-units should get added, 
+        # so don't automatically all of the source-district's reporting units. 
+        # Do it according to the Hart election definition
+        # source_district.reporting_units.each do |ru|
+        #   district.gp_sub_unit_refs << Vssc::GPSubUnitRef.new(object_id: ru.object_id)
+        # end
             
         report.gp_units << district
       
       end
+      
+      # Save the report to the district objects are findable later
+      report.save!
+      
+      
     
       # put all the precincts in with the related precinct-splits
       DMap::ModelRegister.classes[:precinct].all.values.each do |p|
         precinct = Vssc::ReportingUnit.new
+        precinct.local_geo_code = p.id
         source_precinct = source.reporting_units.where(:internal_id=>p.id).first
         if source_precinct.nil?
           raise "Precinct #{p} not found in source #{source}"
         end
+
         precinct.object_id = source_precinct.object_id
-      
+        precinct.national_geo_code = source_precinct.ocd_id
         report.gp_units << precinct      
+      end
+      
+      report.save!
+      
+      DMap::ModelRegister.classes[:precinct_split].all.values.each do |ps|
+        precinct_split = Vssc::ReportingUnit.new
+        # precinct split has no background source equivalent??
+        precinct_split.object_id = "vspub-precinct-split-#{ps.id}"
+        precinct = report.gp_units.where(local_geo_code: ps.precinct_id, type: 'Vssc::ReportingUnit').first
+        if precinct.nil?
+          raise "Precinct #{ps.precint_id} not found in source report"
+        end
+        
+        precinct.gp_sub_unit_refs << Vssc::GPSubUnitRef.new(object_id:  precinct_split.object_id)
+        precinct.save!
+        report.gp_units << precinct_split
+      end
+      report.save!
+      
+      DMap::ModelRegister.classes[:district_precinct_split].all.values.each do |d_ps|
+        district = report.gp_units.where(local_geo_code: d_ps.district_id, type: 'Vssc::District').first
+        precinct_split = report.gp_units.where(object_id: "vspub-precinct-split-#{d_ps.precinct_split_id}").first
+        district.gp_sub_unit_refs << Vssc::GPSubUnitRef.new(object_id:  precinct_split.object_id)
+        district.save!
       end
     
       DMap::ModelRegister.classes[:party].all.values.each do |p|
         party = Vssc::Party.new
         party.abbreviation = p.abbreviation
         party.name = p.name
-        party.object_id = "party-#{p.id}"
+        party.local_party_code = p.party_id
+        # this can't be determined from this file alone!!
+        #party.object_id = "party-#{p.id}"
       
         report.parties << party
       end
-    
+      report.save!
+      
       DMap::ModelRegister.classes[:candidate].all.values.each do |c|
-        candidate = Vssc::Candidate.new
-        candidate.object_id ="candidate-#{c.id}"
-        candidate.party = "party-#{c.party_id}"
-        candidate.ballot_name = c.name
-        candidate.sequence_order = c.order
-        election.candidates << candidate
+        candidate = nil
+        
+        case c.relations(:contest).last.contest_type.downcase
+        when 'c'
+          candidate = Vssc::Candidate.new
+          candidate.object_id ="candidate-#{c.id}"
+          candidate.party = "party-#{c.party_id}"
+          candidate.ballot_name = c.name
+          candidate.sequence_order = c.order
+          election.candidates << candidate
+        when 'p'
+        when 's'
+        else 
+          #nothing else
+        end
+
       end
-    
-      # TODO: CUSTOM  pullng results from CSV - move to separate results uploader
-      # results = CSV.read("./doc/hart/20121106results-mod.csv", :headers=>true)
-      # contest_candidates = {}
-      # results.each do |row|
-      #   cc = "#{row['Contest_Id']} - #{row['candidate_id']}"
-      #   contest_candidates[cc] ||= []
-      #   contest_candidates[cc] << row
-      # end
+      report.save!
     
       DMap::ModelRegister.classes[:contest].all.values.each do |c|
         contest = nil
@@ -104,59 +148,10 @@ module Hart
           contest_gp_units = {}
           c.relations(:candidate).each_with_index do |candidate, i|
             candidate_selection= Vssc::CandidateSelection.new
-            candidate_selection.object_id ="candidate-selection-#{candidate.id}"
+            candidate_selection.object_id = "candidate-selection-#{candidate.id}"
             candidate_selection.candidate_selection_candidate_refs << Vssc::CandidateSelectionCandidateRef.new(object_id: "candidate-#{candidate.id}")
             
             cc = "#{c.id} - #{candidate.id}"
-            if include_results
-              contest_candidates[cc].each do |row|
-                vc_a = Vssc::VoteCounts.new
-                vc_e = Vssc::VoteCounts.new
-                vc = Vssc::VoteCounts.new
-                # "Precinct_name":"101" 
-                # "Reporting_flag":"1" 
-                # "total_ballots":"2061"
-                # "total_votes":"1110"
-                # "total_under_votes":"757"
-                # "total_over_votes":"0"
-                # "absentee_ballots":"48"
-                # "absentee_votes":"28"
-                # "absentee_under_votes":"18"
-                # "absentee_over_votes":"0"
-                # "early_ballots":"1133"
-                # "early_votes":"628"
-                # "early_under_votes":"406"
-                # "early_over_votes":"0"
-                # "election_ballots":"880"
-                # "election_votes":"454"
-                # "election_under_votes":"333"
-                # "election_over_votes":"0"
-                vc_e.gp_unit = vc.gp_unit = vc_a.gp_unit = "precinct-split-#{row["Pct_Id"]}"
-                vc_a.object_id = "votecount-#{cc}-absentee"
-                vc_a.ballot_type = Vssc::BallotType.absentee
-                vc_a.count = row["absentee_votes"]
-                vc_e.object_id = "votecount-#{cc}-early"
-                vc_e.ballot_type = Vssc::BallotType.early
-                vc_e.count = row["early_votes"]
-                vc.object_id = "votecount-#{cc}-election-day"
-                vc.ballot_type = Vssc::BallotType.election_day
-                vc.count = row["election_votes"]
-                candidate_selection.vote_counts << vc
-                candidate_selection.vote_counts << vc_a
-                candidate_selection.vote_counts << vc_e
-              
-                # for the first candidate in the loop put in the totals
-                if i == 0
-                  total_count = Vssc::TotalCounts.new
-                  total_count.gp_unit = "precinct-split-#{row["Pct_Id"]}"
-                  total_count.object_id = "total-counts-#{total_count.gp_unit}-#{c.id}"
-                  total_count.ballots_cast = row["total_ballots"]
-                  total_count.overvotes = row["total_over_votes"]
-                  total_count.undervotes = row["total_under_votes"]
-                  contest.contest_total_counts_by_gp_unit << total_count
-                end
-              end
-            end
             contest.ballot_selections << candidate_selection
           end
         elsif c.contest_type.downcase == "p"
@@ -171,8 +166,13 @@ module Hart
         elsif c.contest_type.downcase == "s"
           contest = Vssc::StraightParty.new
           c.relations(:candidate).each do |candidate|
-            candidate_selection = Vssc::Party.new
+            candidate_selection = report.parties.where(local_party_code: candidate.party_id).first
+            if candidate_selection.nil?
+              raise "Party #{candidate.party_id} not found! (#{candidate.inspect})"
+            end
+            # this is the only place the party "id" is defined (as used by the exported results)
             candidate_selection.object_id = "party-#{candidate.id}"
+            candidate_selection.save!
             contest.ballot_selections << candidate_selection
           end
           # Straight Party

@@ -10,5 +10,9 @@ class Vssc::Party < Vssc::BallotSelection
   define_attribute("nationalPartyCode")
   define_attribute("statePartyCode")
   
+  def name
+    read_attribute(:name)
+  end
+  
   
 end

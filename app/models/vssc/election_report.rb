@@ -1,3 +1,4 @@
+require 'csv'
 class Vssc::ElectionReport < ActiveRecord::Base
   
   include VsscFunctions
@@ -36,6 +37,90 @@ class Vssc::ElectionReport < ActiveRecord::Base
   def parse_hart_dir(dest, source_id)
     Hart::Parser.parse(dest, self, source_id)
   end
+  
+  attr_reader :election_results_csv
+  def election_results_csv=(file)
+    rows = CSV.parse(file.read.scrub, headers: true)
+    puts rows.length
+    rows.each_with_index do |row, i|
+      puts "Row #{i}"
+      contest_id = row['Contest_Id']
+      puts contest_id
+      # TODO: shouldn't use elections.first
+      contest = self.elections.first.contests.where(object_id: "contest-#{contest_id}").first
+      candidate_id = row['candidate_id']
+      candidate_type = row["Candidate_Type"].to_s.downcase # C vs W for write-in
+      candidate_selection = nil
+      if contest.is_a?(Vssc::CandidateChoice)
+        if candidate_type == "c"
+          candidate_selection = contest.ballot_selections.where(object_id: "candidate-selection-#{candidate_id}").first
+        elsif candidate_type == "w"
+          #Add a write-in option
+          #see if it's already added
+          candidate_selection = contest.ballot_selections.where(object_id:  "candidate-selection-#{candidate_id}", is_write_in: true, type: Vssc::CandidateSelection).first
+          if candidate_selection.nil?
+            candidate_selection= Vssc::CandidateSelection.new
+            candidate_selection.is_write_in = true
+            candidate_selection.object_id = "candidate-selection-#{candidate_id}"
+            candidate_selection.candidate_selection_candidate_refs << Vssc::CandidateSelectionCandidateRef.new(object_id: "candidate-#{candidate_id}")
+            e = self.elections.first
+            e.candidates << Vssc::Candidate.new(
+              object_id: "candidate-#{candidate_id}",
+              ballot_name: row["candidate_name"]
+            )
+            e.save!
+            contest.ballot_selections << candidate_selection
+          end
+        end
+      elsif contest.is_a?(Vssc::StraightParty)
+        candidate_selection = contest.ballot_selections.where(object_id: "party-#{candidate_id}").first
+      elsif contest.is_a?(Vssc::BallotMeasure)        
+        candidate_selection = contest.ballot_selections.where(object_id: "ballot-measure-selection-#{candidate_id}").first
+      end
+      if candidate_selection.nil?
+        raise "No candidate selection for contest #{contest.type} #{contest.id}, candidate #{candidate_id}"
+      end
+      cc = "#{contest_id}-#{candidate_id}"
+    
+      vc_a = Vssc::VoteCount.new
+      vc_e = Vssc::VoteCount.new
+      vc = Vssc::VoteCount.new
+      
+      # find the precinct split with this ID
+      ps = self.gp_units.where(object_id: "vspub-precinct-split-#{row["Pct_Id"]}").first
+      vc_e.gp_unit = vc.gp_unit = vc_a.gp_unit = ps.object_id
+      vc_a.object_id = "votecount-#{cc}-absentee"
+      vc_a.ballot_type = Vssc::BallotType.absentee
+      vc_a.count = row["absentee_votes"]
+      vc_e.object_id = "votecount-#{cc}-early"
+      vc_e.ballot_type = Vssc::BallotType.early
+      vc_e.count = row["early_votes"]
+      vc.object_id = "votecount-#{cc}-election-day"
+      vc.ballot_type = Vssc::BallotType.election_day
+      vc.count = row["election_votes"]
+      # TODO: need to lookup the candidate_selection
+      candidate_selection.vote_counts << vc
+      candidate_selection.vote_counts << vc_a
+      candidate_selection.vote_counts << vc_e
+      
+      # for the first candidate in the loop put in the totals
+      if contest.contest_total_counts_by_gp_unit.size == 0
+        total_count = Vssc::TotalCount.new
+        total_count.gp_unit = ps.object_id
+        total_count.object_id = "total-counts-#{total_count.gp_unit}-#{contest_id}"
+        total_count.ballots_cast = row["total_ballots"]
+        total_count.overvotes = row["total_over_votes"]
+        total_count.undervotes = row["total_under_votes"]
+        contest.contest_total_counts_by_gp_unit << Vssc::ContestTotalCountsByGPUnit.new(total_count: total_count)
+      end
+      #candidate_selection.save!
+      contest.save!
+    end
+    # TODO: when uploading results, change the report status. To what?
+    self.status = Vssc::ReportStatus.unofficial_complete
+    self.save!  
+  end
+  
   
   def self.from_jurisdiction(j)
     er = self.new

@@ -12,7 +12,7 @@ module Hart
       end
 
       DMap::File.define("PARTY.txt", defaults) do |df|
-        df.party :abbreviation, :name, :id
+        df.party :abbreviation, :name, :party_id
       end
     
     

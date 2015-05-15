@@ -1,0 +1,2 @@
+module Vssc::ContestsHelper
+end

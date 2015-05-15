@@ -34,7 +34,7 @@ class JurisdictionsController < ApplicationController
 private
     def jurisdiction_params
       params.require(:jurisdiction).permit(:name, :state, :contact_info, 
-      :background_csv, :vssc_election_report, 
+      :background_csv, :background_vip, :vssc_election_report, 
       :selected_source_for_hart, :hart_election_report)
     end
   

@@ -7,4 +7,18 @@ class Vssc::ElectionReportsController < ApplicationController
     end
   end
   
+  def update
+    @er = Vssc::ElectionReport.find(params[:id])
+    @er.update(election_report_params)
+    redirect_to @er.jurisdiction
+  end
+  
+private
+    def election_report_params
+      params.require(:vssc_election_report).permit(:election_results_csv)
+    end
+
+
+  
+  
 end

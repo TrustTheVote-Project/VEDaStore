@@ -14,9 +14,9 @@
         - @jurisdiction.background_sources.each do |s|
           .row
             .col-md-12
-              %a{data: {toggle: :collapse}, href: "#districts"} 
+              %a{data: {toggle: :collapse}, href: "#districts-#{s.id}"} 
                 = "Show Districts from #{s.name} | #{s.created_at}"
-          %table.table.collapse#districts
+          %table.table.collapse{id: "districts-#{s.id}"}
             - s.districts.each do |d|
               %tr[d]
                 %td.name= d.name
@@ -37,11 +37,18 @@
                             %td.ocd_id= ru.ocd_object.try(:ocd_id)
   
       .row
-        .col-md-12
-          %h4 Upload district and precinct definitinos
+        .col-md-6
+          %h4 Upload district and precinct definitions from CSV
           = semantic_form_for @jurisdiction do |f|
             = f.inputs do
               = f.input :background_csv, as: :file, label: "Jurisdiction definition CSV"
+            = f.actions do
+              = f.action :submit, :label=>"Upload"
+        .col-md-6
+          %h4 Upload district and precinct definitions from VIP XML
+          = semantic_form_for @jurisdiction do |f|
+            = f.inputs do
+              = f.input :background_vip, as: :file, label: "Jurisdiction definition VIP XML"
             = f.actions do
               = f.action :submit, :label=>"Upload"
 
@@ -65,8 +72,10 @@
               Status:
               = eru.election_report.status
               %br
-              = "# Elections:"
-              = eru.election_report.elections.count
+              = "Elections:"
+              %ul
+                - eru.election_report.elections.each do |e|
+                  %li= link_to e.name, e
             %td
               = link_to "Export Election Report VSSC", vssc_election_report_path(eru.election_report, format: :xml)
               %br
@@ -92,10 +101,11 @@
           - if @jurisdiction.background_sources.empty?
             You must upload jurisdiction district and precinct definitions in order
             to process Hart data.
-          = semantic_form_for @jurisdiction do |f|
-            = f.inputs do
-              = f.input :selected_source_for_hart, collection: @jurisdiction.background_sources.pluck(:name, :id)
-              = f.input :hart_election_report, as: :file
-            = f.actions do
-              = f.action :submit, :label=>"Upload"
+          - else 
+            = semantic_form_for @jurisdiction do |f|
+              = f.inputs do
+                = f.input :selected_source_for_hart, collection: @jurisdiction.background_sources.pluck(:name, :id)
+                = f.input :hart_election_report, as: :file
+              = f.actions do
+                = f.action :submit, :label=>"Upload"
       

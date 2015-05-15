@@ -4,13 +4,13 @@ class Vssc::Election < ActiveRecord::Base
   belongs_to :election_report
   
   define_element("BallotStyleCollection", type: Vssc::BallotStyle, method: :ballot_styles, passthrough: "BallotStyle")
-  has_and_belongs_to_many :ballot_styles
+  has_many :ballot_styles, dependent: :destroy
   
   define_element("CandidateCollection", type: Vssc::Candidate, method: :candidates, passthrough: "Candidate")
-  has_and_belongs_to_many :candidates
+  has_many :candidates, dependent: :destroy
   
   define_element("ContestCollection", type: Vssc::Contest, method: :contests, passthrough: "Contest")
-  has_and_belongs_to_many :contests
+  has_many :contests, dependent: :destroy
   
   define_element("ElectionGPScope", method: :election_gp_scope)
   

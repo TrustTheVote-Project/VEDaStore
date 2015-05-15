@@ -2,7 +2,11 @@ class Vssc::CandidateSelectionCandidateRef < ActiveRecord::Base
   include VsscFunctions
   
   belongs_to :candidate_selection
-  belongs_to :candidate, primary_key: :object_id, foreign_key: :object_id
+  # belongs_to :candidate, primary_key: :object_id, foreign_key: :object_id
+  
+  def candidate
+    self.candidate_selection.contest.election.candidates.where(object_id: object_id).first
+  end
   
   def self.parse_vssc(node)
     e = self.new

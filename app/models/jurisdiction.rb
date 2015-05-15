@@ -55,14 +55,24 @@ class Jurisdiction < ActiveRecord::Base
   # t.datetime "updated_at",    null: false
   # t.integer  "ocd_object_id" - this is for "parent" levels (maybe unnecessary)
 
-  attr_reader :background_csv, :hart_election_report, :vssc_election_report
+  attr_reader :background_csv, :background_vip, :hart_election_report, :vssc_election_report
   def background_csv=(file)
     @background_csv=file
-    load_from_csv(file.read, file.original_filename)
+    self.load_from_csv(file.read, file.original_filename)
+  end
+  def background_vip=(file)
+    @background_vip=file
+    self.load_from_vip(file.read, file.original_filename)
   end
   def vssc_election_report=(file)
     eru = ElectionReportUpload.new(source_type: "VSSC XML", file_name: file.original_filename)
     eru.election_report = Vssc::ElectionReport.parse_vssc_file(file)
+    self.election_report_uploads << eru
+    self.save!
+  end
+  def vip_election_report=(file)
+    eru = ElectionReportUpload.new(source_type: "VIP XML", file_name: file.original_filename)
+    eru.election_report = Vssc::ElectionReport.parse_vip_file(file)
     self.election_report_uploads << eru
     self.save!
   end
@@ -180,6 +190,56 @@ class Jurisdiction < ActiveRecord::Base
       end
     end
     
+    self.save!
+  end
+  
+  
+  def load_from_vip(filedata, filename)
+    source = BackgroundSource.new(name: filename)
+    self.background_sources << source
+    enclosings = {} # ru.id => [district]
+    mappings = []
+    internal_objects = {"precinct" => {}}    
+    rus = {}
+    districts = {}
+    
+    doc = Nokogiri::XML(filedata) { |config| config.noblanks }
+    
+    # Make sure there's only one locality!
+    if doc.css("locality").count != 1
+      raise "For background data, there must be exactly one locality in the VIP to define this jurisdiction #{self.name}"
+    end
+    
+
+  
+    doc.css("electoral_district").each do |ed|
+      d = self.districts.build
+      d.background_source = source
+      d.internal_id = ed.attributes["id"].value
+      d.name = ed.css("> name").text
+      d.district_type = ed.css("> type").text
+      d.save!
+    end
+
+    doc.css("precinct").each do |p|
+      r = self.reporting_units.build
+      r.background_source = source
+      r.internal_id = p.attributes["id"].value
+      r.name = p.css("> name").text
+      p.css("> electoral_district_id").each do |ed_id|
+        d = source.districts.where(internal_id: ed_id.text).first
+        d.reporting_units << r
+      end
+      r.save!
+    end
+    doc.css("precinct_split").each do |p|
+      # find the precinct this talks about
+      r = self.reporting_units.where(internal_id: p.css("> precinct_id").text).first
+      p.css("> electoral_district_id").each do |ed_id|
+        d = source.districts.where(internal_id: ed_id.text).first
+        d.reporting_units << r
+      end
+    end
     self.save!
   end
   

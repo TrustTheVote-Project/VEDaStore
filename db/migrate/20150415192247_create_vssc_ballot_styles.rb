@@ -7,5 +7,6 @@ class CreateVsscBallotStyles < ActiveRecord::Migration
     end
     add_index :vssc_ballot_styles, :object_id
     add_reference :vssc_ballot_styles, :gp_unit, index: true
+    add_reference :vssc_ballot_styles, :election, index: true
   end
 end

@@ -27,5 +27,6 @@ class CreateVsscContests < ActiveRecord::Migration
       t.timestamps null: false
     end
     add_index :vssc_contests, :object_id
+    add_reference :vssc_contests, :election, index: true
   end
 end

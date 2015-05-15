@@ -1,7 +1,7 @@
 class Vssc::Candidate < ActiveRecord::Base
   include VsscFunctions
   
-  has_and_belongs_to_many :elections
+  belongs_to :election
   
   define_element("Party")
   define_element("Person")

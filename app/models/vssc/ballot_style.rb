@@ -1,6 +1,8 @@
 class Vssc::BallotStyle < ActiveRecord::Base
   include VsscFunctions
   
+  belongs_to :election
+  
   define_element("OrderedContest", method: :ordered_contests, type: OrderedContest)
   has_and_belongs_to_many :ordered_contests
   
