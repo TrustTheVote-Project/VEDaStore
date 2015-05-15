@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150504150515) do
+ActiveRecord::Schema.define(version: 20150515205807) do
 
   create_table "background_sources", force: :cascade do |t|
     t.string   "name",            limit: 255
@@ -93,20 +93,24 @@ ActiveRecord::Schema.define(version: 20150504150515) do
   add_index "reporting_units", ["ocd_object_id"], name: "index_reporting_units_on_ocd_object_id", using: :btree
 
   create_table "shape_sources", force: :cascade do |t|
-    t.string   "name",         limit: 255
-    t.text     "contact_info", limit: 65535
-    t.text     "source_data",  limit: 65535
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.string   "name",                 limit: 255
+    t.text     "contact_info",         limit: 65535
+    t.text     "source_data",          limit: 65535
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.integer  "background_source_id", limit: 4
   end
+
+  add_index "shape_sources", ["background_source_id"], name: "index_shape_sources_on_background_source_id", using: :btree
 
   create_table "shapes", force: :cascade do |t|
     t.string   "internal_id",     limit: 255
-    t.text     "shape_data",      limit: 65535
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.binary   "shape_data",      limit: 16777215
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.integer  "ocd_object_id",   limit: 4
     t.integer  "shape_source_id", limit: 4
+    t.string   "shape_type",      limit: 255
   end
 
   add_index "shapes", ["ocd_object_id"], name: "index_shapes_on_ocd_object_id", using: :btree

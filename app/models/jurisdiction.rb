@@ -3,7 +3,7 @@ require 'fileutils'
 require 'zip'
 
 class Jurisdiction < ActiveRecord::Base
-  before_save :process_hart_upload
+  before_save :process_hart_upload, :process_reporting_unit_kml_upload
   
   belongs_to :state
   
@@ -75,6 +75,16 @@ class Jurisdiction < ActiveRecord::Base
     eru.election_report = Vssc::ElectionReport.parse_vip_file(file)
     self.election_report_uploads << eru
     self.save!
+  end
+  
+  attr_accessor :selected_source_for_reporting_unit_kml, :reporting_unit_kml
+  def process_reporting_unit_kml_upload
+    if kml = self.reporting_unit_kml
+      background = BackgroundSource.find(self.selected_source_for_reporting_unit_kml)
+      source = background.shape_sources.build(name: kml.original_filename)
+      source.load_reporting_units_from_kml(kml)
+      background.save!
+    end
   end
   
   attr_accessor :selected_source_for_hart, :hart_election_report

@@ -248,7 +248,7 @@ module VsscFunctions
     end
   end
   
-  def to_xml_node(xml = nil, node_name = nil)
+  def to_xml_node(xml = nil, node_name = nil, &block)
     node_name ||= class_node_name
     xml ||= Nokogiri::XML::Builder.new
     
@@ -264,6 +264,9 @@ module VsscFunctions
         else 
           self.element_xml_node(r, k, options, value)
         end
+      end
+      if block
+        yield r
       end
     end
     return xml
