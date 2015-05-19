@@ -2,7 +2,7 @@ class Vssc::OrderedContestBallotSelectionRef  < ActiveRecord::Base
   include VsscFunctions
   
   belongs_to :ordered_contest
-  belongs_to :ballot_selection, primary_key: :object_id, :foreign_key: :object_id
+  belongs_to :ballot_selection, primary_key: :object_id, foreign_key: :object_id
   
   def self.parse_vssc(node)
     e = self.new
