@@ -3,7 +3,7 @@ class Vssc::ElectionReport < ActiveRecord::Base
   
   include VsscFunctions
   
-  has_one :election_report_upload
+  has_one :election_report_upload, dependent: :destroy
   delegate :jurisdiction, to: :election_report_upload
   
   define_element("Message")
@@ -32,7 +32,6 @@ class Vssc::ElectionReport < ActiveRecord::Base
   define_attribute("stateAbbreviation", required: true)
   define_attribute("stateCode")
   define_attribute("vendorApplicationID", required: true)
-  
   
   def parse_hart_dir(dest, source_id)
     Hart::Parser.parse(dest, self, source_id)
@@ -73,7 +72,7 @@ class Vssc::ElectionReport < ActiveRecord::Base
           end
         end
       elsif contest.is_a?(Vssc::StraightParty)
-        candidate_selection = contest.ballot_selections.where(object_id: "party-#{candidate_id}").first
+        candidate_selection = contest.ballot_selections.where(local_party_code: "party-selection-#{candidate_id}").first
       elsif contest.is_a?(Vssc::BallotMeasure)        
         candidate_selection = contest.ballot_selections.where(object_id: "ballot-measure-selection-#{candidate_id}").first
       end
@@ -128,7 +127,7 @@ class Vssc::ElectionReport < ActiveRecord::Base
     er.date = DateTime.now
     er.format = Vssc::ReportFormat.summary_contest
     er.status = Vssc::ReportFormat.pre_election
-    er.issuer = "VSPub"
+    er.issuer = "VSPub-#{j.name}"
     er.state_abbreviation = j.state_abbreviation
     er.vendor_application_id = "VSPub-<some-deployment-specific-guid>"
     

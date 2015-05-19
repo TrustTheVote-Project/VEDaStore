@@ -1,6 +1,6 @@
 class OcdObject < ActiveRecord::Base
   
-  has_many :districs
+  has_many :districts
   has_many :reporting_units
   has_many :shapes
   

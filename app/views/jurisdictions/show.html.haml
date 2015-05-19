@@ -76,7 +76,10 @@
       %table.table.table-striped
         - @jurisdiction.election_report_uploads.each do |eru|
           %tr
-            %td.file_name= eru.file_name
+            %td.file_name
+              = eru.file_name
+              %br
+              = link_to "Delete", vssc_election_report_path(eru.election_report), {method: :delete, confirm: "Are you sure?"}
             %td.date= eru.created_at
             %td.source= eru.source_type
             %td.report

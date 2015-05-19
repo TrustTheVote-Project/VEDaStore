@@ -13,6 +13,12 @@ class Vssc::ElectionReportsController < ApplicationController
     redirect_to @er.jurisdiction
   end
   
+  def destroy
+    @er = Vssc::ElectionReport.find(params[:id])
+    @er.destroy!
+    redirect_to @er.jurisdiction
+  end
+  
 private
     def election_report_params
       params.require(:vssc_election_report).permit(:election_results_csv)

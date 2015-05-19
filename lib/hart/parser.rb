@@ -103,9 +103,8 @@ module Hart
         party = Vssc::Party.new
         party.abbreviation = p.abbreviation
         party.name = p.name
-        party.local_party_code = p.party_id
-        # this can't be determined from this file alone!!
-        #party.object_id = "party-#{p.id}"
+        # this may get overwritten later!! 
+        party.object_id = "party-#{p.id}"
       
         report.parties << party
       end
@@ -166,17 +165,17 @@ module Hart
         elsif c.contest_type.downcase == "s"
           contest = Vssc::StraightParty.new
           c.relations(:candidate).each do |candidate|
-            candidate_selection = report.parties.where(local_party_code: candidate.party_id).first
+            candidate_selection = report.parties.where(object_id: "party-#{candidate.party_id}").first
             if candidate_selection.nil?
               raise "Party #{candidate.party_id} not found! (#{candidate.inspect})"
             end
             # this is the only place the party "id" is defined (as used by the exported results)
-            candidate_selection.object_id = "party-#{candidate.id}"
+            candidate_selection.local_party_code = "party-selection-#{candidate.id}"
             candidate_selection.save!
             contest.ballot_selections << candidate_selection
           end
-          # Straight Party
-        
+          
+          # Straight Party        
         else
           # Don't record generic ballot text
           next

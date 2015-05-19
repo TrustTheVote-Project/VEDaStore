@@ -28,18 +28,23 @@ class Vssc::GPUnit < ActiveRecord::Base
   define_attribute("name")
   define_attribute("nationalGeoCode")
   define_attribute("stateGeoCode")
+
+
+  def ocd_object
+    @ocd_obj ||= OcdObject.find_by_ocd_id(self.national_geo_code)
+  end
   
   def to_xml_node_with_shapes(xml = nil, node_name = nil)
-    ocd_obj = nil
-    if self.national_geo_code
-      ocd_obj = OcdObject.find_by_ocd_id(self.national_geo_code)
-      shape = ocd_obj.shapes.first
+    if self.national_geo_code && ocd_object
+      shape = ocd_object.shapes.last
       shape_data = shape ? shape.shape_data : nil
       if shape_data
         return to_xml_node_without_shapes(xml, node_name) do |xml|
           xml.send("SpatialDimension") do |sd|
             sd.send("SpatialExtent") do |se|
-              se.send("insert", shape_data)
+              se.send("Coordinates") do |coo|
+                coo.cdata(shape_data)
+              end
             end
           end
         end
