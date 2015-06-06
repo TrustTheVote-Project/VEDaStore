@@ -40,11 +40,9 @@ class Vssc::ElectionReport < ActiveRecord::Base
   attr_reader :election_results_csv
   def election_results_csv=(file)
     rows = CSV.parse(file.read.scrub, headers: true)
-    puts rows.length
     rows.each_with_index do |row, i|
-      puts "Row #{i}"
+      #puts "Row #{i}"
       contest_id = row['Contest_Id']
-      puts contest_id
       # TODO: shouldn't use elections.first
       contest = self.elections.first.contests.where(object_id: "contest-#{contest_id}").first
       candidate_id = row['candidate_id']
