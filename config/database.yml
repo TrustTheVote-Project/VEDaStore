@@ -29,7 +29,7 @@ test:
 
 production:
   <<: *default
-  host: vspubstaging.co2uuw3cetr9.us-east-1.rds.amazonaws.com
-  database: vspubstaging
-  username: vspubstaging
-  password: os99Fjsiufe9
+  host: vspubstaging2.co2uuw3cetr9.us-east-1.rds.amazonaws.com
+  database: vspubstaging2
+  username: vspubstaging2
+  password: vspubstaging2
