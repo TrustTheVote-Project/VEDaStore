@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       get :vssc_export, format: :xml
     end
   end
+  resources :election_result_uploads, only: [:index]
   namespace :vssc do
     resources :election_reports, only: [:show, :update, :destroy]
     resources :elections, only: :show

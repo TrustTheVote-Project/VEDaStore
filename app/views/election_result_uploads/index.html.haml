@@ -1,0 +1,18 @@
+.container
+  .row
+    .col-md-12
+      %h1 Result Uploads
+
+  - @ers.each do |eru|
+    .row[eru]
+      .col-md-12
+        %strong= "#{eru.percent_complete}%"
+        = I18n.l(eru.created_at, format: :long)
+        = ' - '
+        = eru.election_report.issuer
+        = eru.election_report.date
+        = ' - '
+        = link_to eru.election_report.jurisdiction.name, jurisdiction_path(eru.election_report.jurisdiction)
+  
+
+    

@@ -1,0 +1,2 @@
+module ElectionResultUploadsHelper
+end

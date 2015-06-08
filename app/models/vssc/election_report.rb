@@ -43,7 +43,7 @@ class Vssc::ElectionReport < ActiveRecord::Base
   
   def election_results_csv=(file)
     eru = ElectionResultUpload.create(election_report: self, file: file)
-    eru.process!
+    eru.delay.process!
   end
   
   
