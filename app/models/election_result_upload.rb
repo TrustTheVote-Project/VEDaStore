@@ -117,13 +117,7 @@ class ElectionResultUpload < ActiveRecord::Base
     end
     # TODO: when uploading results, change the report status. To what?
     
-    new_percent = (i * 100 / pending_rows).to_i
-    if  new_percent > percent
-      percent = new_percent
-      self.update_attributes(rows_processed: i)
-      puts self.rows_processed
-    end
-    
+    self.update_attributes(rows_processed: self.row_count)
     
     election_report.status = Vssc::ReportStatus.unofficial_complete
     election_report.save!  
