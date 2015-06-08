@@ -1,3 +1,4 @@
+require 'csv'
 class ElectionResultUpload < ActiveRecord::Base
 
   belongs_to :election_report, :class_name=>"Vssc::ElectionReport"
@@ -14,7 +15,8 @@ class ElectionResultUpload < ActiveRecord::Base
   
   def save_file
     File.open(path, "w+") do |f|
-      f.write file.read
+      str = file.read.scrub
+      f.write str.force_encoding("ISO-8859-1").encode("UTF-8")
     end
   end
   
