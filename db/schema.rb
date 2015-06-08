@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150608174805) do
+ActiveRecord::Schema.define(version: 20150608204754) do
 
   create_table "background_sources", force: :cascade do |t|
     t.string   "name",            limit: 255
@@ -62,12 +62,13 @@ ActiveRecord::Schema.define(version: 20150608174805) do
   add_index "districts_reporting_units", ["reporting_unit_id"], name: "index_districts_reporting_units_on_reporting_unit_id", using: :btree
 
   create_table "election_report_uploads", force: :cascade do |t|
-    t.integer  "election_report_id", limit: 4
-    t.integer  "jurisdiction_id",    limit: 4
-    t.string   "file_name",          limit: 255
-    t.string   "source_type",        limit: 255
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.integer  "election_report_id",   limit: 4
+    t.integer  "jurisdiction_id",      limit: 4
+    t.string   "file_name",            limit: 255
+    t.string   "source_type",          limit: 255
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "background_source_id", limit: 4
   end
 
   create_table "election_result_uploads", force: :cascade do |t|

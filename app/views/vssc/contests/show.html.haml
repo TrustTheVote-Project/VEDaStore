@@ -3,7 +3,10 @@
     = @contest.name
     in election
     = link_to @contest.election.name, @contest.election
-  
+  %h2
+    District
+    = @contest.contest_gp_scope_object.name
+    = link_to "edit", edit_vssc_contest_path(@contest)
   - if @contest.is_a?(Vssc::BallotMeasure)
     %h4 Summary
     %h3 Ballot Measure

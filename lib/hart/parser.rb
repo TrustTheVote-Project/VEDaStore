@@ -2,9 +2,8 @@ require 'nokogiri'
 
 module Hart
   class Parser
-    def self.parse(dest, report, source_id, include_results=false)
-      
-      source = BackgroundSource.find(source_id)
+    def self.parse(dest, report, include_results=false)
+      source = report.election_report_upload.background_source
 
       Hart::Mapper.map(dest)      
       
@@ -43,7 +42,7 @@ module Hart
         
         district.object_id = source_district.object_id
         district.national_geo_code = source_district.ocd_id
-        district.district_type = source_district.district_type
+        district.district_type = source_district.vssc_district_type 
         
         # In this eleciton report, only the used sub-units should get added, 
         # so don't automatically all of the source-district's reporting units. 

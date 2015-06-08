@@ -102,10 +102,10 @@ class Jurisdiction < ActiveRecord::Base
       eru = ElectionReportUpload.new(source_type: "Hart ZIP", file_name: zip_file.original_filename)
 
       eru.jurisdiction = self
+      eru.background_source_id = self.selected_source_for_hart
       eru.build_election_report
       eru.election_report.parse_hart_dir(
         dest.join(zip_file.original_filename.gsub(".zip", '')),
-        self.selected_source_for_hart
       )
       eru.save!
     

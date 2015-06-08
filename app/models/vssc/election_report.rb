@@ -3,7 +3,6 @@ class Vssc::ElectionReport < ActiveRecord::Base
   
   include VsscFunctions
   
-  has_many :election_result_uploads
   
   has_one :election_report_upload, dependent: :destroy
   delegate :jurisdiction, to: :election_report_upload
@@ -35,8 +34,8 @@ class Vssc::ElectionReport < ActiveRecord::Base
   define_attribute("stateCode")
   define_attribute("vendorApplicationID", required: true)
   
-  def parse_hart_dir(dest, source_id)
-    Hart::Parser.parse(dest, self, source_id)
+  def parse_hart_dir(dest)
+    Hart::Parser.parse(dest, self)
   end
   
   attr_reader :election_results_csv

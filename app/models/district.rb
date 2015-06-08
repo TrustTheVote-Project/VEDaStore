@@ -12,23 +12,27 @@ class District < ActiveRecord::Base
     "vspub-district-#{self.id}"
   end
   
-  def vssc_type
-    case self.district_type
-    when "Congressional"
-      Vssc::DistrictType.congressional
-    when "City", "Community College", "School District", "Aquifer District", "Library District",  "Municipal Utility District", "MUD", "WCID", "Water District", 
-      Vssc::DistrictType.local
-    when "County"
-      Vssc::DistrictType.locality
-    when "State House"  
-      Vssc::DistrictType.state_house
-    when "State Senate"
-      Vssc::DistrictType.state_senate
-    when "Federal", "Federal Ballot", "All", "Statewide"
-      Vssc::DistrictType.statewide
-    else
-      Vssc::DistrictType.other
-    end
+  def vssc_district_type
+    Vssc::DistrictType.find(ocd_object.district_type) || Vssc::DistrictType.other
   end
+  
+  # def vssc_type
+  #   case self.district_type
+  #   when "Congressional"
+  #     Vssc::DistrictType.congressional
+  #   when "City", "Community College", "School District", "Aquifer District", "Library District",  "Municipal Utility District", "MUD", "WCID", "Water District",
+  #     Vssc::DistrictType.local
+  #   when "County"
+  #     Vssc::DistrictType.locality
+  #   when "State House"
+  #     Vssc::DistrictType.state_house
+  #   when "State Senate"
+  #     Vssc::DistrictType.state_senate
+  #   when "Federal", "Federal Ballot", "All", "Statewide"
+  #     Vssc::DistrictType.statewide
+  #   else
+  #     Vssc::DistrictType.other
+  #   end
+  # end
   
 end

@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   namespace :vssc do
     resources :election_reports, only: [:show, :update, :destroy]
     resources :elections, only: :show
-    resources :contests, only: :show
+    resources :contests, only: [:show, :edit, :update]
   end
   root 'jurisdictions#index'
   
