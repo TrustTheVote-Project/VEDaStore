@@ -5,7 +5,7 @@
 #   </xsd:restriction>
 # </xsd:simpleType>
 class Vssc::ReportFormat
-  include Vssc::Enum
+  include VsscEnum
   
   set_enum_values "precinct-level",
                   "summary-contest"    

@@ -3,6 +3,9 @@ class Vssc::GPUnit < ActiveRecord::Base
     
   has_many :reporting_unit_authority_refs
   
+  has_and_belongs_to_many :contacts, foreign_key: :reporting_unit_id
+  
+  
   has_and_belongs_to_many :election_reports
   
   define_element("GPSubUnit", type: "Vssc::GPUnit", method: :gp_sub_units)
@@ -30,9 +33,7 @@ class Vssc::GPUnit < ActiveRecord::Base
   define_attribute("stateGeoCode")
 
 
-  def ocd_object
-    @ocd_obj ||= OcdObject.find_by_ocd_id(self.national_geo_code)
-  end
+  has_one :ocd_object, foreign_key: :ocd_id, primary_key: :national_geo_code
   
   def to_xml_node_with_shapes(xml = nil, node_name = nil)
     if self.national_geo_code && ocd_object

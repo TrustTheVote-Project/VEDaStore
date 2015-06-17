@@ -3,7 +3,38 @@ class Vssc::ElectionReport < ActiveRecord::Base
   
   include VsscFunctions
   
-  
+  def self.find_with_eager_load(id)
+    self.where(id: id).includes([
+      {:gp_units=>[
+          :reporting_unit_authority_refs,
+          :contacts,
+          :gp_sub_units, 
+          :gp_sub_unit_refs, 
+          :total_counts, 
+          :party_registration,
+          {:spatial_dimensions=>[:spatial_extent]},
+          {:ocd_object=>[:shapes]}
+        ]},
+      :ballot_selections,
+      {:people=>[
+        {:contacts=>[:reporting_units]}
+      ]},
+      :offices,
+      {:elections=>[
+          {:ballot_styles=>[:ordered_contests]},
+          {:candidates=>[:offices]},
+          {:contests=>[
+            {:ballot_selections=>[
+                :counts,
+                {:candidate_selection_candidate_refs=>[:candidate]}
+              ]},
+            {:contest_total_counts=>[:total_count]},
+            :total_counts_by_gp_unit
+          ]}
+        ]
+      }
+    ]).first
+  end
   has_one :election_report_upload, dependent: :destroy
   delegate :jurisdiction, to: :election_report_upload
   
@@ -11,8 +42,9 @@ class Vssc::ElectionReport < ActiveRecord::Base
   define_element("GPUnitCollection", type: Vssc::GPUnit, method: :gp_units, passthrough: "GPUnit")
   has_and_belongs_to_many :gp_units, :class_name=>"Vssc::GPUnit"
   
-  define_element("PartyCollection", type: Vssc::Party, method: :parties, passthrough: "Party")
-  has_and_belongs_to_many :parties
+  define_element("PartyCollection", type: Vssc::Party, method: :ballot_selections, passthrough: "Party")
+  has_and_belongs_to_many :ballot_selections, association_foreign_key: 'party_id', join_table: 'vssc_ballot_selections_election_reports'
+  
   define_element("PersonCollection", type: Vssc::Person, method: :people, passthrough: "Person")
   has_and_belongs_to_many :people
   define_element("OfficeCollection", type: Vssc::Office, method: :offices, passthrough: "Office")

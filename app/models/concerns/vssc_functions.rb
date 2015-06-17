@@ -182,7 +182,7 @@ module VsscFunctions
   def convert_value_to_type(value, obj_type)
     return value
     # TODO: Figure out enums
-    # if obj_type.is_a?(Class) && obj_type.ancestors.include?(Vssc::Enum)
+    # if obj_type.is_a?(Class) && obj_type.ancestors.include?(VsscEnum)
     #   return obj_type.find(value)
     # end
     case obj_type.to_s

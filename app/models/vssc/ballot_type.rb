@@ -14,7 +14,7 @@
 #   </xsd:restriction>
 # </xsd:simpleType>
 class Vssc::BallotType
-  include Vssc::Enum
+  include VsscEnum
   
   set_enum_values "absentee",
                   "absentee-FWAB",

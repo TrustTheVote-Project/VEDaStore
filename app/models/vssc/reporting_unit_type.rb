@@ -16,7 +16,7 @@
 #   </xsd:restriction>
 # </xsd:simpleType>
 class Vssc::ReportingUnitType
-  include Vssc::Enum
+  include VsscEnum
   
   set_enum_values "audit-batch",
                   "city",

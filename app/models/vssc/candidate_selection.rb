@@ -1,7 +1,7 @@
 class Vssc::CandidateSelection < Vssc::BallotSelection
   
   define_element("Candidate", type: Vssc::CandidateSelectionCandidateRef, method: :candidate_selection_candidate_refs)
-  has_many :candidate_selection_candidate_refs
+
   def candidates
     candidate_selection_candidate_refs.collect(&:candidate)
   end

@@ -7,7 +7,7 @@
 #   </xsd:restriction>
 # </xsd:simpleType>
 class Vssc::VoteVariation
-  include Vssc::Enum
+  include VsscEnum
 
   set_enum_values "approval",
                   "cumulative",

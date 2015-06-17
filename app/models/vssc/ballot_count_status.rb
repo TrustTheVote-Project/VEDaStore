@@ -7,7 +7,7 @@
 #     </xsd:restriction>
 #   </xsd:simpleType>
 class Vssc::BallotCountStatus
-  include Vssc::Enum
+  include VsscEnum
 
   set_enum_values "completed", "in-process", "not-processed", "unknown"
 end

@@ -11,7 +11,7 @@
 #   </xsd:restriction>
 # </xsd:simpleType>
 class Vssc::DeviceType
-  include Vssc::Enum
+  include VsscEnum
   
   set_enum_values "electronic",
                   "lever",

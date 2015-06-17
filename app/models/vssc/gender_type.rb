@@ -6,7 +6,7 @@
 #   </xsd:restriction>
 # </xsd:simpleType>
 class Vssc::GenderType
-  include Vssc::Enum
+  include VsscEnum
   
   set_enum_values "female",
                   "male",
