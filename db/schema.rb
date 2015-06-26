@@ -169,14 +169,6 @@ ActiveRecord::Schema.define(version: 20150608204754) do
   add_index "vssc_ballot_selections", ["contest_id"], name: "index_vssc_ballot_selections_on_contest_id", using: :btree
   add_index "vssc_ballot_selections", ["object_id"], name: "index_vssc_ballot_selections_on_object_id", using: :btree
 
-  create_table "vssc_ballot_selections_counts", id: false, force: :cascade do |t|
-    t.integer "ballot_selection_id", limit: 4
-    t.integer "vote_count_id",       limit: 4
-  end
-
-  add_index "vssc_ballot_selections_counts", ["ballot_selection_id"], name: "index_vssc_ballot_selections_counts_on_ballot_selection_id", using: :btree
-  add_index "vssc_ballot_selections_counts", ["vote_count_id"], name: "index_vssc_ballot_selections_counts_on_vote_count_id", using: :btree
-
   create_table "vssc_ballot_selections_election_reports", id: false, force: :cascade do |t|
     t.integer "election_report_id", limit: 4
     t.integer "party_id",           limit: 4
@@ -352,11 +344,13 @@ ActiveRecord::Schema.define(version: 20150608204754) do
     t.integer  "overvotes",           limit: 4
     t.integer  "undervotes",          limit: 4
     t.integer  "write_ins",           limit: 4
+    t.integer  "ballot_selection_id", limit: 4
     t.float    "count",               limit: 24
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
   end
 
+  add_index "vssc_counts", ["ballot_selection_id"], name: "index_vssc_counts_on_ballot_selection_id", using: :btree
   add_index "vssc_counts", ["object_id"], name: "index_vssc_counts_on_object_id", using: :btree
 
   create_table "vssc_counts_gp_units", id: false, force: :cascade do |t|

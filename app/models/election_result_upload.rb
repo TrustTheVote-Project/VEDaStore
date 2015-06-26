@@ -37,6 +37,34 @@ class ElectionResultUpload < ActiveRecord::Base
     pending_rows = rows.length
     percent = 0
     self.update_attributes(row_count: pending_rows, rows_processed: 0)
+    
+    election = election_report.elections.includes([
+      {:contests=>[
+        :ballot_selections
+      ]}
+    ]).first
+    
+    gp_units = election_report.gp_units.inject({}) do |r, gp|
+      r[gp.object_id] = gp
+      r
+    end
+    
+    contests = election.contests.inject({}) do |r, c| 
+      r[c.object_id] = {
+        contest: c,
+        ballot_selections: c.ballot_selections.inject({}) {|bsr, bs| bsr[bs.object_id]=bs; bsr},
+        parties: c.ballot_selections.inject({}){|bsr, bs| bsr[bs.local_party_code]=bs if bs.is_a?(Vssc::Party); bsr},
+        write_ins: {}
+      }
+      r
+    end
+    
+    vc_list = []
+    total_count_hash = {}
+    contest_total_counts = {}
+    
+    puts "Done loading gp_units, contests and ballot selections"
+    
     rows.each_with_index do |row, i|
       new_percent = (i * 100 / pending_rows).to_i
       if  new_percent > percent
@@ -44,81 +72,205 @@ class ElectionResultUpload < ActiveRecord::Base
         self.update_attributes(rows_processed: i)
         puts self.rows_processed
       end
+      if row["total_ballots"].to_i == 0 && row[]
+        next 
+      end
       contest_id = row['Contest_Id']
       # TODO: shouldn't use elections.first
-      contest = election_report.elections.first.contests.where(object_id: "contest-#{contest_id}").first
+      contest_info = contests["contest-#{contest_id}"]
+      contest = contest_info[:contest]
+      
+      
+      
       candidate_id = row['candidate_id']
       candidate_type = row["Candidate_Type"].to_s.downcase # C vs W for write-in
       candidate_selection = nil
       if contest.is_a?(Vssc::CandidateChoice)
         if candidate_type == "c"
-          candidate_selection = contest.ballot_selections.where(object_id: "candidate-selection-#{candidate_id}").first
+          candidate_selection = contest_info[:ballot_selections]["candidate-selection-#{candidate_id}"]
         elsif candidate_type == "w"
           #Add a write-in option
           #see if it's already added
-          candidate_selection = contest.ballot_selections.where(object_id:  "candidate-selection-#{candidate_id}", is_write_in: true, type: Vssc::CandidateSelection).first
+          writein_selection_id = "candidate-selection-writein-#{candidate_id}"
+          candidate_selection = contest_info[:write_ins][writein_selection_id]
           if candidate_selection.nil?
             candidate_selection= Vssc::CandidateSelection.new
             candidate_selection.is_write_in = true
-            candidate_selection.object_id = "candidate-selection-#{candidate_id}"
-            candidate_selection.candidate_selection_candidate_refs << Vssc::CandidateSelectionCandidateRef.new(object_id: "candidate-#{candidate_id}")
-            e = election_report.elections.first
-            e.candidates << Vssc::Candidate.new(
-              object_id: "candidate-#{candidate_id}",
+            candidate_selection.object_id = writein_selection_id
+            candidate_writein_id = "candidate-writein-#{candidate_id}"
+            candidate_selection.candidate_selection_candidate_refs << Vssc::CandidateSelectionCandidateRef.new(object_id: candidate_writein_id)
+            election.candidates << Vssc::Candidate.new(
+              object_id: candidate_writein_id,
               ballot_name: row["candidate_name"]
             )
-            e.save!
+            election.save!
             contest.ballot_selections << candidate_selection
+            contest.save!
+            contest_info[:write_ins][writein_selection_id] = candidate_selection
           end
         end
       elsif contest.is_a?(Vssc::StraightParty)
-        candidate_selection = contest.ballot_selections.where(local_party_code: "party-selection-#{candidate_id}").first
-      elsif contest.is_a?(Vssc::BallotMeasure)        
-        candidate_selection = contest.ballot_selections.where(object_id: "ballot-measure-selection-#{candidate_id}").first
+        candidate_selection = contest_info[:parties]["party-selection-#{candidate_id}"]
+        # contest.ballot_selections.where(local_party_code: "party-selection-#{candidate_id}").first
+      elsif contest.is_a?(Vssc::BallotMeasure)
+        candidate_selection = contest_info[:ballot_selections]["ballot-measure-selection-#{candidate_id}"]
       end
       if candidate_selection.nil?
         raise "No candidate selection for contest #{contest.type} #{contest.id}, candidate #{candidate_id}"
       end
-      cc = "#{contest_id}-#{candidate_id}"
+
+      # find the precinct split with this ID
+
+      ps = gp_units["vspub-precinct-split-#{row["Pct_Id"]}"]
+      if ps.is_a?(Vssc::ReportingUnit) && row["Reg_voters"].to_i > 0 && ps.registered_voters.to_i != row["Reg_voters"].to_i
+        ps.update_attributes(registered_voters: row["Reg_voters"].to_i)
+      end
+      ccp = "#{contest_id}-#{candidate_id}-#{row["Pct_Id"]}"
     
       vc_a = Vssc::VoteCount.new
       vc_e = Vssc::VoteCount.new
       vc = Vssc::VoteCount.new
       
-      # find the precinct split with this ID
-      ps = election_report.gp_units.where(object_id: "vspub-precinct-split-#{row["Pct_Id"]}").first
       vc_e.gp_unit = vc.gp_unit = vc_a.gp_unit = ps.object_id
-      vc_a.object_id = "votecount-#{cc}-absentee"
+      vc_a.object_id = "votecount-#{ccp}-absentee"
       vc_a.ballot_type = Vssc::BallotType.absentee
       vc_a.count = row["absentee_votes"]
-      vc_e.object_id = "votecount-#{cc}-early"
+      vc_e.object_id = "votecount-#{ccp}-early"
       vc_e.ballot_type = Vssc::BallotType.early
       vc_e.count = row["early_votes"]
-      vc.object_id = "votecount-#{cc}-election-day"
+      vc.object_id = "votecount-#{ccp}-election-day"
       vc.ballot_type = Vssc::BallotType.election_day
       vc.count = row["election_votes"]
-      # TODO: need to lookup the candidate_selection
-      candidate_selection.vote_counts << vc
-      candidate_selection.vote_counts << vc_a
-      candidate_selection.vote_counts << vc_e
       
-      # for the first candidate in the loop put in the totals
-      if contest.contest_total_counts_by_gp_unit.size == 0
-        total_count = Vssc::TotalCount.new
+      vc.ballot_selection_id = candidate_selection.id
+      vc_a.ballot_selection_id = candidate_selection.id
+      vc_e.ballot_selection_id = candidate_selection.id
+      
+      vc_list << vc
+      vc_list << vc_a
+      vc_list << vc_e
+      
+      
+      total_count_by_gp_unit_id_total = "total-counts-#{ps.object_id}-#{contest_id}-#{Vssc::BallotType.total.to_s}"
+      if total_count_hash[total_count_by_gp_unit_id_total].nil?
+        total_count = Vssc::TotalCount.new        
+        # absentee_ballots early_ballots	election_ballots        
+        total_count.ballot_type = Vssc::BallotType.total     
         total_count.gp_unit = ps.object_id
-        total_count.object_id = "total-counts-#{total_count.gp_unit}-#{contest_id}"
+        total_count.object_id = total_count_by_gp_unit_id_total
         total_count.ballots_cast = row["total_ballots"]
         total_count.overvotes = row["total_over_votes"]
         total_count.undervotes = row["total_under_votes"]
-        contest.contest_total_counts_by_gp_unit << Vssc::ContestTotalCountsByGPUnit.new(total_count: total_count)
+        total_count_hash[total_count.object_id] = total_count        
+        contest_total_counts[contest.id] ||= []
+        contest_total_counts[contest.id] << total_count.object_id
       end
-      #candidate_selection.save!
-      contest.save!
+      total_count_by_gp_unit_id_absentee = "total-counts-#{ps.object_id}-#{contest_id}-#{Vssc::BallotType.absentee.to_s}"
+      if total_count_hash[total_count_by_gp_unit_id_absentee].nil?
+        total_count = Vssc::TotalCount.new        
+        # absentee_ballots early_ballots	election_ballots        
+        total_count.ballot_type = Vssc::BallotType.absentee     
+        total_count.gp_unit = ps.object_id
+        total_count.object_id = total_count_by_gp_unit_id_absentee
+        total_count.ballots_cast = row["absentee_ballots"]
+        total_count.overvotes = row["absentee_over_votes"]
+        total_count.undervotes = row["absentee_under_votes"]
+        total_count_hash[total_count.object_id] = total_count        
+        contest_total_counts[contest.id] ||= []
+        contest_total_counts[contest.id] << total_count.object_id
+      end
+      
+      total_count_by_gp_unit_id_early = "total-counts-#{ps.object_id}-#{contest_id}-#{Vssc::BallotType.early.to_s}"
+      if total_count_hash[total_count_by_gp_unit_id_early].nil?
+        total_count = Vssc::TotalCount.new        
+        # absentee_ballots early_ballots	election_ballots        
+        total_count.ballot_type = Vssc::BallotType.early
+        total_count.gp_unit = ps.object_id
+        total_count.object_id = total_count_by_gp_unit_id_early
+        total_count.ballots_cast = row["early_ballots"]
+        total_count.overvotes = row["early_over_votes"]
+        total_count.undervotes = row["early_under_votes"]
+        total_count_hash[total_count.object_id] = total_count        
+        contest_total_counts[contest.id] ||= []
+        contest_total_counts[contest.id] << total_count.object_id
+      end
+      
+      total_count_by_gp_unit_id_election_day = "total-counts-#{ps.object_id}-#{contest_id}-#{Vssc::BallotType.election_day.to_s}"
+      if total_count_hash[total_count_by_gp_unit_id_election_day].nil?
+        total_count = Vssc::TotalCount.new        
+        # absentee_ballots early_ballots	election_ballots        
+        total_count.ballot_type = Vssc::BallotType.election_day
+        total_count.gp_unit = ps.object_id
+        total_count.object_id = total_count_by_gp_unit_id_election_day
+        total_count.ballots_cast = row["election_ballots"]
+        total_count.overvotes = row["election_over_votes"]
+        total_count.undervotes = row["election_under_votes"]
+        total_count_hash[total_count.object_id] = total_count        
+        contest_total_counts[contest.id] ||= []
+        contest_total_counts[contest.id] << total_count.object_id
+      end
+      
     end
-    # TODO: when uploading results, change the report status. To what?
     
     self.update_attributes(rows_processed: self.row_count)
     
+    
+    # break it down
+    grp_size = 5000
+    i = 0
+    length = vc_list.size
+    
+    vc_list.in_groups_of(grp_size, false) do |group|
+      Vssc::VoteCount.import(group)
+      puts "Imported Vote Counts #{i*grp_size}-#{(i+1)*grp_size} of #{length}"      
+      i += 1
+    end
+    
+    i = 0
+    length = total_count_hash.values.size
+    total_count_hash.values.in_groups_of(grp_size, false) do |group|
+      Vssc::TotalCount.import(group)
+      puts "Imported Total Count #{i*grp_size}-#{(i+1)*grp_size} of #{length}"   
+      i += 1  
+    end
+    
+    puts "reload total_count list"
+    h = {}
+    i = 0
+    length = total_count_hash.keys.size
+    total_count_hash.keys.in_groups_of(grp_size, false) do |group|
+      Vssc::TotalCount.where(:object_id=>group).each do |tc|
+        h[tc.object_id] = tc.id
+      end
+      puts "Reloading total_count list #{i*grp_size}-#{(i+1)*grp_size} of #{length}" 
+      i += 1      
+    end
+    total_count_hash = h
+    
+
+    puts "Build Contest Total Counts by gpunit list"
+    contest_total_counts_by_gp_unit = []
+    contest_total_counts.each do |contest_id, tc_object_id_list|
+      tc_object_id_list.each do |tc_object_id|
+        contest_total_counts_by_gp_unit << Vssc::ContestTotalCountsByGPUnit.new(total_count_id: total_count_hash[tc_object_id], contest_id: contest_id)
+      end
+    end
+    
+    i = 0
+    length = contest_total_counts_by_gp_unit.size
+    puts "Load #{length} total count by gp unit"
+    contest_total_counts_by_gp_unit.in_groups_of(grp_size, false) do |group|
+      Vssc::ContestTotalCountsByGPUnit.import(group)
+      puts "Imported Total Count by GPUnit #{i*grp_size}-#{(i+1)*grp_size} of #{length}"      
+      i += 1
+    end
+    
+    
+    
+    
+    # TODO: when uploading results, change the report status. To what?
+    
+    puts "Save!"
     election_report.status = Vssc::ReportStatus.unofficial_complete
     election_report.save!  
   end

@@ -235,7 +235,13 @@ module VsscFunctions
           value = [value]
         end
         value.each do |v|
-          v.to_xml_node(r, node_name)
+          begin
+            v.to_xml_node(r, node_name)
+          rescue Exception => e
+            puts v.inspect
+            Rails.logger.error("#{node_name} #{v.inspect}")
+            raise e
+          end
         end
       else
         if !is_many?(options[:method])
@@ -251,7 +257,11 @@ module VsscFunctions
   def to_xml_node(xml = nil, node_name = nil, &block)
     node_name ||= class_node_name
     xml ||= Nokogiri::XML::Builder.new
-    
+    #Rails.logger.debug("Writing node: #{node_name}")
+    if node_name == "BallotSelection"
+      Rails.logger.debug("Writing node: #{node_name}")
+    end
+      
     xml.send(node_name, xml_attributes_hash(node_name)) do |r|
       elements.each do |k, options|
         value = self.send(options[:method])

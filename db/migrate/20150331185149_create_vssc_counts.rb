@@ -14,10 +14,13 @@ class CreateVsscCounts < ActiveRecord::Migration
       t.integer :undervotes
       t.integer :write_ins
       
+      t.integer :ballot_selection_id
+      
       t.float :count
       
       t.timestamps null: false
     end
     add_index :vssc_counts, :object_id
+    add_index :vssc_counts, :ballot_selection_id
   end
 end

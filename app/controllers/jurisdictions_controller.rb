@@ -24,7 +24,17 @@ class JurisdictionsController < ApplicationController
   end
   
   def show
-    @jurisdiction=Jurisdiction.find(params[:id])
+    @jurisdiction=Jurisdiction.includes([
+      :districts,
+      :reporting_units,
+      {:background_sources=>[
+        {:districts=>[
+          :ocd_object,
+          {:reporting_units=>[:ocd_object]}
+        ]}
+      ]}
+    ]).where(id: params[:id]).first
+    
   end
   
   def vssc_export

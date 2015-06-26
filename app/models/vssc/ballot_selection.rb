@@ -7,7 +7,7 @@ class Vssc::BallotSelection < ActiveRecord::Base
   
   
   define_element("VoteCounts", type: Vssc::VoteCount, method: :counts)
-  has_and_belongs_to_many :counts, association_foreign_key: 'vote_count_id', join_table: 'vssc_ballot_selections_counts'
+  has_many :counts
   
   define_attribute("object_id", :required=>true)
   define_attribute("ballotSelectionID")

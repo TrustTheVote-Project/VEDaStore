@@ -29,13 +29,19 @@ module Hart
     
       report.date = DateTime.iso8601(Date.parse(er.date).iso8601)
       report.state_abbreviation = er.state_abbreviation
+      report.save!
     
+      districts = {}
+      source_districts = source.districts.inject({}) do |h, sd|
+        h[sd.internal_id] = sd
+        h
+      end
       DMap::ModelRegister.classes[:district].all.values.each do |d|
         district = Vssc::District.new
 
         district.local_geo_code = d.id
         district.name = d.attributes[:name]
-        source_district = source.districts.where(internal_id: d.id).first
+        source_district = source_districts[d.id] #source.districts.where(internal_id: d.id).first
         if source_district.nil?
           raise "District #{d} not found in background data from source #{source}!"
         end
@@ -50,54 +56,86 @@ module Hart
         # source_district.reporting_units.each do |ru|
         #   district.gp_sub_unit_refs << Vssc::GPSubUnitRef.new(object_id: ru.object_id)
         # end
-            
-        report.gp_units << district
-      
+
+        districts[district.object_id] = district
       end
+      Vssc::District.import(districts.values)
+      districts = Vssc::District.where(object_id: districts.keys)
+      # Associate with this report
+      values = districts.map {|district| "(#{report.id},#{district.id})"}.join(",")
+      Vssc::District.connection.execute("INSERT INTO vssc_election_reports_gp_units (election_report_id, gp_unit_id) VALUES #{values}")
       
-      # Save the report to the district objects are findable later
-      report.save!
       
       
-    
       # put all the precincts in with the related precinct-splits
+      precincts = {}
+      source_precincts = source.reporting_units.inject({}) do |h, ru|
+        h[ru.internal_id] = ru
+        h
+      end
       DMap::ModelRegister.classes[:precinct].all.values.each do |p|
         precinct = Vssc::ReportingUnit.new
         precinct.local_geo_code = p.id
-        source_precinct = source.reporting_units.where(:internal_id=>p.id).first
+        source_precinct = source_precincts[p.id] #source.reporting_units.where(:internal_id=>p.id).first
         if source_precinct.nil?
           raise "Precinct #{p} not found in source #{source}"
         end
 
         precinct.object_id = source_precinct.object_id
         precinct.national_geo_code = source_precinct.ocd_id
-        report.gp_units << precinct      
+
+        precincts[precinct.object_id] = precinct
+      end
+      Vssc::ReportingUnit.import(precincts.values)
+      #associate with this report
+      precincts = Vssc::ReportingUnit.where(object_id: precincts.keys)
+      values = precincts.map {|precinct| "(#{report.id},#{precinct.id})"}.join(",")
+      Vssc::ReportingUnit.connection.execute("INSERT INTO vssc_election_reports_gp_units (election_report_id, gp_unit_id) VALUES #{values}")
+      
+      
+      report_gp_units = report.gp_units.where(type: "Vssc::ReportingUnit").inject({}) do |h, gpu|
+        h[gpu.local_geo_code] = gpu
+        h
       end
       
-      report.save!
       
+      gp_sub_unit_refs = []
+      precinct_splits = {}
       DMap::ModelRegister.classes[:precinct_split].all.values.each do |ps|
         precinct_split = Vssc::ReportingUnit.new
         # precinct split has no background source equivalent??
         precinct_split.object_id = "vspub-precinct-split-#{ps.id}"
-        precinct = report.gp_units.where(local_geo_code: ps.precinct_id, type: 'Vssc::ReportingUnit').first
+        precinct = report_gp_units[ps.precinct_id] #report.gp_units.where(local_geo_code: ps.precinct_id, type: 'Vssc::ReportingUnit').first
         if precinct.nil?
-          raise "Precinct #{ps.precint_id} not found in source report"
+          raise "Precinct #{ps.precinct_id} not found in source report"
         end
         
-        precinct.gp_sub_unit_refs << Vssc::GPSubUnitRef.new(object_id:  precinct_split.object_id)
-        precinct.save!
-        report.gp_units << precinct_split
+        gp_sub_unit_ref = Vssc::GPSubUnitRef.new(object_id:  precinct_split.object_id, gp_unit_id: precinct.id)
+        gp_sub_unit_refs << gp_sub_unit_ref
+        precinct_splits[precinct_split.object_id] = precinct_split
       end
-      report.save!
+
+      Vssc::ReportingUnit.import(precinct_splits.values)
+      precinct_splits = Vssc::ReportingUnit.where(object_id: precinct_splits.keys)
+      values = precinct_splits.map {|precinct| "(#{report.id},#{precinct.id})"}.join(",")
+      Vssc::ReportingUnit.connection.execute("INSERT INTO vssc_election_reports_gp_units (election_report_id, gp_unit_id) VALUES #{values}")
+
+      Vssc::GPSubUnitRef.import(gp_sub_unit_refs)
       
-      DMap::ModelRegister.classes[:district_precinct_split].all.values.each do |d_ps|
-        district = report.gp_units.where(local_geo_code: d_ps.district_id, type: 'Vssc::District').first
-        precinct_split = report.gp_units.where(object_id: "vspub-precinct-split-#{d_ps.precinct_split_id}").first
-        district.gp_sub_unit_refs << Vssc::GPSubUnitRef.new(object_id:  precinct_split.object_id)
-        district.save!
+      
+      report_districts = report.gp_units.where(type: "Vssc::District").inject({}) do |h, d|
+        h[d.local_geo_code] = d
+        h
       end
-    
+      district_sub_unit_refs = []
+
+      DMap::ModelRegister.classes[:district_precinct_split].all.values.each do |d_ps|
+        district = report_districts[d_ps.district_id] #report.gp_units.where(local_geo_code: d_ps.district_id, type: 'Vssc::District').first
+        
+        district_sub_unit_refs << Vssc::GPSubUnitRef.new(object_id:  "vspub-precinct-split-#{d_ps.precinct_split_id}", gp_unit_id: district.id)
+      end
+      Vssc::GPSubUnitRef.import(district_sub_unit_refs)
+      
       DMap::ModelRegister.classes[:party].all.values.each do |p|
         party = Vssc::Party.new
         party.abbreviation = p.abbreviation
@@ -105,7 +143,7 @@ module Hart
         # this may get overwritten later!! 
         party.object_id = "party-#{p.id}"
       
-        report.parties << party
+        report.ballot_selections << party
       end
       report.save!
       
@@ -164,7 +202,7 @@ module Hart
         elsif c.contest_type.downcase == "s"
           contest = Vssc::StraightParty.new
           c.relations(:candidate).each do |candidate|
-            candidate_selection = report.parties.where(object_id: "party-#{candidate.party_id}").first
+            candidate_selection = report.ballot_selections.where(object_id: "party-#{candidate.party_id}").first
             if candidate_selection.nil?
               raise "Party #{candidate.party_id} not found! (#{candidate.inspect})"
             end

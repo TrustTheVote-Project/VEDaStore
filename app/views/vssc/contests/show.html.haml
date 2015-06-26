@@ -14,7 +14,14 @@
     %h4 Full Text
     %p= @contest.full_text
   
-  - if @contest.total_counts_by_gp_unit.any?
+  
+  %ul
+    %li= "Ballots Case: #{@contest.total_ballots_cast}"
+    %li= "Overvotes: #{@contest.total_overvotes}"
+    %li= "Undervotes: #{@contest.total_undervotes}"
+    %li= "Write ins: #{@contest.total_write_ins}"
+    
+  - if @contest.total_counts_by_gp_unit.any? && false
     %ul
       - @contest.total_counts_by_gp_unit.each do |tc|
         %li
