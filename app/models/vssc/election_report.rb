@@ -70,10 +70,10 @@ class Vssc::ElectionReport < ActiveRecord::Base
         puts "Substituting contest #{contest.inspect} ballot selections"
         Rails.logger.debug("Substituting contest #{contest.inspect} ballot selections")
         contest.ballot_selections.each do |bs|
-          records = ballot_selection_counts[bs.id]
+          records = ballot_selection_counts[bs.id] || []
           association = bs.association(:counts)
           association.loaded!
-          association.target.concat(records)
+          association.target.concat(records.to_a)
           records.each { |record| association.set_inverse_instance(record) }
         end
       end

@@ -72,7 +72,7 @@ class ElectionResultUpload < ActiveRecord::Base
         self.update_attributes(rows_processed: i)
         puts self.rows_processed
       end
-      if row["total_ballots"].to_i == 0 && row[]
+      if row["total_ballots"].to_i == 0
         next 
       end
       contest_id = row['Contest_Id']
