@@ -1,3 +1,0 @@
-module Hart
-
-end

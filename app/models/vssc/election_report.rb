@@ -114,10 +114,6 @@ class Vssc::ElectionReport < ActiveRecord::Base
   define_attribute("stateCode")
   define_attribute("vendorApplicationID", required: true)
   
-  def parse_hart_dir(dest)
-    Hart::Parser.parse(dest, self)
-  end
-  
   attr_reader :election_results_csv
   
   def election_results_csv=(file)

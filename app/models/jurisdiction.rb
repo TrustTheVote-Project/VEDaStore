@@ -3,7 +3,6 @@ require 'fileutils'
 require 'zip'
 
 class Jurisdiction < ActiveRecord::Base
-  before_save :process_hart_upload, :process_reporting_unit_kml_upload
   
   belongs_to :state
   
@@ -55,7 +54,7 @@ class Jurisdiction < ActiveRecord::Base
   # t.datetime "updated_at",    null: false
   # t.integer  "ocd_object_id" - this is for "parent" levels (maybe unnecessary)
 
-  attr_reader :background_csv, :background_vip, :hart_election_report, :vssc_election_report
+  attr_reader :background_csv, :vssc_election_report
   def background_csv=(file)
     @background_csv=file
     self.load_from_csv(file.read, file.original_filename)
@@ -87,32 +86,6 @@ class Jurisdiction < ActiveRecord::Base
     end
   end
   
-  attr_accessor :selected_source_for_hart, :hart_election_report
-  def process_hart_upload
-    if zip_file = self.hart_election_report
-      # TODO: handle zip-file differences better
-      dest = Rails.root.join('zip_uploads', Time.now.getutc.to_s)
-      FileUtils.mkdir_p(dest)
-      Zip::File.open(zip_file.path) do |zip_file|
-        zip_file.each do |entry|
-          puts "Extracting #{entry.name}"
-          entry.extract(dest.join(entry.name))
-        end
-      end
-      eru = ElectionReportUpload.new(source_type: "Hart ZIP", file_name: zip_file.original_filename)
-
-      eru.jurisdiction = self
-      eru.background_source_id = self.selected_source_for_hart
-      eru.build_election_report
-      eru.election_report.parse_hart_dir(
-        dest.join(zip_file.original_filename.gsub(".zip", '')),
-      )
-      eru.save!
-    
-      # delete from the hart file      
-    end
-  end
-    
   def load_from_csv_file(filename)
     File.open(filename, "r") do |f|
       load_from_csv(f.read, filename)
