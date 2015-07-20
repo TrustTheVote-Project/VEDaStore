@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   end
   resources :election_result_uploads, only: [:index]
   namespace :vssc do
-    resources :election_reports, only: [:show, :update, :destroy]
+    resources :election_reports, only: [:new, :create, :show, :update, :destroy]
     resources :elections, only: :show
     resources :contests, only: [:show, :edit, :update]
   end

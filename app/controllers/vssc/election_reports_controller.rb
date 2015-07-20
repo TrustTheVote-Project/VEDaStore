@@ -1,5 +1,14 @@
 class Vssc::ElectionReportsController < ApplicationController
   
+  def new
+  end
+  
+  def create
+    @er = Vssc::ElectionReport.parse_vssc_file(params[:vssc_file])
+    @er.save!
+    redirect_to action: 'show', :id=>@er.id, format: :xml
+  end
+  
   def show
     @er = Vssc::ElectionReport.find_with_eager_load(params[:id])
     respond_to do |f|

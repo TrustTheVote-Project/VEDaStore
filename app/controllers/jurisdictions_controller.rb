@@ -8,6 +8,7 @@ class JurisdictionsController < ApplicationController
   def new
     @jurisdiction = Jurisdiction.new
   end
+  
   def create
     @jurisdiction = Jurisdiction.new(jurisdiction_params)
     @jurisdiction.save!

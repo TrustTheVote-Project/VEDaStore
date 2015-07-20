@@ -10,11 +10,13 @@
     = javascript_include_tag "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"
     = csrf_meta_tags
   %body
-    %nav
-      %ul.nav.nav-pils
-        %li{role: "presentation"}
-          = link_to "Jurisdictions", jurisdictions_path
-        %li{role: "presentation"}
-          = link_to "Election Result Uploads", election_result_uploads_path
+    -# %nav
+    -#   %ul.nav.nav-pils
+    -#     %li{role: "presentation"}
+    -#       = link_to "Jurisdictions", jurisdictions_path
+    -#     %li{role: "presentation"}
+    -#       = link_to "Election Result Uploads", election_result_uploads_path
 
+    %br
     = yield
+    %br
