@@ -1,24 +1,42 @@
+# <xsd:complexType name="Candidate">
+#   <xsd:sequence>
+#     <xsd:element name="BallotName" type="InternationalizedText"/>
+#     <xsd:element name="Code" type="Code" minOccurs="0" maxOccurs="unbounded"/>
+#     <xsd:element name="PartyId" type="xsd:IDREF" minOccurs="0"/>
+#     <xsd:element name="PersonId" type="xsd:IDREF" minOccurs="0"/>
+#   </xsd:sequence>
+#   <xsd:attribute name="ObjectId" type="xsd:ID" use="required"/>
+#   <xsd:attribute name="FileDate" type="xsd:date"/>
+#   <xsd:attribute name="Id" type="xsd:string"/>
+#   <xsd:attribute name="IsIncumbent" type="xsd:boolean"/>
+#   <xsd:attribute name="IsTopTicket" type="xsd:boolean"/>
+#   <xsd:attribute name="PostElectionStatus" type="CandidatePostElectionStatus"/>
+#   <xsd:attribute name="PreElectionStatus" type="CandidatePreElectionStatus"/>
+#   <xsd:attribute name="SequenceOrder" type="xsd:integer"/>
+# </xsd:complexType>
 class Vssc::Candidate < ActiveRecord::Base
   include VsscFunctions
   
   belongs_to :election
+
+    
+  define_element("BallotName", type: Vssc::InternationalizedText, belongs_to: true)
+
+  define_element("Code", type: Vssc::Code, method: :codes)
+  has_and_belongs_to_many :codes
   
-  define_element("Party")
-  define_element("Person")
-  
-  define_element("Office", type: String, method: :offices)
-  has_many :candidate_office_refs
-  has_many :offices, through: :candidate_office_refs
+  define_element("PartyId", method: :party)
+  define_element("PersonId", method: :person)
   
   
   
-  define_attribute("object_id", required: true)
-  define_attribute("ballotName", required: true)
-  define_attribute("candidateID")
-  define_attribute("fileDate", type: "xsd:dateTime")  
-  define_attribute("isIncumbent", type: "xsd:boolean")  
-  define_attribute("isTopTicket", type: "xsd:boolean")  
-  define_attribute("sequenceOrder", type: Fixnum)  
-  define_attribute("status", type: Vssc::CandidateStatus)
+  define_attribute("ObjectId", required: true)
+  define_attribute("FileDate", type: "xsd:date")  
+  define_attribute("Id", method: :candidate_id)
+  define_attribute("IsIncumbent", type: "xsd:boolean")  
+  define_attribute("IsTopTicket", type: "xsd:boolean")  
+  define_attribute("PostElectionStatus", type: Vssc::CandidatePostElectionStatus)
+  define_attribute("PreElectionStatus", type: Vssc::CandidatePreElectionStatus)
+  define_attribute("SequenceOrder", type: Fixnum)  
   
 end

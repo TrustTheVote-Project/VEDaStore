@@ -353,12 +353,16 @@
 		<xsd:attribute name="TotalSubUnits" type="xsd:integer"/>
 		<xsd:attribute name="VoteVariationType" type="VoteVariationType"/>
 	</xsd:complexType>
-	<xsd:complexType name="CountStatus">
+  
+	
+  <xsd:complexType name="CountStatus">
 		<xsd:attribute name="OtherType" type="xsd:string"/>
 		<xsd:attribute name="Status" type="CountItemStatus" use="required"/>
 		<xsd:attribute name="Type" type="CountItemType" use="required"/>
 	</xsd:complexType>
-	<xsd:complexType name="Counts" abstract="true">
+	
+  
+  <xsd:complexType name="Counts" abstract="true">
 		<xsd:sequence>
 			<xsd:element name="Device" type="Device" minOccurs="0"/>
 			<xsd:element name="GpUnitId" type="xsd:IDREF" minOccurs="0"/>
@@ -366,6 +370,7 @@
 		<xsd:attribute name="OtherType" type="xsd:string"/>
 		<xsd:attribute name="Type" type="CountItemType"/>
 	</xsd:complexType>
+  
 	<xsd:complexType name="Device">
 		<xsd:attribute name="Manufacturer" type="xsd:string"/>
 		<xsd:attribute name="Model" type="xsd:string"/>

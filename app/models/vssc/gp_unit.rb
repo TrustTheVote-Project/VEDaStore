@@ -1,4 +1,4 @@
-class Vssc::GPUnit < ActiveRecord::Base
+class Vssc::GpUnit < ActiveRecord::Base
   include VsscFunctions
     
   has_many :reporting_unit_authority_refs

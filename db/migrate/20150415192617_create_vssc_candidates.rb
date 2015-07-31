@@ -10,7 +10,8 @@ class CreateVsscCandidates < ActiveRecord::Migration
       t.boolean :is_incumbent
       t.boolean :is_top_ticket
       t.integer :sequence_order
-      t.string :status
+      t.string :post_election_status
+      t.string :pre_election_status
       t.timestamps null: false
     end
     add_index :vssc_candidates, :object_id

@@ -1,15 +1,20 @@
-class Vssc::Count < ActiveRecord::Base
+# <xsd:complexType name="Counts" abstract="true">
+#   <xsd:sequence>
+#     <xsd:element name="Device" type="Device" minOccurs="0"/>
+#     <xsd:element name="GpUnitId" type="xsd:IDREF" minOccurs="0"/>
+#   </xsd:sequence>
+#   <xsd:attribute name="OtherType" type="xsd:string"/>
+#   <xsd:attribute name="Type" type="CountItemType"/>
+# </xsd:complexType>
+class Vssc::Counts < ActiveRecord::Base
   include VsscFunctions
   
-  define_element("GPUnit")
-  #has_one :gp_unit_ref - via GPUnit string object_id
+  define_element("Device", type: Vssc::Device)
+  has_one :device
   
+  define_element("GPUnitId")
   
+  define_attribute("OtherType")
+  define_attribute("Type", type: Vssc::CountItemType, method: :count_item_type)
   
-  define_attribute("object_id", required: true)
-  define_attribute("ballotType", type: Vssc::BallotType)
-  
-  define_attribute("deviceManufacturer")
-  define_attribute("deviceModel")
-  define_attribute("deviceType", type: Vssc::DeviceType)
 end

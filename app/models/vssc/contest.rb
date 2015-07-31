@@ -1,3 +1,23 @@
+# <xsd:complexType name="Contest" abstract="true">
+#   <xsd:sequence>
+#     <xsd:element name="BallotSelection" type="BallotSelection" minOccurs="0" maxOccurs="unbounded"/>
+#     <xsd:element name="BallotSubTitle" type="InternationalizedText" minOccurs="0"/>
+#     <xsd:element name="BallotTitle" type="InternationalizedText" minOccurs="0"/>
+#     <xsd:element name="Code" type="Code" minOccurs="0" maxOccurs="unbounded"/>
+#     <xsd:element name="CountStatus" type="CountStatus" minOccurs="0" maxOccurs="unbounded"/>
+#     <xsd:element name="JurisdictionalScopeId" type="xsd:IDREF"/>
+#     <xsd:element name="Name" type="xsd:string"/>
+#     <xsd:element name="SummaryCounts" type="SummaryCounts" minOccurs="0" maxOccurs="unbounded"/>
+#   </xsd:sequence>
+#   <xsd:attribute name="ObjectId" type="xsd:ID" use="required"/>
+#   <xsd:attribute name="Abbreviation" type="xsd:string"/>
+#   <xsd:attribute name="HasRotation" type="xsd:boolean"/>
+#   <xsd:attribute name="OtherVoteVariationType" type="xsd:string"/>
+#   <xsd:attribute name="SequenceOrder" type="xsd:integer"/>
+#   <xsd:attribute name="SubUnitsReported" type="xsd:integer"/>
+#   <xsd:attribute name="TotalSubUnits" type="xsd:integer"/>
+#   <xsd:attribute name="VoteVariationType" type="VoteVariationType"/>
+# </xsd:complexType>
 class Vssc::Contest < ActiveRecord::Base
   include VsscFunctions
   
@@ -6,45 +26,26 @@ class Vssc::Contest < ActiveRecord::Base
   define_element("BallotSelection", type: Vssc::BallotSelection, method: :ballot_selections)
   has_many :ballot_selections, class_name: "Vssc::BallotSelection", dependent: :destroy
   
-  define_element("ContestGPScope")
-  def contest_gp_scope_object
-    election.election_report.gp_units.where(object_id: contest_gp_scope).first
-  end
-  define_element("ContestTotalCounts", type: Vssc::TotalCount, method: :total_counts)
-  has_many :contest_total_counts, dependent: :destroy
-  has_many :total_counts, through: :contest_total_counts
+  define_element("BallotSubTitle", type: Vssc::InternationalizedText, belongs_to: true)
+  define_element("BallotTitle", type: Vssc::InternationalizedText, belongs_to: true)
   
+  define_element("Code", type: Vssc::Code, method: :codes)
+  has_many :codes
+  define_element("CountStatus", type: Vssc::CountStatus, method: :count_statuses)
+  has_many :count_statuses
+
+  define_element("JurisdictionalScopeId")
+  define_element("Name")
+  define_element("SummaryCounts", type: Vssc::SummaryCounts, method: :summary_counts)
+  has_many :summary_counts
   
-  
-  define_element("ContestTotalCountsByGPUnit", type: Vssc::TotalCount, method: :total_counts_by_gp_unit)
-  has_many :contest_total_counts_by_gp_unit, class_name: "Vssc::ContestTotalCountsByGPUnit", dependent: :destroy
-  has_many :total_counts_by_gp_unit, through: :contest_total_counts_by_gp_unit, source: :total_count
-  
-  def total_ballots_cast
-    self.total_counts_by_gp_unit.sum(:ballots_cast)
-  end
-  def total_overvotes
-    self.total_counts_by_gp_unit.sum(:overvotes)
-  end
-  def total_undervotes
-    self.total_counts_by_gp_unit.sum(:undervotes)
-  end
-  def total_write_ins
-    self.total_counts_by_gp_unit.sum(:write_ins)
-  end
-  
-  
-  
-  
-  define_attribute("object_id", required: true)
-  define_attribute("abbreviation")
-  define_attribute("localContestCode")
-  define_attribute("name", required: true)
-  define_attribute("nationalContestCode")
-  define_attribute("reportedPrecincts", type: Fixnum)
-  define_attribute("sequenceOrder", type: Fixnum)
-  define_attribute("stateContestCode")
-  define_attribute("totalPrecincts", type: Fixnum)
-  define_attribute("voteVariation", type: Vssc::VoteVariation )
+  define_attribute("ObjectId", required: true)
+  define_attribute("Abbreviation")
+  define_attribute("HasRotation", type: "xsd:boolean")
+  define_attribute("OtherVoteVariationType")
+  define_attribute("SequenceOrder", type: Fixnum)
+  define_attribute("SubUnitsReported", type: Fixnum)
+  define_attribute("TotalSubUnits", type: Fixnum)
+  define_attribute("VoteVariationType", type: Vssc::VoteVariationType )
   
 end

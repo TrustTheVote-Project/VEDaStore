@@ -21,8 +21,18 @@ class CreateVsscContests < ActiveRecord::Migration
       
       t.string :vote_variation
       
-      t.text :full_text
-      t.text :summary_text
+      # From BallotMeasureContest
+      t.string :other_type
+      t.string :ballot_measure_type
+      
+      t.integer :con_statement_id
+      t.integer :effect_of_abstain_id
+      t.integer :full_text_id
+      t.integer :passage_threshold_id
+      t.integer :pro_statement_id
+      t.integer :summary_text_id
+      
+      
       
       t.timestamps null: false
     end
