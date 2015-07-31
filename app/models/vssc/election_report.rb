@@ -83,9 +83,6 @@ class Vssc::ElectionReport < ActiveRecord::Base
     
   end
 
-  has_one :election_report_upload, dependent: :destroy
-  delegate :jurisdiction, to: :election_report_upload
-  
   define_element("Message")
   define_element("GPUnitCollection", type: Vssc::GPUnit, method: :gp_units, passthrough: "GPUnit")
   has_and_belongs_to_many :gp_units, :class_name=>"Vssc::GPUnit"
@@ -113,56 +110,6 @@ class Vssc::ElectionReport < ActiveRecord::Base
   define_attribute("stateAbbreviation", required: true)
   define_attribute("stateCode")
   define_attribute("vendorApplicationID", required: true)
-  
-  attr_reader :election_results_csv
-  
-  def election_results_csv=(file)
-    eru = ElectionResultUpload.create(election_report: self, file: file)
-    eru.delay.process!
-  end
-  
-  
-  
-  def self.from_jurisdiction(j)
-    er = self.new
-    er.object_id = "VSPubJurisdictionReport-#{j.id}-#{DateTime.now}"
-    er.date = DateTime.now
-    er.format = Vssc::ReportFormat.summary_contest
-    er.status = Vssc::ReportFormat.pre_election
-    er.issuer = "VSPub-#{j.name}"
-    er.state_abbreviation = j.state_abbreviation
-    er.vendor_application_id = "VSPub-<some-deployment-specific-guid>"
-    
-    j.districts.each do |d|
-      district = Vssc::District.new
-      district.district_type = d.vssc_type
-      
-      d.reporting_units.each do |ru|
-        district.gp_sub_unit_refs << Vssc::GPSubUnitRef.new(object_id: ru.object_id)
-      end
-      
-      district.object_id = d.object_id
-      district.local_geo_code = d.internal_id
-      district.name = d.name
-      district.national_geo_code = d.ocd_id
-      
-      er.gp_units << district
-    end
-    
-    j.reporting_units.each do |ru|
-      reporting_unit = Vssc::ReportingUnit.new
-
-      reporting_unit.object_id = ru.object_id
-      reporting_unit.local_geo_code = ru.internal_id
-      reporting_unit.name = ru.name
-      reporting_unit.national_geo_code = ru.ocd_id
-      
-      reporting_unit.reporting_unit_type = Vssc::ReportingUnitType.precinct      
-      
-      er.gp_units << reporting_unit      
-    end
-    return er
-  end
   
   def xml_attributes_hash_with_root(node_name)
     attr_hash = xml_attributes_hash_without_root(node_name)
