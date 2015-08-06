@@ -6,7 +6,7 @@
 #     <xsd:enumeration value="WriteIn"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::CandidatePreElectionStatus
+class Vssc::Enum::CandidatePreElectionStatus
   include VsscEnum
   
   set_enum_values "Filed",

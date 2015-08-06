@@ -12,7 +12,7 @@
 #     <xsd:enumeration value="All"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::DayType
+class Vssc::Enum::DayType
   include VsscEnum
   
   set_enum_values "Sunday",

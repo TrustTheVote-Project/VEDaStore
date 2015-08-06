@@ -6,7 +6,7 @@
 #     <xsd:enumeration value="Unknown"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::CountItemStatus
+class Vssc::Enum::CountItemStatus
   include VsscEnum
   
   set_enum_values "Completed",

@@ -7,7 +7,7 @@
 #     <xsd:enumeration value="Wkt"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::GeoSpatialFormat
+class Vssc::Enum::GeoSpatialFormat
   include VsscEnum
   
   set_enum_values "GeoJson",

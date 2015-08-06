@@ -13,7 +13,7 @@
 #     <xsd:enumeration value="Other"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::CountItemType
+class Vssc::Enum::CountItemType
   include VsscEnum
   
   set_enum_values "Absentee",

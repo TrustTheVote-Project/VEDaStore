@@ -4,7 +4,7 @@
 #     <xsd:enumeration value="SummaryContest"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::ReportDetailLevel
+class Vssc::Enum::ReportDetailLevel
   include VsscEnum
   
   set_enum_values "PrecinctLevel",

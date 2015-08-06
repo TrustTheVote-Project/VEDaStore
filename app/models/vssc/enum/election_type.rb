@@ -9,7 +9,7 @@
 #     <xsd:enumeration value="Other"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::ElectionType
+class Vssc::Enum::ElectionType
   include VsscEnum
   
   set_enum_values "General",

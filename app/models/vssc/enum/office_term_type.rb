@@ -4,7 +4,7 @@
 #     <xsd:enumeration value="UnexpiredTerm"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::OfficeTermType
+class Vssc::Enum::OfficeTermType
   include VsscEnum
   
   set_enum_values "FullTerm",

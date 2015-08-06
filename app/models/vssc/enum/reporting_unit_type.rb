@@ -29,7 +29,7 @@
 #     <xsd:enumeration value="Other"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::ReportingUnitType
+class Vssc::Enum::ReportingUnitType
   include VsscEnum
   
   set_enum_values "BallotBatch",

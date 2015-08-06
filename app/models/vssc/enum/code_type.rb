@@ -8,7 +8,7 @@
 #     <xsd:enumeration value="StateLevel"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::CodeType
+class Vssc::Enum::CodeType
   include VsscEnum
   
   set_enum_values "Fips",

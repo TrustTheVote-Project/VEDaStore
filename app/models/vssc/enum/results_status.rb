@@ -8,7 +8,7 @@
 #     <xsd:enumeration value="UnofficialPartial"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::ResultsStatus
+class Vssc::Enum::ResultsStatus
   include VsscEnum
   
   set_enum_values "Certified",

@@ -7,7 +7,7 @@
 #     <xsd:enumeration value="Retention"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
-class Vssc::BallotMeasureType
+class Vssc::Enum::BallotMeasureType
   include VsscEnum
   
   set_enum_values "BallotMeasure",
