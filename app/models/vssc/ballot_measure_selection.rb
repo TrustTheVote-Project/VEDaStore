@@ -8,10 +8,7 @@
 #   </xsd:complexContent>
 # </xsd:complexType>
 class Vssc::BallotMeasureSelection < Vssc::BallotSelection
+
   define_attribute("Selection", {:required=>true})
-  
-  def name
-    selection
-  end
   
 end
