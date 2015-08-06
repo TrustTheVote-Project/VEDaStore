@@ -3,7 +3,9 @@
 #   <xsd:attribute name="Model" type="xsd:string"/>
 #   <xsd:attribute name="Type" type="DeviceType"/>
 # </xsd:complexType>
-class Vssc::Device < Vssc::GPUnit
+class Vssc::Device < ActiveRecord::Base
+  include VsscFunctions
+  
   define_attribute("Manufacturer")
   define_attribute("Model")
   define_attribute("Type", type: Vssc::DeviceType, method: :device_type)

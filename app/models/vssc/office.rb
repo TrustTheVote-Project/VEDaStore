@@ -1,21 +1,37 @@
+# <xsd:complexType name="Office">
+#   <xsd:sequence>
+#     <xsd:element name="Code" type="Code" minOccurs="0" maxOccurs="unbounded"/>
+#     <xsd:element name="ContactInformation" type="ContactInformation" minOccurs="0"/>
+#     <xsd:element name="JurisdictionalScopeId" type="xsd:IDREF" minOccurs="0"/>
+#     <xsd:element name="Name" type="InternationalizedText"/>
+#     <xsd:element name="OfficeHolderId" type="xsd:IDREF" minOccurs="0" maxOccurs="unbounded"/>
+#     <xsd:element name="Term" type="Term" minOccurs="0"/>
+#   </xsd:sequence>
+#   <xsd:attribute name="ObjectId" type="xsd:ID" use="required"/>
+#   <xsd:attribute name="FilingDeadline" type="xsd:date"/>
+#   <xsd:attribute name="IsPartisan" type="xsd:boolean"/>
+# </xsd:complexType>
 class Vssc::Office < ActiveRecord::Base
   include VsscFunctions
   
-  has_and_belongs_to_many :election_reports
+  define_element("Code", type: Vssc::Code, method: :codes)
+  has_many :codes, as: :codeable
   
-  define_element("OfficeGPScope", type: String, method: :office_gp_scope)
+  define_element("ContactInformation", type: Vssc::ContactInformation, belongs_to: true)
   
-  define_attribute("object_id", required: true)
-  define_attribute("name", required: true)
-  define_attribute("filingDate", type: "xsd:dateTime")
-  define_attribute("incumbentRunning", type: "xsd:boolean")
-  define_attribute("localOfficeCode")
-  define_attribute("nationalOfficeCode")
-  define_attribute("stateOfficeCode")
-  define_attribute("partisan", type: "xsd:boolean")
-  define_attribute("termStartDate", type: "xsd:date")
-  define_attribute("termEndDate", type: "xsd:date")
-  define_attribute("unexpiredTerm", type: "xsd:boolean")
+  define_element("JurisdictionalScopeId")
+
+  define_element("Name", type: Vssc::InternationalizedText, belongs_to: true)
+  
+  define_element("OfficeHolderId", type: String, method: :office_holder_ids)
+  has_many :office_office_holders
+  has_many :office_holder_ids, through: :office_office_holders
+  
+  define_elemnt("Term", type: Vssc::Term, belongs_to: true)
+  
+  define_attribute("ObjectId", required: true)
+  define_attribute("FilingDeadline", type: "xsd:dateTime")
+  define_attribute("IsPartisan", type: "xsd:boolean")
   
   
 end

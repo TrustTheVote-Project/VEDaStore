@@ -1,18 +1,24 @@
-class Vssc::Party < Vssc::BallotSelection
+# <xsd:complexType name="Party">
+#   <xsd:sequence>
+#     <xsd:element name="Code" type="Code" minOccurs="0" maxOccurs="unbounded"/>
+#     <xsd:element name="Name" type="InternationalizedText"/>
+#   </xsd:sequence>
+#   <xsd:attribute name="ObjectId" type="xsd:ID" use="required"/>
+#   <xsd:attribute name="Abbreviation" type="xsd:string"/>
+#   <xsd:attribute name="Color" type="HtmlColorString"/>
+#   <xsd:attribute name="LogoUri" type="xsd:anyURI"/>
+# </xsd:complexType>
+class Vssc::Party < ActiveRecord::Base
   include VsscFunctions
   
-  has_and_belongs_to_many :election_reports
+  define_element("Code", type: Vssc::Code, method: :codes)
+  has_many :codes, as: :codeable
   
-  define_attribute("object_id")
-  define_attribute("abbreviation")
-  define_attribute("localPartyCode")
-  define_attribute("name")
-  define_attribute("nationalPartyCode")
-  define_attribute("statePartyCode")
-  
-  def name
-    read_attribute(:name)
-  end
-  
+  define_element("Name", type: Vssc::InternationalizedText, belongs_to: true)
+
+  define_attribute("ObjectId", required: true)
+  define_attribute("Abbreviation")
+  define_attribute("Color")
+  define_attribute("LogoUri")
   
 end

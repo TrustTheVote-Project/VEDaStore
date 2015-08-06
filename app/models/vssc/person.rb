@@ -1,26 +1,41 @@
+# <xsd:complexType name="Person">
+#   <xsd:sequence>
+#     <xsd:element name="ContactInformation" type="ContactInformation" minOccurs="0" maxOccurs="unbounded"/>
+#     <xsd:element name="FirstName" type="xsd:string" minOccurs="0"/>
+#     <xsd:element name="FullName" type="InternationalizedText" minOccurs="0"/>
+#     <xsd:element name="LastName" type="xsd:string" minOccurs="0"/>
+#     <xsd:element name="MiddleName" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+#     <xsd:element name="Nickname" type="xsd:string" minOccurs="0"/>
+#     <xsd:element name="PartyId" type="xsd:IDREF" minOccurs="0"/>
+#     <xsd:element name="Prefix" type="xsd:string" minOccurs="0"/>
+#     <xsd:element name="Profession" type="InternationalizedText" minOccurs="0"/>
+#     <xsd:element name="Suffix" type="xsd:string" minOccurs="0"/>
+#     <xsd:element name="Title" type="InternationalizedText" minOccurs="0"/>
+#   </xsd:sequence>
+#   <xsd:attribute name="ObjectId" type="xsd:ID" use="required"/>
+#   <xsd:attribute name="DateOfBirth" type="xsd:date"/>
+#   <xsd:attribute name="Gender" type="xsd:string"/>
+# </xsd:complexType>
 class Vssc::Person < ActiveRecord::Base
   include VsscFunctions
   
-  has_and_belongs_to_many :election_reports
+  define_element("ContastInformation", type: Vssc::ContactInformation, method: :contact_informations)
+  has_many :contact_informations, as: :contactable
 
-  define_element("Party" )
-  #has_one :party_ref - via Party string object_id
+  define_element("FirstName")
+  define_element("FullName", type: Vssc::InternationalizedText, belongs_to: true)
+  define_element("LastName")
+  define_element("MiddleName", type: String, method: :middle_names)
+  serialize :middle_names, Array
+  define_element("Nickname")
+  define_element("PartyId")
+  define_element("Prefix")
+  define_element("Profession", type: Vssc::InternationalizedText, belongs_to: true)
+  define_element("Suffix")
+  define_element("Title", type: Vssc::InternationalizedText, belongs_to: true)
   
-  define_element("Contact", :type=>Vssc::Contact, method: :contacts)
-  has_and_belongs_to_many :contacts
-  
-  
-  define_attribute("object_id", required: true)
-  #define_attribute("ethnicity", type: EthnicityType)
-  define_attribute("firstName")
-  #define_attribute("gender", type: GenderType)
-  define_attribute("lastName", required: true)
-  define_attribute("middleName")
-  define_attribute("prefix")
-  define_attribute("profession")
-  define_attribute("nickname")
-  define_attribute("title")
-  define_attribute("suffix")
-  
-  
+  define_attribute("ObjectId", required: true)
+  define_attribute("DateOfBirth", type: Date)
+  define_attribute("Gender")
+
 end

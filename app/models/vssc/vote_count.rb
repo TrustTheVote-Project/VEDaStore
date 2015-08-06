@@ -1,11 +1,12 @@
-class Vssc::VoteCount < Vssc::Count
-  
-  belongs_to :ballot_selection
-  
-  define_attribute("count", type: Float)
-  
-  def report_gp_unit
-    ballot_selection.contest.election.election_report.gp_units.where(object_id: gp_unit).first
-  end
+# <xsd:complexType name="VoteCounts">
+#   <xsd:complexContent>
+#     <xsd:extension base="Counts">
+#       <xsd:attribute name="Count" type="xsd:float" use="required"/>
+#     </xsd:extension>
+#   </xsd:complexContent>
+# </xsd:complexType>
+class Vssc::VoteCounts < Vssc::Counts
+
+  define_attribute("count", type: Float, required: true)
   
 end

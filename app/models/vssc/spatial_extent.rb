@@ -1,9 +1,13 @@
+# <xsd:complexType name="SpatialExtent">
+#   <xsd:sequence>
+#     <xsd:element name="Coordinates" type="xsd:string"/>
+#   </xsd:sequence>
+#   <xsd:attribute name="Format" type="GeoSpatialFormat" use="required"/>
+# </xsd:complexType>
 class Vssc::SpatialExtent < ActiveRecord::Base
   include VsscFunctions
-  belongs_to :spatial_dimension
   
   define_element("Coordinates")
-  define_attribute("object_id", required: true)
-  define_attribute("format", required: true)
+  define_attribute("Format", required: true, type: Vssc::GeoSpatialFormat)
   
 end

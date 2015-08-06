@@ -51,13 +51,15 @@ class Vssc::ElectionReport < ActiveRecord::Base
   include VsscFunctions
   
   define_element("Code", type: Vssc::Code, method: :codes)
-  has_many :codes
+  has_many :election_report_codes
+  has_many :codes, through: :election_report_codes
   
   define_element("Message")
   define_element("Election", type: Vssc::Election)
 
   define_element("GpUnitCollection", type: Vssc::GpUnit, method: :gp_units, passthrough: "GpUnit")
-  has_many :gp_units
+  has_many :election_report_gp_units
+  has_many :gp_units, through: :election_report_gp_units
   
   define_element("Notes")
   define_element("OfficeCollection", type: Vssc::OfficeCollection, method: :office_collections)
@@ -70,7 +72,7 @@ class Vssc::ElectionReport < ActiveRecord::Base
 
 
   define_element("PersonCollection", type: Vssc::Person, method: :people, passthrough: "Person")
-  has_and_belongs_to_many :people
+  has_many :people
   
   
   

@@ -1,10 +1,14 @@
+# <xsd:complexType name="PartyRegistration">
+#   <xsd:sequence>
+#     <xsd:element name="PartyId" type="xsd:IDREF"/>
+#   </xsd:sequence>
+#   <xsd:attribute name="Count" type="xsd:integer" use="required"/>
+# </xsd:complexType>
 class Vssc::PartyRegistration < ActiveRecord::Base
   include VsscFunctions
   
-  has_one :gp_unit, class_name: "Vssc::GPUnit"
+  define_element("PartyId")
   
-  define_element("Party", type: String)
-  define_attribute("object_id", required: true)
-  define_attribute("count", required: true, type: Fixnum)
+  define_attribute("Count", required: true, type: Fixnum)
   
 end
