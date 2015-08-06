@@ -13,22 +13,10 @@
 class Vssc::BallotSelection < ActiveRecord::Base
   include VsscFunctions
   
-  belongs_to :contest
-  
-  has_many :candidate_selection_candidate_refs, foreign_key: :candidate_selection_id
-  
-  
   define_element("VoteCountsCollection", type: Vssc::VoteCount, method: :counts, passthrough: "VoteCounts")
-  has_many :counts
+  has_many :counts, as: :countable
   
   define_attribute("ObjectId", :required=>true)
-
   
-  def totals
-    self.counts.group(:ballot_type).sum(:count)
-  end
-  
-  def name
-  end
   
 end
