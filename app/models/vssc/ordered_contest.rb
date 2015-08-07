@@ -7,6 +7,8 @@
 class Vssc::OrderedContest < ActiveRecord::Base
   include VsscFunctions
   
+  belongs_to :ballot_style
+  
   define_element("ContestId", method: :contest_identifier)
 
   define_element("OrderedBallotSelectionId", type: Vssc::OrderedContestBallotSelectionIdRef, method: :ordered_contest_ballot_selection_id_refs)

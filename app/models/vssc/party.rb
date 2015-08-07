@@ -11,6 +11,8 @@
 class Vssc::Party < ActiveRecord::Base
   include VsscFunctions
   
+  belongs_to :election_report
+  
   define_element("Code", type: Vssc::Code, method: :codes)
   has_many :codes, as: :codeable
   

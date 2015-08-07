@@ -1,6 +1,7 @@
 class CreateVsscBallotSelections < ActiveRecord::Migration
   def change
     create_table :vssc_ballot_selections do |t|
+      t.integer :contest_id
       t.string :type      
       
       t.string :object_id
@@ -15,7 +16,8 @@ class CreateVsscBallotSelections < ActiveRecord::Migration
       t.boolean :is_write_in
       
             
-    end    
+    end  
+    add_index :vssc_ballot_selections, :contest_id, name: :vssc_ballot_selection_contest  
     add_index :vssc_ballot_selections, :selection_id, name: :vssc_ballot_measure_selections
     add_index :vssc_ballot_selections, :object_id, name: :vssc_ballot_selection_object_id
     

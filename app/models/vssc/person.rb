@@ -18,6 +18,8 @@
 # </xsd:complexType>
 class Vssc::Person < ActiveRecord::Base
   include VsscFunctions
+
+  belongs_to :election_report
   
   define_element("ContactInformation", type: Vssc::ContactInformation, method: :contact_informations)
   has_many :contact_informations, as: :contactable

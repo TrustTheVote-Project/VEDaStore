@@ -9,6 +9,8 @@
 # </xsd:complexType>
 class Vssc::GpUnit < ActiveRecord::Base
   include VsscFunctions
+
+  belongs_to :election_report
     
   define_element("ComposingGpUnitId", type: Vssc::GpUnitComposingGpUnitIdRef, method: :gp_unit_composing_gp_unit_id_refs)
   has_many :gp_unit_composing_gp_unit_id_refs

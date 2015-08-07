@@ -17,6 +17,8 @@
 class Vssc::Candidate < ActiveRecord::Base
   include VsscFunctions
   
+  belongs_to :election
+  
   define_element("BallotName", type: Vssc::InternationalizedText, belongs_to: true)
 
   define_element("Code", type: Vssc::Code, method: :codes)

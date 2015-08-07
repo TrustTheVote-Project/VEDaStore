@@ -10,14 +10,16 @@
 class Vssc::BallotStyle < ActiveRecord::Base
   include VsscFunctions
   
+  belongs_to :election
+  
   define_element("GpUnitId", type: Vssc::BallotStyleGpUnitIdRef, method: :ballot_style_gp_unit_id_refs)
   has_many :ballot_style_gp_unit_id_refs
   has_many :gp_units, through: :ballot_style_gp_unit_id_refs
   
   define_element("ImageUri")
   
-  define_element("OrderedContest", method: :ordered_contests, type: OrderedContest)
-  has_many :ordered_contests, as: :ordered_contestable
+  define_element("OrderedContest", method: :ordered_contests, type: Vssc::OrderedContest)
+  has_many :ordered_contests
   
   define_element("PartyId", type: Vssc::BallotStylePartyIdRef, method: :ballot_style_party_id_refs)
   has_many :ballot_style_party_id_refs

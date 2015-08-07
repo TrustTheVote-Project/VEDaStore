@@ -2,6 +2,8 @@ class CreateVsscGpUnits < ActiveRecord::Migration
   def change
     create_table :vssc_gp_units do |t|
       t.string :type
+
+      t.integer :election_report_id
       
       t.string :object_id
       t.string :name
@@ -28,6 +30,7 @@ class CreateVsscGpUnits < ActiveRecord::Migration
       t.integer :voters_registered
       
     end
+    add_index :vssc_gp_units, :election_report_id, name: :vscc_gp_unit_election_report
     add_index :vssc_gp_units, :type, name: :vssc_gp_unit_type
     add_index :vssc_gp_units, :object_id, name: :vssc_gp_unit_object_id
     add_index :vssc_gp_units, :contact_information_id, name: :vssc_gp_unit_contact_info

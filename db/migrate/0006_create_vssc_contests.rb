@@ -3,6 +3,8 @@ class CreateVsscContests < ActiveRecord::Migration
     create_table :vssc_contests do |t|
       t.string :type
       
+      t.integer :election_id
+      
       t.integer :ballot_sub_title_id
       t.integer :ballot_title_id
       
@@ -42,6 +44,7 @@ class CreateVsscContests < ActiveRecord::Migration
       t.string :candidate_identifier
       t.string :office_identifier      
     end
+    add_index :vssc_contests, :election_id, name: :vssc_contest_election
     add_index :vssc_contests, :ballot_sub_title_id, name: :vssc_contest_ballot_sub_title
     add_index :vssc_contests, :ballot_title_id, name: :vssc_contest_ballot_title
     add_index :vssc_contests, :object_id, name: :vssc_contest_object_id

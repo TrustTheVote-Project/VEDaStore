@@ -11,6 +11,8 @@
 #   </xsd:complexContent>
 # </xsd:complexType>
 class Vssc::SummaryCounts < Vssc::Counts
+
+  belongs_to :summary_countable, polymorphic: true
   
   define_attribute("BallotsCast", type: Fixnum)
   define_attribute("BallotsOutstanding", type: Fixnum)

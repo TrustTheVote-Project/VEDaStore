@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ElectionReport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Format="PrecinctLevel" GeneratedDate="2015-05-11T15:06:52.710000" Issuer="New York" IssuerAbbreviation="NY" Sequence="0" SequenceEnd="0" Status="Certified" VendorApplicationId="New York-EMS" xmlns="http://grouper.ieee.org/groups/1622/groups/2/V1/1622_2-election_results_reporting.xsd" xsi:schemaLocation="http://grouper.ieee.org/groups/1622/groups/2/V1/1622_2-election_results_reporting.xsd http://grouper.ieee.org/groups/1622/groups/2/V1/1622_2-election_results_reporting.xsd">
+  <Election Date="2014-11-04" Type="Other">
+    <Name>
+      <LanguageString Language="en-US">Election</LanguageString>
+    </Name>
+  </Election>
+</ElectionReport>

@@ -19,13 +19,16 @@ class CreateVsscCounts < ActiveRecord::Migration
       t.integer :undervotes
       t.integer :write_ins
       
+      t.integer :summary_countable_id
+      t.string  :summary_countable_type
+      
       #vote counts
       t.float :count      
     end
     add_index :vssc_counts, :type, name: :vssc_counts_type
     add_index :vssc_counts, :device_id, name: :vssc_counts_device
     add_index :vssc_counts, :gp_unit_identifier, name: :vssc_counts_gp_unit
-    
+    add_index :vssc_counts, [:summary_countable_id, :summary_countable_type], :vssc_counts_summary_countable
     
   end  
 end

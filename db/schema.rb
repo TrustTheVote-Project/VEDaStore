@@ -203,7 +203,7 @@ ActiveRecord::Schema.define(version: 25) do
 
   create_table "vssc_election_reports", force: :cascade do |t|
     t.string   "message",                       limit: 255
-    t.string   "election_id",                   limit: 255
+    t.integer  "election_id",                   limit: 4
     t.text     "notes",                         limit: 65535
     t.string   "format",                        limit: 255
     t.datetime "generated_date"

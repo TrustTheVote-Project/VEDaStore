@@ -1,11 +1,13 @@
 class CreateVsscBallotStyles < ActiveRecord::Migration
   def change
     create_table :vssc_ballot_styles do |t|
+      t.integer :election_id
       t.string :image_uri
       t.string :ballot_style_identifier
       
       t.timestamps null: false
     end
+    add_index :vssc_ballot_styles, :election_id, name: :vssc_ballot_style_election
     
     create_table :vssc_ballot_style_gp_unit_id_refs do |t|
       t.integer :ballot_style_id

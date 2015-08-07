@@ -3,8 +3,14 @@ module VsscFunctions
   
   included do
     #class_attribute :elements, :xml_attributes, {instance_accessor: false}
+    before_save :vssc_before_save_callback
+    after_save  :vssc_after_save_callback
+    
     class << self
       attr_accessor :elements, :xml_attributes, :text_node_method
+      
+      
+      
     end
   end
   
@@ -82,6 +88,15 @@ module VsscFunctions
     
   end
     
+    
+  def vssc_before_save_callback
+    puts "Saving: #{self.class}"
+  end
+  
+  def vssc_after_save_callback
+    puts "Saved! #{self.class}"
+  end
+  
   def is_valid_date_time?(value)
     begin
       return DateTime.iso8601(value.to_s).iso8601.to_s == value.to_s

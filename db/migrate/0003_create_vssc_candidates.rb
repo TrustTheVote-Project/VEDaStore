@@ -1,6 +1,7 @@
 class CreateVsscCandidates < ActiveRecord::Migration
   def change
     create_table :vssc_candidates do |t|
+      t.integer :election_id
       t.integer :ballot_name_id
       
       t.string :party_identifier
@@ -17,6 +18,7 @@ class CreateVsscCandidates < ActiveRecord::Migration
       
       t.timestamps null: false
     end
+    add_index :vssc_candidates, :election_id, name: :vssc:candidate_election
     add_index :vssc_candidates, :ballot_name_id, name: :vssc_candidate_ballot_name
     add_index :vssc_candidates, :object_id, name: :vssc_candidate_object_id
     

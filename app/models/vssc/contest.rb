@@ -21,6 +21,8 @@
 class Vssc::Contest < ActiveRecord::Base
   include VsscFunctions
   
+  belongs_to :election
+  
   define_element("BallotSelection", type: Vssc::BallotSelection, method: :ballot_selections)
   has_many :ballot_selections, class_name: "Vssc::BallotSelection", dependent: :destroy
   

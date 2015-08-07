@@ -2,7 +2,7 @@ class CreateVsscElectionReports < ActiveRecord::Migration
   def change
     create_table :vssc_election_reports do |t|
       t.string :message
-      t.string :election_id
+      t.integer :election_id
       
       t.text :notes
       

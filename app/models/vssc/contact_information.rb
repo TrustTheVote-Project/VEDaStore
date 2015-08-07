@@ -12,6 +12,8 @@
 class Vssc::ContactInformation < ActiveRecord::Base
   include VsscFunctions
 
+  belongs_to :contactable, polymorphic: true
+
   define_element("AddressLine")
   serialize :address_line, Array
 

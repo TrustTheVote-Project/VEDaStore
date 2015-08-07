@@ -57,22 +57,22 @@ class Vssc::ElectionReport < ActiveRecord::Base
   define_element("Election", type: Vssc::Election, belongs_to: true)
 
   define_element("GpUnitCollection", type: Vssc::GpUnit, method: :gp_units, passthrough: "GpUnit")
-  has_many :gp_units
+  has_many :gp_units, dependent: :destroy
   
   define_element("Notes")
   
   define_element("OfficeCollection", type: Vssc::Office, method: :offices, passthrough: "Office")
-  has_many :office_collections
-  has_many :offices
+  has_many :office_groups, as: :office_groupable
+  has_many :offices, dependent: :destroy
   # need Office / OfficeGroup
 
   
   define_element("PartyCollection", type: Vssc::Party, method: :parties, passthrough: "Party")
-  has_many :parties
+  has_many :parties, dependent: :destroy
 
 
   define_element("PersonCollection", type: Vssc::Person, method: :people, passthrough: "Person")
-  has_many :people
+  has_many :people, dependent: :destroy
   
   
   

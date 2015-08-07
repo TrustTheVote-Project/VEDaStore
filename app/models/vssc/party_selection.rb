@@ -9,8 +9,8 @@
 # </xsd:complexType>
 class Vssc::PartySelection < Vssc::BallotSelection
   
-  define_element("PartyId", type: Vssc::PartySelectionPartyIdRef, method: :party_selection_party_id_refs)
-  has_many :party_selection_party_id_refs
-  #has_many :parties, through: :party_selection_party_ids
+  define_element("PartyId", type: Vssc::BallotSelectionPartyIdRef, method: :ballot_selection_party_id_refs)
+  has_many :ballot_selection_party_id_refs
+  has_many :parties, through: :ballot_selection_party_id_refs
   
 end

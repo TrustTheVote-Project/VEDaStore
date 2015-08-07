@@ -1,10 +1,12 @@
 class CreateVsscOrderedContests < ActiveRecord::Migration
   def change
     create_table :vssc_ordered_contests do |t|
+      t.index  :ballot_style_id
       t.string :contest_identifier
       
       t.timestamps null: false
     end
+    add_index :vssc_ordered_contests, :ballot_style_id, name: :vscc_ordered_contest_ballot_style
     add_index :vssc_ordered_contests, :contest_identifier, name: :vssc_ordered_contest_identifier
     
     create_table :vssc_ordered_contest_ballot_selection_id_refs do |t|
