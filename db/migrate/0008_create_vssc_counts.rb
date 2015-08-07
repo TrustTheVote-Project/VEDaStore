@@ -1,0 +1,31 @@
+class CreateVsscCounts < ActiveRecord::Migration
+  def change
+    create_table :vssc_counts do |t|
+      t.string :type
+
+      t.integer :device_id
+      
+      t.string :gp_unit_identifier
+      t.string :other_type
+      t.string :count_item_type
+      
+      t.timestamps null: false
+      
+      #summary_counts
+      t.integer :ballots_cast
+      t.integer :ballots_outstanding
+      t.integer :ballots_rejected
+      t.integer :overvotes
+      t.integer :undervotes
+      t.integer :write_ins
+      
+      #vote counts
+      t.float :count      
+    end
+    add_index :vssc_counts, :type, name: :vssc_counts_type
+    add_index :vssc_counts, :device_id, name: :vssc_counts_device
+    add_index :vssc_counts, :gp_unit_identifier, name: :vssc_counts_gp_unit
+    
+    
+  end  
+end

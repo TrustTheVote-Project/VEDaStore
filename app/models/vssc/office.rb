@@ -14,20 +14,22 @@
 class Vssc::Office < ActiveRecord::Base
   include VsscFunctions
   
+  belongs_to :office_group
+  
   define_element("Code", type: Vssc::Code, method: :codes)
   has_many :codes, as: :codeable
   
   define_element("ContactInformation", type: Vssc::ContactInformation, belongs_to: true)
   
-  define_element("JurisdictionalScopeId")
+  define_element("JurisdictionalScopeId", method: :jurisdictional_scope_identifier)
 
   define_element("Name", type: Vssc::InternationalizedText, belongs_to: true)
   
-  define_element("OfficeHolderId", type: String, method: :office_holder_ids)
-  has_many :office_office_holders
-  has_many :office_holder_ids, through: :office_office_holders
+  define_element("OfficeHolderId", type: String, method: :office_office_holder_id_refs)
+  has_many :office_office_holder_id_refs
+  has_many :office_holders, through: :office_office_holder_id_refs
   
-  define_elemnt("Term", type: Vssc::Term, belongs_to: true)
+  define_element("Term", type: Vssc::Term, belongs_to: true)
   
   define_attribute("ObjectId", required: true)
   define_attribute("FilingDeadline", type: "xsd:dateTime")

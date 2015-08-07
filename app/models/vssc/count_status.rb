@@ -4,9 +4,12 @@
 #   <xsd:attribute name="Type" type="CountItemType" use="required"/>
 # </xsd:complexType>
 class Vssc::CountStatus < ActiveRecord::Base
+  include VsscFunctions
+  
+  belongs_to :count_statusable, polymorphic: true
   
   define_attribute("OtherType")
-  define_attribute("Status", type: Vssc::CountItemStatus, required: true)
-  define_attrubute("Type", type: Vssc::CountItemType, method: :count_item_type, required: true)
+  define_attribute("Status", type: Vssc::Enum::CountItemStatus, required: true)
+  define_attribute("Type", type: Vssc::Enum::CountItemType, method: :count_item_type, required: true)
   
 end

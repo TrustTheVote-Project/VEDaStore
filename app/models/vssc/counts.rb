@@ -9,12 +9,11 @@
 class Vssc::Counts < ActiveRecord::Base
   include VsscFunctions
   
-  define_element("Device", type: Vssc::Device)
-  has_one :device
+  define_element("Device", type: Vssc::Device, belongs_to: true)
   
-  define_element("GPUnitId")
+  define_element("GPUnitId", method: :gp_unit_identifier)
   
   define_attribute("OtherType")
-  define_attribute("Type", type: Vssc::CountItemType, method: :count_item_type)
+  define_attribute("Type", type: Vssc::Enum::CountItemType, method: :count_item_type)
   
 end

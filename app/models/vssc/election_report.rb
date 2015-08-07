@@ -51,19 +51,19 @@ class Vssc::ElectionReport < ActiveRecord::Base
   include VsscFunctions
   
   define_element("Code", type: Vssc::Code, method: :codes)
-  has_many :election_report_codes
-  has_many :codes, through: :election_report_codes
+  has_many :codes, as: :codeable
   
   define_element("Message")
-  define_element("Election", type: Vssc::Election)
+  define_element("Election", type: Vssc::Election, belongs_to: true)
 
   define_element("GpUnitCollection", type: Vssc::GpUnit, method: :gp_units, passthrough: "GpUnit")
-  has_many :election_report_gp_units
-  has_many :gp_units, through: :election_report_gp_units
+  has_many :gp_units
   
   define_element("Notes")
-  define_element("OfficeCollection", type: Vssc::OfficeCollection, method: :office_collections)
+  
+  define_element("OfficeCollection", type: Vssc::Office, method: :offices, passthrough: "Office")
   has_many :office_collections
+  has_many :offices
   # need Office / OfficeGroup
 
   
@@ -77,16 +77,16 @@ class Vssc::ElectionReport < ActiveRecord::Base
   
   
   
-  define_attribute("Format", required: true, type: Vssc::ReportDetailLevel)
+  define_attribute("Format", required: true, type: Vssc::Enum::ReportDetailLevel)
   define_attribute("GeneratedDate", required: true, type: "xsd:dateTime")
   define_attribute("Issuer", required: true)
   define_attribute("IssuerAbbreviation", required: true)
   define_attribute("IsTest", type: "xsd:boolean")
   define_attribute("Sequence", required: true, type: Fixnum)
   define_attribute("SequenceEnd", required: true, type: Fixnum)
-  define_attribute("Status", required: true, type: Vssc::ResultsStatus)
+  define_attribute("Status", required: true, type: Vssc::Enum::ResultsStatus)
   define_attribute("TestType")
-  define_attribute("VendorApplicationId", required: true)
+  define_attribute("VendorApplicationId", required: true, method: :vendor_application_identifier)
   
   def xml_attributes_hash_with_root(node_name)
     attr_hash = xml_attributes_hash_without_root(node_name)

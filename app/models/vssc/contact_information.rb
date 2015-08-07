@@ -14,16 +14,20 @@ class Vssc::ContactInformation < ActiveRecord::Base
 
   define_element("AddressLine")
   serialize :address_line, Array
+
   define_element("Email")
   serialize :email, Array
+
   define_element("Fax")
   serialize :fax, Array
+
   define_element("Name")
+
   define_element("Phone")
   serialize :phone, Array
 
   define_element("Schedule", type: Vssc::Schedule, method: :schedules)
-  has_many :schedules
+  has_many :schedules, as: :schedulable
   
   define_element("Uri")
   serialize :uri, Array

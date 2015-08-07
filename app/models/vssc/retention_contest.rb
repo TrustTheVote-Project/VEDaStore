@@ -10,7 +10,7 @@
 # </xsd:complexType>
 class Vssc::RetentionContest < Vssc::BallotMeasureContest
   
-  define_element("CandidateId")
-  define_element("OfficeId")
+  define_element("CandidateId", method :candidate_identifier)
+  define_element("OfficeId", method :office_identifier)
   
 end

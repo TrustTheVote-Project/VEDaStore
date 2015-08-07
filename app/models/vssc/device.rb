@@ -8,6 +8,6 @@ class Vssc::Device < ActiveRecord::Base
   
   define_attribute("Manufacturer")
   define_attribute("Model")
-  define_attribute("Type", type: Vssc::DeviceType, method: :device_type)
+  define_attribute("Type", type: Vssc::Enum::DeviceType, method: :device_type)
   
 end

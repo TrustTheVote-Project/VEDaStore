@@ -25,6 +25,6 @@ class Vssc::BallotMeasureContest < Vssc::Contest
   define_element "SummaryText", type: Vssc::InternationalizedText, belongs_to: true
   
   define_attribute "OtherType"
-  define_attribute "Type", type: Vssc::BallotMeasureType, method: :ballot_measure_type, required: true
+  define_attribute "Type", type: Vssc::Enum::BallotMeasureType, method: :ballot_measure_type, required: true
   
 end

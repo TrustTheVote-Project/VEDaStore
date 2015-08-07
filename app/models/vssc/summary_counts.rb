@@ -10,7 +10,7 @@
 #     </xsd:extension>
 #   </xsd:complexContent>
 # </xsd:complexType>
-class Vssc::SummaryCounts < Vssc::Count
+class Vssc::SummaryCounts < Vssc::Counts
   
   define_attribute("BallotsCast", type: Fixnum)
   define_attribute("BallotsOutstanding", type: Fixnum)

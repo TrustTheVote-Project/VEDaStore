@@ -8,6 +8,6 @@ class Vssc::SpatialExtent < ActiveRecord::Base
   include VsscFunctions
   
   define_element("Coordinates")
-  define_attribute("Format", required: true, type: Vssc::GeoSpatialFormat)
+  define_attribute("Format", required: true, type: Vssc::Enum::GeoSpatialFormat)
   
 end

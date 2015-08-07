@@ -1,19 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Vssc::ElectionReport, type: :model do
-  let(:e) { Vssc::ElectionReport.new }
-  before(:each) do
-    e.object_id = "oid"
-    e.date = DateTime.now.iso8601
-    #e.format = Vssc::ReportFormat.precinct_level
-    #e.status = Vssc::ReportStatus.test
-    e.issuer = "issuer"
-    e.sequence = 1
-    e.sequence_end = 5
-    e.state_abbreviation = "ma"
-    e.vendor_application_id = "ID"
-  end
-  subject { e }
+  # let(:e) { Vssc::ElectionReport.new }
+  # before(:each) do
+  #   e.object_id = "oid"
+  #   e.date = DateTime.now.iso8601
+  #   #e.format = Vssc::ReportFormat.precinct_level
+  #   #e.status = Vssc::ReportStatus.test
+  #   e.issuer = "issuer"
+  #   e.sequence = 1
+  #   e.sequence_end = 5
+  #   e.state_abbreviation = "ma"
+  #   e.vendor_application_id = "ID"
+  # end
+  # subject { e }
     #
   # it { should have_element("Message") }
   # it { should have_element("GPUnitCollection") }
@@ -56,7 +56,7 @@ RSpec.describe Vssc::ElectionReport, type: :model do
   describe 'XML import/export' do
     it "should import/export equivalent files" do
       #xml_file = './spec/fixtures/ohio2014-simplified.xml'
-      xml_file = './spec/fixtures/ohio2014.p1622-v29.xml'
+      xml_file = './spec/fixtures/DelawareResults0609150915.xml'
       doc = nil
       e = nil
       File.open(xml_file) do |f|

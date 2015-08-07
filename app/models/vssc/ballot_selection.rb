@@ -13,7 +13,7 @@
 class Vssc::BallotSelection < ActiveRecord::Base
   include VsscFunctions
   
-  define_element("VoteCountsCollection", type: Vssc::VoteCount, method: :counts, passthrough: "VoteCounts")
+  define_element("VoteCountsCollection", type: Vssc::VoteCounts, method: :counts, passthrough: "VoteCounts")
   has_many :counts, as: :countable
   
   define_attribute("ObjectId", :required=>true)

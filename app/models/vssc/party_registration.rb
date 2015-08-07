@@ -7,7 +7,7 @@
 class Vssc::PartyRegistration < ActiveRecord::Base
   include VsscFunctions
   
-  define_element("PartyId")
+  define_element("PartyId", method: :party_identifier)
   
   define_attribute("Count", required: true, type: Fixnum)
   

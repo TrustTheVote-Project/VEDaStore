@@ -21,8 +21,6 @@
 class Vssc::Contest < ActiveRecord::Base
   include VsscFunctions
   
-  belongs_to :election
-  
   define_element("BallotSelection", type: Vssc::BallotSelection, method: :ballot_selections)
   has_many :ballot_selections, class_name: "Vssc::BallotSelection", dependent: :destroy
   
@@ -30,14 +28,17 @@ class Vssc::Contest < ActiveRecord::Base
   define_element("BallotTitle", type: Vssc::InternationalizedText, belongs_to: true)
   
   define_element("Code", type: Vssc::Code, method: :codes)
-  has_many :codes
-  define_element("CountStatus", type: Vssc::CountStatus, method: :count_statuses)
-  has_many :count_statuses
+  has_many :codes, as: :codeable
+  
+  define_element("CountStatus", type: Vssc::Enum::CountStatus, method: :count_statuses)
+  has_many :count_statuses, as: :count_statusable
 
-  define_element("JurisdictionalScopeId")
+  define_element("JurisdictionalScopeId", method: :jurisdictional_scope_identifier)
+  
   define_element("Name")
+  
   define_element("SummaryCounts", type: Vssc::SummaryCounts, method: :summary_counts)
-  has_many :summary_counts
+  has_many :summary_counts, as: :summary_countable
   
   define_attribute("ObjectId", required: true)
   define_attribute("Abbreviation")
@@ -46,6 +47,6 @@ class Vssc::Contest < ActiveRecord::Base
   define_attribute("SequenceOrder", type: Fixnum)
   define_attribute("SubUnitsReported", type: Fixnum)
   define_attribute("TotalSubUnits", type: Fixnum)
-  define_attribute("VoteVariationType", type: Vssc::VoteVariationType )
+  define_attribute("VoteVariationType", type: Vssc::Enum::VoteVariationType )
   
 end

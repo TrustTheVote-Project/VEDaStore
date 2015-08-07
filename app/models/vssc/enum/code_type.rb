@@ -16,6 +16,6 @@ class Vssc::Enum::CodeType
                   "NationalLevel",
                   "OcdId",
                   "Other",
-                  "StateLevel",
+                  "StateLevel"
                   
 end

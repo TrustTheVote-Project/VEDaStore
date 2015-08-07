@@ -11,6 +11,8 @@
 class Vssc::Schedule < ActiveRecord::Base
   include VsscFunctions
   
+  belongs_to :schedulable, polymorphic: true
+  
   define_element("Hours", type: Vssc::Hours, method: :hours)
   has_many :hours, as: :hourable
   

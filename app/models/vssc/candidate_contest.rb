@@ -13,11 +13,11 @@
 
 class Vssc::CandidateContest < Vssc::Contest
 
-  define_element("OfficeId", type: String, method: :office_ids)
-  has_many :contest_office_ids
-  has_many :office_ids, through: :contest_office_ids
+  define_element("OfficeId", type: String, method: :contest_office_id_refs)
+  has_many :contest_office_id_refs
+  has_many :offices, through: :contest_office_id_refs
   
-  define_element("PrimaryPartyId", method: :primary_party)
+  define_element("PrimaryPartyId", method: :primary_party_identifier)
   
   define_attribute("NumberElected", type: Fixnum)
   define_attribute("VotesAllowed", type: Fixnum, required: true)

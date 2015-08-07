@@ -10,24 +10,15 @@
 class Vssc::GpUnit < ActiveRecord::Base
   include VsscFunctions
     
-  has_many :reporting_unit_authority_refs
-  has_and_belongs_to_many :contacts, foreign_key: :reporting_unit_id
-    
-  has_and_belongs_to_many :election_reports
-  
-  
-  
-  define_element("ComposingGpUnitId", type: String, method: :composing_gp_unit_ids)
-  has_many :gp_unit_composing_gp_unit_ids
-  has_many :composing_gp_unit_ids, through: :gp_unit_composing_gp_unit_ids
+  define_element("ComposingGpUnitId", type: Vssc::GpUnitComposingGpUnitIdRef, method: :gp_unit_composing_gp_unit_id_refs)
+  has_many :gp_unit_composing_gp_unit_id_refs
+  has_many :composing_gp_units, through: :gp_unit_composing_gp_unit_id_refs
   
   define_element("Code", type: Vssc::Code, method: :codes)
-  has_many :gp_unit_codes
-  has_many :codes, through: :gp_unit_codes
+  has_many :codes, as: :codeable
     
   define_element("SummaryCounts", type: Vssc::SummaryCounts, method: :summary_counts)
-  has_many :gp_unit_summary_counts
-  has_many :summary_counts, through: :gp_unit_summary_counts
+  has_many :summary_counts, as: :summary_countable
 
   define_attribute("ObjectId", required: true)
   define_attribute("Name")

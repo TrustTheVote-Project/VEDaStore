@@ -19,7 +19,7 @@
 class Vssc::Person < ActiveRecord::Base
   include VsscFunctions
   
-  define_element("ContastInformation", type: Vssc::ContactInformation, method: :contact_informations)
+  define_element("ContactInformation", type: Vssc::ContactInformation, method: :contact_informations)
   has_many :contact_informations, as: :contactable
 
   define_element("FirstName")
@@ -28,7 +28,7 @@ class Vssc::Person < ActiveRecord::Base
   define_element("MiddleName", type: String, method: :middle_names)
   serialize :middle_names, Array
   define_element("Nickname")
-  define_element("PartyId")
+  define_element("PartyId", method: :party_identifier)
   define_element("Prefix")
   define_element("Profession", type: Vssc::InternationalizedText, belongs_to: true)
   define_element("Suffix")

@@ -7,10 +7,10 @@
 class Vssc::OrderedContest < ActiveRecord::Base
   include VsscFunctions
   
-  define_element("ContestId")
+  define_element("ContestId", method: :contest_identifier)
 
-  define_element("OrderedBallotSelectionId", type: String, method: :ordered_ballot_selection_ids)
-  has_many :ordered_contest_ordered_ballot_selection_ids
-  has_many :ordered_ballot_selection_ids, through: :ordered_contest_ordered_ballot_selection_ids
+  define_element("OrderedBallotSelectionId", type: Vssc::OrderedContestBallotSelectionIdRef, method: :ordered_contest_ballot_selection_id_refs)
+  has_many :ordered_contest_ballot_selection_id_refs
+  has_many :ballot_selections, through: :ordered_contest_ballot_selection_id_refs
   
 end

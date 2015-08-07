@@ -18,15 +18,16 @@
 #     </xsd:extension>
 #   </xsd:complexContent>
 # </xsd:complexType>
-class Vssc::ReportingUnit < Vssc::GPUnit
-  define_element("AuthorityId", type: String, method: :authority_ids)
-  has_many :reporting_unit_authority_ids
-  has_many :authority_ids, through: :reporting_unit_authority_ids
+class Vssc::ReportingUnit < Vssc::GpUnit
+
+  define_element("AuthorityId", type: String, method: :gp_unit_authority_id_refs)
+  has_many :gp_unit_authority_id_refs
+  has_many :authorities,, through: :gp_unit_authority_id_refs
   
   define_element("ContactInformation", type: Vssc::ContactInformation, belongs_to: true)
   
   define_element("CountStatus", type: Vssc::CountStatus, method: :count_statuses)
-  serialize_attribute :count_statuses, Array
+  has_many :count_statuses, as: :count_statusable
 
   define_element("PartyRegistration", type: Vssc::PartyRegistration, method: :party_registrations)
   has_many :party_registrations, as: :party_registrationable
@@ -37,7 +38,7 @@ class Vssc::ReportingUnit < Vssc::GPUnit
   define_attribute("OtherType")
   define_attribute("SubUnitsReported", type: Fixnum)
   define_attribute("TotalSubUnits", type: Fixnum)
-  define_attribute("Type", type: Vssc::ReportingUnitType, required: true, method: :reporting_unit_type)
+  define_attribute("Type", type: Vssc::Enum::ReportingUnitType, required: true, method: :reporting_unit_type)
   define_attribute("VotersParticipated", type: Fixnum)
   define_attribute("VotersRegistered", type: Fixnum)
   

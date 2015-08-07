@@ -8,7 +8,7 @@
 #     </xsd:extension>
 #   </xsd:complexContent>
 # </xsd:complexType>
-class Vssc::ReportingDevice < Vssc::GPUnit
+class Vssc::ReportingDevice < Vssc::GpUnit
   
   define_element("Device", type: Vssc::Device, belongs_to: true)
   

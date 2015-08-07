@@ -9,6 +9,6 @@
 # </xsd:complexType>
 class Vssc::BallotMeasureSelection < Vssc::BallotSelection
 
-  define_attribute("Selection", {:required=>true})
+  define_attribute("Selection", type: Vssc::InternationalizedText, required: true, belongs_to: true)
   
 end

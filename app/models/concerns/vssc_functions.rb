@@ -4,7 +4,7 @@ module VsscFunctions
   included do
     #class_attribute :elements, :xml_attributes, {instance_accessor: false}
     class << self
-      attr_accessor :elements, :xml_attributes
+      attr_accessor :elements, :xml_attributes, :text_node_method
     end
   end
   
@@ -24,7 +24,7 @@ module VsscFunctions
       self.send(accessor_group)[element_name][:passthrough] = opts[:passthrough]
       
       if opts[:belongs_to]
-        belongs_to method_name.to_sym, class_name = element_type.to_s 
+        belongs_to method_name.to_sym, class_name: element_type.to_s 
       end
       
     end
@@ -35,6 +35,10 @@ module VsscFunctions
     
     def define_attribute(element_name, opts={})
       define_xml_accessor(:xml_attributes, element_name, opts)
+    end
+    
+    def define_text_node(method_name)
+      self.text_node_method = method_name
     end
     
     def noko_doc(file_contents_or_path)
@@ -61,6 +65,7 @@ module VsscFunctions
       e = self.new
       e.set_vssc_attributes(node.attributes)
       e.set_vssc_elements(node.elements)
+      e.set_text_node(node)
       e
     end
     
@@ -117,6 +122,12 @@ module VsscFunctions
       elsif key.to_s != 'type'
         parse_error "Attribute #{key} not part of #{self.class}"
       end
+    end
+  end
+  
+  def set_text_node(node)
+    if self.class.text_node_method
+      self.send("#{self.class.text_node_method}=", node.text)
     end
   end
   

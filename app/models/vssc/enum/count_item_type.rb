@@ -26,6 +26,6 @@ class Vssc::Enum::CountItemType
                   "Total",
                   "Uocava",
                   "WriteIn",
-                  "Other",
+                  "Other"
                   
 end

@@ -34,8 +34,6 @@
 class Vssc::Election < ActiveRecord::Base
   include VsscFunctions
   
-  belongs_to :election_report
-  
   define_element("BallotStyleCollection", type: Vssc::BallotStyle, method: :ballot_styles, passthrough: "BallotStyle")
   has_many :ballot_styles, dependent: :destroy
   
@@ -43,21 +41,22 @@ class Vssc::Election < ActiveRecord::Base
   has_many :candidates, dependent: :destroy
   
   define_element("Code", type: Vssc::Code, method: :codes)
-  has_many: :codes
+  has_many :codes, :as=>:codeable
   
-  define_element("ContactInformation", type: Vssc::ContactInformation)
+  define_element("ContactInformation", type: Vssc::ContactInformation, belongs_to: true)
   
   define_element("ContestCollection", type: Vssc::Contest, method: :contests, passthrough: "Contest")
   has_many :contests, dependent: :destroy
   
   define_element("CountStatus", type: Vssc::CountStatus, method: :count_statuses)
-  has_many :count_statuses
+  has_many :count_statuses, as: :count_statusable
   
-  define_element("ElectionScopeId", method: :election_scope_id)
+  define_element("ElectionScopeId", method: :election_scope_identifier)
+  
   define_element("Name", type: Vssc::InternationalizedText, belongs_to: true)
   
   define_attribute("Date", required: true, type: Date, required: true)
   define_attribute("EndDate", required: true, type: Date)
-  define_attribute("Type", required: true, type: Vssc::ElectionType, method: "election_type")
+  define_attribute("Type", required: true, type: Vssc::Enum::ElectionType, method: "election_type")
   
 end

@@ -8,13 +8,15 @@
 class Vssc::OfficeGroup < ActiveRecord::Base
   include VsscFunctions
   
-  define_element("OfficeId", type: String, method: :office_ids)
-  has_many :office_group_office_ids
-  has_many :office_ids, through: :office_group_office_ids
+  define_element("OfficeId", type: String, method: :office_group_office_id_refs)
+  has_many :office_group_office_id_refs
+  has_many :offices, through: :office_group_office_id_refs
   
   define_element("SubOfficeGroup", type: Vssc::OfficeGroup, method: :office_groups)
-  has_many :office_groups, as: :groupable
+  has_many :office_groups, as: :office_groupable
   
-  belongs_to :groupable, polymorphic: true
+  belongs_to :office_groupable, polymorphic: true
+  
+  define_attribute("Name", required: true)
   
 end

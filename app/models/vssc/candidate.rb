@@ -17,26 +17,23 @@
 class Vssc::Candidate < ActiveRecord::Base
   include VsscFunctions
   
-  belongs_to :election
-
-    
   define_element("BallotName", type: Vssc::InternationalizedText, belongs_to: true)
 
   define_element("Code", type: Vssc::Code, method: :codes)
-  has_and_belongs_to_many :codes
+  has_many :codes, as: :codeable
   
-  define_element("PartyId", method: :party)
-  define_element("PersonId", method: :person)
+  define_element("PartyId", method: :party_identifier)
+  define_element("PersonId", method: :person_identifier)
   
   
   
   define_attribute("ObjectId", required: true)
   define_attribute("FileDate", type: "xsd:date")  
-  define_attribute("Id", method: :candidate_id)
+  define_attribute("Id", method: :candidate_identifier)
   define_attribute("IsIncumbent", type: "xsd:boolean")  
   define_attribute("IsTopTicket", type: "xsd:boolean")  
-  define_attribute("PostElectionStatus", type: Vssc::CandidatePostElectionStatus)
-  define_attribute("PreElectionStatus", type: Vssc::CandidatePreElectionStatus)
+  define_attribute("PostElectionStatus", type: Vssc::Enum::CandidatePostElectionStatus)
+  define_attribute("PreElectionStatus", type: Vssc::Enum::CandidatePreElectionStatus)
   define_attribute("SequenceOrder", type: Fixnum)  
   
 end

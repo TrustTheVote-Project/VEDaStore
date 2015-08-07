@@ -8,6 +8,6 @@ class Vssc::Term < ActiveRecord::Base
   
   define_attribute("EndDate", type: Date)
   define_attribute("StartDate", type: Date)
-  define_attribute("Type", type: Vssc::OfficeTermType, method: :office_term_type)
+  define_attribute("Type", type: Vssc::Enum::OfficeTermType, method: :office_term_type)
   
 end
