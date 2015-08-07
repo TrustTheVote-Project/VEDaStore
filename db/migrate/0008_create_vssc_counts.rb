@@ -3,6 +3,9 @@ class CreateVsscCounts < ActiveRecord::Migration
     create_table :vssc_counts do |t|
       t.string :type
 
+      t.integer :countable_id
+      t.string :countable_type
+
       t.integer :device_id
       
       t.string :gp_unit_identifier
@@ -26,6 +29,7 @@ class CreateVsscCounts < ActiveRecord::Migration
       t.float :count      
     end
     add_index :vssc_counts, :type, name: :vssc_counts_type
+    add_index :vssc_counts, [:countable_id, :countable_type], name: :vssc_countable
     add_index :vssc_counts, :device_id, name: :vssc_counts_device
     add_index :vssc_counts, :gp_unit_identifier, name: :vssc_counts_gp_unit
     add_index :vssc_counts, [:summary_countable_id, :summary_countable_type], name: :vssc_counts_summary_countable

@@ -21,7 +21,7 @@
 class Vssc::ReportingUnit < Vssc::GpUnit
 
   define_element("AuthorityId", type: Vssc::GpUnitAuthorityIdRef, method: :gp_unit_authority_id_refs)
-  has_many :gp_unit_authority_id_refs
+  has_many :gp_unit_authority_id_refs, foreign_key: :gp_unit_id
   has_many :authorities, through: :gp_unit_authority_id_refs
   
   define_element("ContactInformation", type: Vssc::ContactInformation, belongs_to: true)

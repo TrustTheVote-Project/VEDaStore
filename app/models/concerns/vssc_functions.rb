@@ -30,7 +30,7 @@ module VsscFunctions
       self.send(accessor_group)[element_name][:passthrough] = opts[:passthrough]
       
       if opts[:belongs_to]
-        belongs_to method_name.to_sym, class_name: element_type.to_s 
+        belongs_to method_name.to_sym, class_name: element_type.to_s, foreign_key: "#{method_name}_id".to_sym
       end
       
     end

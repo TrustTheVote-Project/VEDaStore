@@ -187,6 +187,8 @@ ActiveRecord::Schema.define(version: 25) do
 
   create_table "vssc_counts", force: :cascade do |t|
     t.string   "type",                   limit: 255
+    t.integer  "countable_id",           limit: 4
+    t.string   "countable_type",         limit: 255
     t.integer  "device_id",              limit: 4
     t.string   "gp_unit_identifier",     limit: 255
     t.string   "other_type",             limit: 255
@@ -204,6 +206,7 @@ ActiveRecord::Schema.define(version: 25) do
     t.float    "count",                  limit: 24
   end
 
+  add_index "vssc_counts", ["countable_id", "countable_type"], name: "vssc_countable", using: :btree
   add_index "vssc_counts", ["device_id"], name: "vssc_counts_device", using: :btree
   add_index "vssc_counts", ["gp_unit_identifier"], name: "vssc_counts_gp_unit", using: :btree
   add_index "vssc_counts", ["summary_countable_id", "summary_countable_type"], name: "vssc_counts_summary_countable", using: :btree
