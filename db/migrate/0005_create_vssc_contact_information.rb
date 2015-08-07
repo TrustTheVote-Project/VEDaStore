@@ -13,7 +13,7 @@ class CreateVsscContactInformation < ActiveRecord::Migration
       t.text :uri
       t.timestamps null: false
     end
-    add_index :vssc_contact_information, [:contactable_id, :contactable_type], :vssc_contactable
+    add_index :vssc_contact_information, [:contactable_id, :contactable_type], name: :vssc_contactable
 
   end  
 end

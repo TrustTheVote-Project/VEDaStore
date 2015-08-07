@@ -295,25 +295,26 @@ module VsscFunctions
     node_name ||= class_node_name
     xml ||= Nokogiri::XML::Builder.new
     #Rails.logger.debug("Writing node: #{node_name}")
-    if node_name == "BallotSelection"
-      Rails.logger.debug("Writing node: #{node_name}")
-    end
       
     xml.send(node_name, xml_attributes_hash(node_name)) do |r|
-      elements.each do |k, options|
-        value = self.send(options[:method])
-        if options[:passthrough] && k != options[:passthrough]
-          if value.any? #passthroughs are always for collections/multiples
-            xml.send(k) do |pr|            
-              self.element_xml_node(pr, k, options, value)
+      if self.class.text_node_method
+        r.text self.send(self.class.text_node_method)
+      else
+        elements.each do |k, options|
+          value = self.send(options[:method])
+          if options[:passthrough] && k != options[:passthrough]
+            if value.any? #passthroughs are always for collections/multiples
+              xml.send(k) do |pr|            
+                self.element_xml_node(pr, k, options, value)
+              end
             end
+          else 
+            self.element_xml_node(r, k, options, value)
           end
-        else 
-          self.element_xml_node(r, k, options, value)
         end
-      end
-      if block
-        yield r
+        if block
+          yield r
+        end
       end
     end
     return xml

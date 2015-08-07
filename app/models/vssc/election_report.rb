@@ -91,8 +91,8 @@ class Vssc::ElectionReport < ActiveRecord::Base
   def xml_attributes_hash_with_root(node_name)
     attr_hash = xml_attributes_hash_without_root(node_name)
     attr_hash['xmlns:xsi'] = "http://www.w3.org/2001/XMLSchema-instance"
-    attr_hash['xmlns'] = "http://grouper.ieee.org/groups/1622/fake_url"
-    attr_hash['xsi:schemaLocation'] = "http://grouper.ieee.org/groups/1622/fake_url file:///G:/1622.2/ElectionResultsV29.xsd"
+    attr_hash['xmlns'] = "http://grouper.ieee.org/groups/1622/groups/2/V1/1622_2-election_results_reporting.xsd"
+    attr_hash['xsi:schemaLocation'] = "http://grouper.ieee.org/groups/1622/groups/2/V1/1622_2-election_results_reporting.xsd http://grouper.ieee.org/groups/1622/groups/2/V1/1622_2-election_results_reporting.xsd"
     return attr_hash
   end
   

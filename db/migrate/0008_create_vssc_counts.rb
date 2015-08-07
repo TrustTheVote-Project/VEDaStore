@@ -28,7 +28,7 @@ class CreateVsscCounts < ActiveRecord::Migration
     add_index :vssc_counts, :type, name: :vssc_counts_type
     add_index :vssc_counts, :device_id, name: :vssc_counts_device
     add_index :vssc_counts, :gp_unit_identifier, name: :vssc_counts_gp_unit
-    add_index :vssc_counts, [:summary_countable_id, :summary_countable_type], :vssc_counts_summary_countable
+    add_index :vssc_counts, [:summary_countable_id, :summary_countable_type], name: :vssc_counts_summary_countable
     
   end  
 end
