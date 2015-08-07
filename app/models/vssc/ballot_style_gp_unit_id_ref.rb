@@ -1,4 +1,4 @@
-class Vssc:BallotStyleGpUnitIdRef < ActiveRecord::Base
+class Vssc::BallotStyleGpUnitIdRef < ActiveRecord::Base
   include VsscFunctions
   
   belongs_to :ballot_style

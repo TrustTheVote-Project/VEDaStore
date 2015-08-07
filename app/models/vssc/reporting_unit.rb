@@ -20,9 +20,9 @@
 # </xsd:complexType>
 class Vssc::ReportingUnit < Vssc::GpUnit
 
-  define_element("AuthorityId", type: String, method: :gp_unit_authority_id_refs)
+  define_element("AuthorityId", type: Vssc::GpUnitAuthorityIdRef, method: :gp_unit_authority_id_refs)
   has_many :gp_unit_authority_id_refs
-  has_many :authorities,, through: :gp_unit_authority_id_refs
+  has_many :authorities, through: :gp_unit_authority_id_refs
   
   define_element("ContactInformation", type: Vssc::ContactInformation, belongs_to: true)
   

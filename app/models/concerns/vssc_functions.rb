@@ -57,7 +57,9 @@ module VsscFunctions
     def parse_vssc_file(file_contents_or_path)
       node = self.noko_doc(file_contents_or_path).root
       er = self.parse_vssc(node)
-      er.save!
+      
+      #er.save!
+        
       return er
     end
     
@@ -137,11 +139,16 @@ module VsscFunctions
   end
   
   def set_vssc_element_value(element, element_name, method, type)
-    value =  convert_element_to_type(element, element_name, type)
-    if is_many?(method)
-      self.send("#{method}") << value
-    else
-      self.send("#{method}=", value)
+    begin
+      value =  convert_element_to_type(element, element_name, type)
+      if is_many?(method)
+        self.send("#{method}") << value
+      else
+        self.send("#{method}=", value)
+      end
+    rescue Exception => e
+      puts "Error Parsing Element #{value}"
+      raise e
     end
   end
   
@@ -181,14 +188,14 @@ module VsscFunctions
         # klass = "Vssc::#{(element.xml_attributes['type'].value || element.xml_attributes['xsi:type'].value || element_name)}".constantize
         end
       rescue Exception => e
-        puts "Didn't parse element: #{e}"
+        puts "Didn't parse element: #{self.class} - #{element_name} - #{element} - #{e.backtrace.join("\n")}"
         klass = obj_type
         klass = klass.constantize if klass.is_a?(String)
       end
       begin
         klass.parse_vssc(element)
       rescue Exception => e
-        puts "#{klass}"
+        puts "Error in convert_element_to_type for class: #{klass}"
         raise e 
       end
     end
@@ -253,7 +260,7 @@ module VsscFunctions
           begin
             v.to_xml_node(r, node_name)
           rescue Exception => e
-            puts v.inspect
+            puts "Error parsing node #{node_name} with value #{v.inspect}"
             Rails.logger.error("#{node_name} #{v.inspect}")
             raise e
           end

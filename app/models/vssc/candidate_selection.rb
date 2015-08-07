@@ -11,12 +11,12 @@
 # </xsd:complexType>
 class Vssc::CandidateSelection < Vssc::BallotSelection
   
-  define_element("CandidateId", type: String, method: :ballot_selection_candidate_id_refs)
+  define_element("CandidateId", type: Vssc::BallotSelectionCandidateIdRef, method: :ballot_selection_candidate_id_refs)
   has_many :ballot_selection_candidate_id_refs
   has_many :candidates, through: :ballot_selection_candidate_id_refs
   
   
-  define_element("EndorsementPartyId", type: String, method: :ballot_selection_endorsement_party_id_refs)
+  define_element("EndorsementPartyId", type: Vssc::BallotSelectionEndorsementPartyIdRef, method: :ballot_selection_endorsement_party_id_refs)
   has_many :ballot_selection_endorsement_party_id_refs
   has_many :endorsement_parties, through: :ballot_selection_endorsement_party_id_refs
   

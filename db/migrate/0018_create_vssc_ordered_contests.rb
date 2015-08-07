@@ -7,11 +7,11 @@ class CreateVsscOrderedContests < ActiveRecord::Migration
     end
     add_index :vssc_ordered_contests, :contest_identifier, name: :vssc_ordered_contest_identifier
     
-    create_table :vssc_ordered_contest_ballot_selection_ids do |t|
+    create_table :vssc_ordered_contest_ballot_selection_id_refs do |t|
       t.integer :ordered_contest_id
       t.string :ballot_selection_id_ref
     end
-    add_index :vssc_ordered_contest_ballot_selection_ids, [:ordered_contest_id, :ballot_selection_id_ref], name: :vssc_ordered_contest_ballot_selection_ref
+    add_index :vssc_ordered_contest_ballot_selection_id_refs, [:ordered_contest_id, :ballot_selection_id_ref], name: :vssc_ordered_contest_ballot_selection_ref
     
   end  
 end

@@ -12,4 +12,9 @@ class Vssc::LanguageString < ActiveRecord::Base
   
   define_attribute("Language") #type: "xsd:language"
   # inner text is actual value
+  
+  define_text_node(:text)
+
+  
+  
 end

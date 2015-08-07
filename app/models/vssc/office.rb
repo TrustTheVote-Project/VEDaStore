@@ -25,7 +25,7 @@ class Vssc::Office < ActiveRecord::Base
 
   define_element("Name", type: Vssc::InternationalizedText, belongs_to: true)
   
-  define_element("OfficeHolderId", type: String, method: :office_office_holder_id_refs)
+  define_element("OfficeHolderId", type: Vssc::OfficeOfficeHolderIdRef, method: :office_office_holder_id_refs)
   has_many :office_office_holder_id_refs
   has_many :office_holders, through: :office_office_holder_id_refs
   

@@ -8,7 +8,7 @@
 class Vssc::OfficeGroup < ActiveRecord::Base
   include VsscFunctions
   
-  define_element("OfficeId", type: String, method: :office_group_office_id_refs)
+  define_element("OfficeId", type: Vssc::OfficeGroupOfficeIdRef, method: :office_group_office_id_refs)
   has_many :office_group_office_id_refs
   has_many :offices, through: :office_group_office_id_refs
   

@@ -40,11 +40,11 @@ class CreateVsscGpUnits < ActiveRecord::Migration
     add_index :vssc_gp_unit_composing_gp_unit_id_refs, [:gp_unit_id, :composing_gp_unit_id_ref], name: :vssc_gp_unit_composing_units
     
     #reporting_unit
-    create_table :vssc_gp_unit_authority_ids do |t|
+    create_table :vssc_gp_unit_authority_id_refs do |t|
       t.integer :gp_unit_id
       t.string :authority_id_ref
     end
-    add_index :vssc_gp_unit_authority_ids, [:gp_unit_id, :authority_id_ref], name: :vssc_gp_unit_authorities
+    add_index :vssc_gp_unit_authority_id_refs, [:gp_unit_id, :authority_id_ref], name: :vssc_gp_unit_authorities
     
     
   end  

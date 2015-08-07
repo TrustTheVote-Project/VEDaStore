@@ -38,7 +38,7 @@ class Vssc::Contest < ActiveRecord::Base
   define_element("Name")
   
   define_element("SummaryCounts", type: Vssc::SummaryCounts, method: :summary_counts)
-  has_many :summary_counts, as: :summary_countable
+  has_many :summary_counts, as: :summary_countable, class_name: "Vssc::SummaryCounts"
   
   define_attribute("ObjectId", required: true)
   define_attribute("Abbreviation")

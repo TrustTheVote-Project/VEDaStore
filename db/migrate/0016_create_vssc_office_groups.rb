@@ -8,7 +8,7 @@ class CreateVsscOfficeGroups < ActiveRecord::Migration
       
       t.timestamps null: false
     end
-    add_index :vsssc_office_groups, [:office_groupable_id, :office_groupable_type], name: :vssc_office_groupable
+    add_index :vssc_office_groups, [:office_groupable_id, :office_groupable_type], name: :vssc_office_groupable
     
     create_table :vssc_office_group_office_ids do |t|
       t.integer :office_id

@@ -13,7 +13,7 @@ class CreateVsscElections < ActiveRecord::Migration
       
       t.timestamps null: false
     end
-    add_index :vssc_elections, :contact_informatino_id, name: :vssc_election_contact_information
+    add_index :vssc_elections, :contact_information_id, name: :vssc_election_contact_information
     add_index :vssc_elections, :election_scope_identifier, name: :vssc_elections_gp_scope
     add_index :vssc_elections, :name_id, name: :vssc_elections_name
     

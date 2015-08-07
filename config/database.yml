@@ -14,7 +14,7 @@ default: &default
 development:
   <<: *default
   #database: db/development.sqlite3
-  database: vspub_development
+  database: vssc_rails_development
   pool: 5
   username: root
   password:
@@ -25,7 +25,10 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
+  database: vssc_rails_test
+  pool: 5
+  username: root
+  password:
 
 production:
   <<: *default

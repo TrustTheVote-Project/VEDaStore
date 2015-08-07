@@ -10,7 +10,7 @@
 class Vssc::BallotStyle < ActiveRecord::Base
   include VsscFunctions
   
-  define_element("GpUnitId", type: String, method: :ballot_style_gp_unit_id_refs)
+  define_element("GpUnitId", type: Vssc::BallotStyleGpUnitIdRef, method: :ballot_style_gp_unit_id_refs)
   has_many :ballot_style_gp_unit_id_refs
   has_many :gp_units, through: :ballot_style_gp_unit_id_refs
   
@@ -19,7 +19,7 @@ class Vssc::BallotStyle < ActiveRecord::Base
   define_element("OrderedContest", method: :ordered_contests, type: OrderedContest)
   has_many :ordered_contests, as: :ordered_contestable
   
-  define_element("PartyId", type: String, method: :ballot_style_party_id_refs)
+  define_element("PartyId", type: Vssc::BallotStylePartyIdRef, method: :ballot_style_party_id_refs)
   has_many :ballot_style_party_id_refs
   has_many :parties, through: :ballot_style_party_id_refs
   

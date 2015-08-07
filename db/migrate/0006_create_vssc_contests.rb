@@ -60,11 +60,11 @@ class CreateVsscContests < ActiveRecord::Migration
     
     
     #candidate_contest
-    create_table :vssc_contest_office_ids do |t|
+    create_table :vssc_contest_office_id_refs do |t|
       t.integer :contest_id
       t.string :office_id_ref
     end
-    add_index :vssc_contest_office_ids, [:contest_id, :office_id_ref], name: :vssc_contest_offices
+    add_index :vssc_contest_office_id_refs, [:contest_id, :office_id_ref], name: :vssc_contest_offices
     
   end  
 end

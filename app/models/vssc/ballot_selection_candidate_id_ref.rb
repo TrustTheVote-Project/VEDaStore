@@ -1,4 +1,4 @@
-class Vssc:BallotSelectionCandidateIdRef < ActiveRecord::Base
+class Vssc::BallotSelectionCandidateIdRef < ActiveRecord::Base
   include VsscFunctions
   
   belongs_to :ballot_selection

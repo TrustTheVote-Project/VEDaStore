@@ -1,4 +1,4 @@
-class Vssc:ContestOfficeIdRef < ActiveRecord::Base
+class Vssc::ContestOfficeIdRef < ActiveRecord::Base
   include VsscFunctions
   
   belongs_to :contest

@@ -13,7 +13,7 @@
 
 class Vssc::CandidateContest < Vssc::Contest
 
-  define_element("OfficeId", type: String, method: :contest_office_id_refs)
+  define_element("OfficeId", type: Vssc::ContestOfficeIdRef, method: :contest_office_id_refs)
   has_many :contest_office_id_refs
   has_many :offices, through: :contest_office_id_refs
   

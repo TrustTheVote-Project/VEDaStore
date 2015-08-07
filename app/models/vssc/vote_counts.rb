@@ -7,6 +7,6 @@
 # </xsd:complexType>
 class Vssc::VoteCounts < Vssc::Counts
 
-  define_attribute("count", type: Float, required: true)
+  define_attribute("Count", type: Float, required: true)
   
 end

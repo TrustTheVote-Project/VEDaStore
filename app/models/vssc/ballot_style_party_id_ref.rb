@@ -1,4 +1,4 @@
-class Vssc:BallotStylePartyIdRef < ActiveRecord::Base
+class Vssc::BallotStylePartyIdRef < ActiveRecord::Base
   include VsscFunctions
   
   belongs_to :ballot_style

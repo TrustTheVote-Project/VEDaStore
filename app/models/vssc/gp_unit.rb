@@ -18,7 +18,7 @@ class Vssc::GpUnit < ActiveRecord::Base
   has_many :codes, as: :codeable
     
   define_element("SummaryCounts", type: Vssc::SummaryCounts, method: :summary_counts)
-  has_many :summary_counts, as: :summary_countable
+  has_many :summary_counts, as: :summary_countable, class_name: "Vssc::SummaryCounts"
 
   define_attribute("ObjectId", required: true)
   define_attribute("Name")

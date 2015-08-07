@@ -63,10 +63,10 @@ RSpec.describe Vssc::ElectionReport, type: :model do
         doc = Nokogiri::XML(f)
       end
       File.open(xml_file) do |f|
-        Vssc::ElectionReport.parse_vssc_file(f)
+        e = Vssc::ElectionReport.parse_vssc_file(f)
       end
       
-      e = Vssc::ElectionReport.last
+      #e = Vssc::ElectionReport.last
       
       expect(e.to_xml_node.doc.root).to be_equivalent_to(doc.root)
     end
