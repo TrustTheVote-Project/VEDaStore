@@ -1,0 +1,1104 @@
+  [1m[36m (1.2ms)[0m  [1mSELECT COUNT(*) FROM `vssc_elections`[0m
+  [1m[35m (2.2ms)[0m  SELECT COUNT(*) FROM `vssc_election_reports`
+  [1m[36m (60.2ms)[0m  [1mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (78.4ms)[0m  CREATE UNIQUE INDEX `unique_schema_migrations`  ON `schema_migrations` (`version`) 
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Mysql2::Error: Table 'vssc_rails_development.vssc_election_reports' doesn't exist: SHOW FULL FIELDS FROM `vssc_election_reports`
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreateVsscBallotSelections (1)
+  [1m[35m (31.1ms)[0m  CREATE TABLE `vssc_ballot_selections` (`id` int(11) auto_increment PRIMARY KEY, `contest_id` int(11), `type` varchar(255), `object_id` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL, `selection_id` int(11), `is_write_in` tinyint(1)) ENGINE=InnoDB
+  [1m[36m (32.3ms)[0m  [1mCREATE  INDEX `vssc_ballot_selection_contest`  ON `vssc_ballot_selections` (`contest_id`) [0m
+  [1m[35m (33.4ms)[0m  CREATE  INDEX `vssc_ballot_measure_selections`  ON `vssc_ballot_selections` (`selection_id`) 
+  [1m[36m (37.9ms)[0m  [1mCREATE  INDEX `vssc_ballot_selection_object_id`  ON `vssc_ballot_selections` (`object_id`) [0m
+  [1m[35m (26.2ms)[0m  CREATE TABLE `vssc_ballot_selection_candidate_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ballot_selection_id` int(11), `candidate_id_ref` varchar(255)) ENGINE=InnoDB
+  [1m[36m (61.5ms)[0m  [1mCREATE  INDEX `vssc_candidate_selection_candidates`  ON `vssc_ballot_selection_candidate_id_refs` (`ballot_selection_id`, `candidate_id_ref`) [0m
+  [1m[35m (25.6ms)[0m  CREATE TABLE `vssc_ballot_selection_endorsement_party_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ballot_selection_id` int(11), `party_id_ref` varchar(255)) ENGINE=InnoDB
+  [1m[36m (29.3ms)[0m  [1mCREATE  INDEX `vssc_candidate_selection_parties`  ON `vssc_ballot_selection_endorsement_party_id_refs` (`ballot_selection_id`, `party_id_ref`) [0m
+  [1m[35m (25.8ms)[0m  CREATE TABLE `vssc_ballot_selection_party_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ballot_selection_id` int(11), `party_id_ref` varchar(255)) ENGINE=InnoDB
+  [1m[36m (27.8ms)[0m  [1mCREATE  INDEX `vssc_party_selection_parties`  ON `vssc_ballot_selection_party_id_refs` (`ballot_selection_id`, `party_id_ref`) [0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('1')[0m
+  [1m[35m (6.1ms)[0m  COMMIT
+Migrating to CreateVsscBallotStyles (2)
+  [1m[36m (31.6ms)[0m  [1mCREATE TABLE `vssc_ballot_styles` (`id` int(11) auto_increment PRIMARY KEY, `election_id` int(11), `image_uri` varchar(255), `ballot_style_identifier` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (26.8ms)[0m  CREATE  INDEX `vssc_ballot_style_election`  ON `vssc_ballot_styles` (`election_id`) 
+  [1m[36m (20.6ms)[0m  [1mCREATE TABLE `vssc_ballot_style_gp_unit_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ballot_style_id` int(11), `gp_unit_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (25.0ms)[0m  CREATE  INDEX `vssc_ballot_style_gp_units`  ON `vssc_ballot_style_gp_unit_id_refs` (`gp_unit_id_ref`, `ballot_style_id`) 
+  [1m[36m (23.9ms)[0m  [1mCREATE TABLE `vssc_ballot_style_party_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ballot_style_id` int(11), `party_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (46.1ms)[0m  CREATE  INDEX `vssc_ballot_style_parties`  ON `vssc_ballot_style_party_id_refs` (`party_id_ref`, `ballot_style_id`) 
+  [1m[36m (0.8ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('2')
+  [1m[36m (1.0ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscCandidates (3)
+  [1m[35m (33.1ms)[0m  CREATE TABLE `vssc_candidates` (`id` int(11) auto_increment PRIMARY KEY, `election_id` int(11), `ballot_name_id` int(11), `party_identifier` varchar(255), `person_identifier` varchar(255), `object_id` varchar(255), `file_date` date, `candidate_identifier` varchar(255), `is_incumbent` tinyint(1), `is_top_ticket` tinyint(1), `post_election_status` varchar(255), `pre_election_status` varchar(255), `sequence_order` int(11), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (19.3ms)[0m  [1mCREATE  INDEX `vssc_candidate_election`  ON `vssc_candidates` (`election_id`) [0m
+  [1m[35m (30.1ms)[0m  CREATE  INDEX `vssc_candidate_ballot_name`  ON `vssc_candidates` (`ballot_name_id`) 
+  [1m[36m (25.2ms)[0m  [1mCREATE  INDEX `vssc_candidate_object_id`  ON `vssc_candidates` (`object_id`) [0m
+  [1m[35m (0.7ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('3')[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+Migrating to CreateVsscCodes (4)
+  [1m[36m (28.4ms)[0m  [1mCREATE TABLE `vssc_codes` (`id` int(11) auto_increment PRIMARY KEY, `codeable_type` varchar(255), `codeable_id` int(11), `other_type` varchar(255), `code_type` varchar(255), `value` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (32.6ms)[0m  CREATE  INDEX `vssc_codeable`  ON `vssc_codes` (`codeable_type`, `codeable_id`) 
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('4')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscContactInformation (5)
+  [1m[35m (34.9ms)[0m  CREATE TABLE `vssc_contact_information` (`id` int(11) auto_increment PRIMARY KEY, `contactable_id` int(11), `contactable_type` varchar(255), `address_line` text, `email` text, `fax` text, `name` varchar(255), `phone` text, `uri` text, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (26.4ms)[0m  [1mCREATE  INDEX `vssc_contactable`  ON `vssc_contact_information` (`contactable_id`, `contactable_type`) [0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('5')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+Migrating to CreateVsscContests (6)
+  [1m[36m (32.8ms)[0m  [1mCREATE TABLE `vssc_contests` (`id` int(11) auto_increment PRIMARY KEY, `type` varchar(255), `election_id` int(11), `ballot_sub_title_id` int(11), `ballot_title_id` int(11), `jurisdictional_scope_identifier` varchar(255), `name` varchar(255), `object_id` varchar(255), `abbreviation` varchar(255), `has_rotation` tinyint(1), `other_vote_variation_type` varchar(255), `sequence_order` int(11), `sub_units_reported` int(11), `total_sub_units` int(11), `vote_variation_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL, `con_statement_id` int(11), `effect_of_abstain_id` int(11), `full_text_id` int(11), `passage_threshold_id` int(11), `pro_statement_id` int(11), `summary_text_id` int(11), `other_type` varchar(255), `ballot_measure_type` varchar(255), `primary_party_identifier` varchar(255), `number_elected` int(11), `votes_allowed` int(11), `candidate_identifier` varchar(255), `office_identifier` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (31.6ms)[0m  CREATE  INDEX `vssc_contest_election`  ON `vssc_contests` (`election_id`) 
+  [1m[36m (26.0ms)[0m  [1mCREATE  INDEX `vssc_contest_ballot_sub_title`  ON `vssc_contests` (`ballot_sub_title_id`) [0m
+  [1m[35m (34.5ms)[0m  CREATE  INDEX `vssc_contest_ballot_title`  ON `vssc_contests` (`ballot_title_id`) 
+  [1m[36m (30.8ms)[0m  [1mCREATE  INDEX `vssc_contest_object_id`  ON `vssc_contests` (`object_id`) [0m
+  [1m[35m (49.1ms)[0m  CREATE  INDEX `vssc_ballot_measure_con_statement`  ON `vssc_contests` (`con_statement_id`) 
+  [1m[36m (32.1ms)[0m  [1mCREATE  INDEX `vssc_ballot_measure_effect_of_abstain`  ON `vssc_contests` (`effect_of_abstain_id`) [0m
+  [1m[35m (26.2ms)[0m  CREATE  INDEX `vssc_ballot_measure_full_text`  ON `vssc_contests` (`full_text_id`) 
+  [1m[36m (32.1ms)[0m  [1mCREATE  INDEX `vssc_ballot_measure_passage_threshold`  ON `vssc_contests` (`passage_threshold_id`) [0m
+  [1m[35m (36.0ms)[0m  CREATE  INDEX `vssc_ballot_measure_pro_statement`  ON `vssc_contests` (`pro_statement_id`) 
+  [1m[36m (27.9ms)[0m  [1mCREATE  INDEX `vssc_ballot_measure_summary_text`  ON `vssc_contests` (`summary_text_id`) [0m
+  [1m[35m (25.6ms)[0m  CREATE  INDEX `vssc_can_con_primary_party`  ON `vssc_contests` (`primary_party_identifier`) 
+  [1m[36m (30.8ms)[0m  [1mCREATE  INDEX `vssc_ret_con_candidate`  ON `vssc_contests` (`candidate_identifier`) [0m
+  [1m[35m (29.8ms)[0m  CREATE  INDEX `vssc_ret_con_office`  ON `vssc_contests` (`office_identifier`) 
+  [1m[36m (26.9ms)[0m  [1mCREATE TABLE `vssc_contest_office_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `contest_id` int(11), `office_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (28.0ms)[0m  CREATE  INDEX `vssc_contest_offices`  ON `vssc_contest_office_id_refs` (`contest_id`, `office_id_ref`) 
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('6')
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscCountStatuses (7)
+  [1m[35m (27.9ms)[0m  CREATE TABLE `vssc_count_statuses` (`id` int(11) auto_increment PRIMARY KEY, `count_statusable_id` int(11), `count_statusable_type` varchar(255), `other_type` varchar(255), `status` varchar(255), `count_item_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (31.7ms)[0m  [1mCREATE  INDEX `vssc_count_statusable`  ON `vssc_count_statuses` (`count_statusable_id`, `count_statusable_type`) [0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('7')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+Migrating to CreateVsscCounts (8)
+  [1m[36m (30.3ms)[0m  [1mCREATE TABLE `vssc_counts` (`id` int(11) auto_increment PRIMARY KEY, `type` varchar(255), `countable_id` int(11), `countable_type` varchar(255), `device_id` int(11), `gp_unit_identifier` varchar(255), `other_type` varchar(255), `count_item_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL, `ballots_cast` int(11), `ballots_outstanding` int(11), `ballots_rejected` int(11), `overvotes` int(11), `undervotes` int(11), `write_ins` int(11), `summary_countable_id` int(11), `summary_countable_type` varchar(255), `count` float) ENGINE=InnoDB[0m
+  [1m[35m (30.2ms)[0m  CREATE  INDEX `vssc_counts_type`  ON `vssc_counts` (`type`) 
+  [1m[36m (31.2ms)[0m  [1mCREATE  INDEX `vssc_countable`  ON `vssc_counts` (`countable_id`, `countable_type`) [0m
+  [1m[35m (31.2ms)[0m  CREATE  INDEX `vssc_counts_device`  ON `vssc_counts` (`device_id`) 
+  [1m[36m (29.7ms)[0m  [1mCREATE  INDEX `vssc_counts_gp_unit`  ON `vssc_counts` (`gp_unit_identifier`) [0m
+  [1m[35m (26.7ms)[0m  CREATE  INDEX `vssc_counts_summary_countable`  ON `vssc_counts` (`summary_countable_id`, `summary_countable_type`) 
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('8')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscDevices (9)
+  [1m[35m (32.3ms)[0m  CREATE TABLE `vssc_devices` (`id` int(11) auto_increment PRIMARY KEY, `manufacturer` varchar(255), `model` varchar(255), `device_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('9')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscElectionReports (10)
+  [1m[35m (26.7ms)[0m  CREATE TABLE `vssc_election_reports` (`id` int(11) auto_increment PRIMARY KEY, `message` varchar(255), `election_id` int(11), `notes` text, `format` varchar(255), `generated_date` datetime, `issuer` varchar(255), `issuer_abbreviation` varchar(255), `is_test` tinyint(1), `sequence` int(11), `sequence_end` int(11), `status` varchar(255), `test_type` varchar(255), `vendor_application_identifier` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (29.4ms)[0m  [1mCREATE  INDEX `vssc_election_reports_election`  ON `vssc_election_reports` (`election_id`) [0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (2.3ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('10')[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+Migrating to CreateVsscElections (11)
+  [1m[36m (29.4ms)[0m  [1mCREATE TABLE `vssc_elections` (`id` int(11) auto_increment PRIMARY KEY, `contact_information_id` int(11), `election_scope_identifier` varchar(255), `name_id` int(11), `date` date, `end_date` date, `election_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (30.7ms)[0m  CREATE  INDEX `vssc_election_contact_information`  ON `vssc_elections` (`contact_information_id`) 
+  [1m[36m (28.2ms)[0m  [1mCREATE  INDEX `vssc_elections_gp_scope`  ON `vssc_elections` (`election_scope_identifier`) [0m
+  [1m[35m (33.3ms)[0m  CREATE  INDEX `vssc_elections_name`  ON `vssc_elections` (`name_id`) 
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('11')
+  [1m[36m (1.8ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscGpUnits (12)
+  [1m[35m (29.1ms)[0m  CREATE TABLE `vssc_gp_units` (`id` int(11) auto_increment PRIMARY KEY, `type` varchar(255), `election_report_id` int(11), `object_id` varchar(255), `name` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL, `device_id` int(11), `serial_number` varchar(255), `contact_information_id` int(11), `count_statuses` text, `spatial_dimension_id` int(11), `is_electoral_district` tinyint(1), `other_type` varchar(255), `sub_units_reported` int(11), `total_sub_units` int(11), `reporting_unit_type` varchar(255), `voters_participated` int(11), `voters_registered` int(11)) ENGINE=InnoDB
+  [1m[36m (32.4ms)[0m  [1mCREATE  INDEX `vscc_gp_unit_election_report`  ON `vssc_gp_units` (`election_report_id`) [0m
+  [1m[35m (32.5ms)[0m  CREATE  INDEX `vssc_gp_unit_type`  ON `vssc_gp_units` (`type`) 
+  [1m[36m (31.7ms)[0m  [1mCREATE  INDEX `vssc_gp_unit_object_id`  ON `vssc_gp_units` (`object_id`) [0m
+  [1m[35m (29.0ms)[0m  CREATE  INDEX `vssc_gp_unit_contact_info`  ON `vssc_gp_units` (`contact_information_id`) 
+  [1m[36m (26.3ms)[0m  [1mCREATE  INDEX `vssc_gp_unit_spatial_dimension`  ON `vssc_gp_units` (`spatial_dimension_id`) [0m
+  [1m[35m (23.9ms)[0m  CREATE TABLE `vssc_gp_unit_composing_gp_unit_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `gp_unit_id` int(11), `composing_gp_unit_id_ref` varchar(255)) ENGINE=InnoDB
+  [1m[36m (29.4ms)[0m  [1mCREATE  INDEX `vssc_gp_unit_composing_units`  ON `vssc_gp_unit_composing_gp_unit_id_refs` (`gp_unit_id`, `composing_gp_unit_id_ref`) [0m
+  [1m[35m (24.4ms)[0m  CREATE TABLE `vssc_gp_unit_authority_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `gp_unit_id` int(11), `authority_id_ref` varchar(255)) ENGINE=InnoDB
+  [1m[36m (25.3ms)[0m  [1mCREATE  INDEX `vssc_gp_unit_authorities`  ON `vssc_gp_unit_authority_id_refs` (`gp_unit_id`, `authority_id_ref`) [0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (2.8ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('12')[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+Migrating to CreateVsscHours (13)
+  [1m[36m (30.6ms)[0m  [1mCREATE TABLE `vssc_hours` (`id` int(11) auto_increment PRIMARY KEY, `hourable_id` int(11), `hourable_type` varchar(255), `day` varchar(255), `end_time` datetime, `start_time` datetime, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (26.9ms)[0m  CREATE  INDEX `vssc_hourable`  ON `vssc_hours` (`hourable_id`, `hourable_type`) 
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('13')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscInternationalizedTexts (14)
+  [1m[35m (29.4ms)[0m  CREATE TABLE `vssc_internationalized_texts` (`id` int(11) auto_increment PRIMARY KEY, `identifier` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('14')
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscLanguageStrings (15)
+  [1m[35m (27.8ms)[0m  CREATE TABLE `vssc_language_strings` (`id` int(11) auto_increment PRIMARY KEY, `internationalized_text_id` int(11), `language` varchar(255), `text` text, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (20.7ms)[0m  [1mCREATE  INDEX `vssc_language_string_internationalized_text`  ON `vssc_language_strings` (`internationalized_text_id`) [0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('15')[0m
+  [1m[35m (1.2ms)[0m  COMMIT
+Migrating to CreateVsscOfficeGroups (16)
+  [1m[36m (27.4ms)[0m  [1mCREATE TABLE `vssc_office_groups` (`id` int(11) auto_increment PRIMARY KEY, `office_groupable_id` int(11), `office_groupable_type` varchar(255), `name` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (33.2ms)[0m  CREATE  INDEX `vssc_office_groupable`  ON `vssc_office_groups` (`office_groupable_id`, `office_groupable_type`) 
+  [1m[36m (20.9ms)[0m  [1mCREATE TABLE `vssc_office_group_office_ids` (`id` int(11) auto_increment PRIMARY KEY, `office_id` int(11), `office_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (29.1ms)[0m  CREATE  INDEX `vssc_office_group_office_refs`  ON `vssc_office_group_office_ids` (`office_id`, `office_id_ref`) 
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('16')
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscOffices (17)
+  [1m[35m (28.7ms)[0m  CREATE TABLE `vssc_offices` (`id` int(11) auto_increment PRIMARY KEY, `office_group_id` int(11), `election_report_id` int(11), `contact_information_id` int(11), `jurisdictional_scope_identifier` varchar(255), `name_id` int(11), `term_id` int(11), `object_id` varchar(255), `filing_deadline` datetime, `is_partisan` tinyint(1), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (28.2ms)[0m  [1mCREATE  INDEX `vssc_office_election_report`  ON `vssc_offices` (`election_report_id`) [0m
+  [1m[35m (37.7ms)[0m  CREATE  INDEX `vssc_office_office_group`  ON `vssc_offices` (`office_group_id`) 
+  [1m[36m (26.8ms)[0m  [1mCREATE  INDEX `vssc_office_contact_information`  ON `vssc_offices` (`contact_information_id`) [0m
+  [1m[35m (28.7ms)[0m  CREATE  INDEX `vssc_office_jurisdiction_scope`  ON `vssc_offices` (`jurisdictional_scope_identifier`) 
+  [1m[36m (29.7ms)[0m  [1mCREATE  INDEX `vssc_office_name`  ON `vssc_offices` (`name_id`) [0m
+  [1m[35m (32.8ms)[0m  CREATE  INDEX `vssc_office_term`  ON `vssc_offices` (`term_id`) 
+  [1m[36m (28.8ms)[0m  [1mCREATE  INDEX `vssc_office_object_id`  ON `vssc_offices` (`object_id`) [0m
+  [1m[35m (27.4ms)[0m  CREATE TABLE `vssc_office_office_holder_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `office_id` int(11), `office_holder_id_ref` varchar(255)) ENGINE=InnoDB
+  [1m[36m (30.7ms)[0m  [1mCREATE  INDEX `vssc_office_office_holder_ref`  ON `vssc_office_office_holder_id_refs` (`office_id`, `office_holder_id_ref`) [0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('17')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+Migrating to CreateVsscOrderedContests (18)
+  [1m[36m (27.2ms)[0m  [1mCREATE TABLE `vssc_ordered_contests` (`id` int(11) auto_increment PRIMARY KEY, `ballot_style_id` int(11), `contest_identifier` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (31.6ms)[0m  CREATE  INDEX `vscc_ordered_contest_ballot_style`  ON `vssc_ordered_contests` (`ballot_style_id`) 
+  [1m[36m (31.1ms)[0m  [1mCREATE  INDEX `vssc_ordered_contest_identifier`  ON `vssc_ordered_contests` (`contest_identifier`) [0m
+  [1m[35m (27.4ms)[0m  CREATE TABLE `vssc_ordered_contest_ballot_selection_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ordered_contest_id` int(11), `ballot_selection_id_ref` varchar(255)) ENGINE=InnoDB
+  [1m[36m (31.1ms)[0m  [1mCREATE  INDEX `vssc_ordered_contest_ballot_selection_ref`  ON `vssc_ordered_contest_ballot_selection_id_refs` (`ordered_contest_id`, `ballot_selection_id_ref`) [0m
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('18')[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+Migrating to CreateVsscPartyRegistrations (19)
+  [1m[36m (30.9ms)[0m  [1mCREATE TABLE `vssc_party_registrations` (`id` int(11) auto_increment PRIMARY KEY, `type` varchar(255), `election_report_id` int(11), `party_identifier` varchar(255), `count` int(11), `party_registrationable_id` int(11), `party_registrationable_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (21.7ms)[0m  CREATE  INDEX `vssc_party_registration_election_report`  ON `vssc_party_registrations` (`election_report_id`) 
+  [1m[36m (52.4ms)[0m  [1mCREATE  INDEX `vssc_party_reg_identifier`  ON `vssc_party_registrations` (`party_identifier`) [0m
+  [1m[35m (27.0ms)[0m  CREATE  INDEX `vssc_party_registrationable`  ON `vssc_party_registrations` (`party_registrationable_id`, `party_registrationable_type`) 
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('19')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscParties (20)
+  [1m[35m (29.2ms)[0m  CREATE TABLE `vssc_parties` (`id` int(11) auto_increment PRIMARY KEY, `election_report_id` int(11), `name_id` int(11), `object_id` varchar(255), `abbreviation` varchar(255), `color` varchar(255), `logo_uri` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL, `contest_identifier` varchar(255)) ENGINE=InnoDB
+  [1m[36m (24.9ms)[0m  [1mCREATE  INDEX `vssc_party_election_report`  ON `vssc_parties` (`election_report_id`) [0m
+  [1m[35m (25.6ms)[0m  CREATE  INDEX `vssc_party_name`  ON `vssc_parties` (`name_id`) 
+  [1m[36m (27.9ms)[0m  [1mCREATE  INDEX `vssc_party_object_id`  ON `vssc_parties` (`object_id`) [0m
+  [1m[35m (28.5ms)[0m  CREATE  INDEX `vssc_party_contest`  ON `vssc_parties` (`contest_identifier`) 
+  [1m[36m (26.9ms)[0m  [1mCREATE TABLE `vssc_party_party_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `party_id` int(11), `party_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (53.3ms)[0m  CREATE  INDEX `vssc_party_party_id_ref`  ON `vssc_party_party_id_refs` (`party_id`, `party_id_ref`) 
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscPeople (21)
+  [1m[35m (32.0ms)[0m  CREATE TABLE `vssc_people` (`id` int(11) auto_increment PRIMARY KEY, `election_report_id` int(11), `first_name` varchar(255), `full_name_id` int(11), `last_name` varchar(255), `middle_names` text, `nickname` varchar(255), `party_identifier` varchar(255), `prefix` varchar(255), `profession_id` int(11), `sufix` varchar(255), `title_id` int(11), `object_id` varchar(255), `date_of_birth` date, `gender` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (23.2ms)[0m  [1mCREATE  INDEX `vssc_person_election_report`  ON `vssc_people` (`election_report_id`) [0m
+  [1m[35m (30.5ms)[0m  CREATE  INDEX `vssc_person_full_name`  ON `vssc_people` (`full_name_id`) 
+  [1m[36m (36.7ms)[0m  [1mCREATE  INDEX `vssc_person_profession`  ON `vssc_people` (`profession_id`) [0m
+  [1m[35m (29.9ms)[0m  CREATE  INDEX `vssc_perspon_title`  ON `vssc_people` (`title_id`) 
+  [1m[36m (35.2ms)[0m  [1mCREATE  INDEX `vssc_person_object_id`  ON `vssc_people` (`object_id`) [0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('21')[0m
+  [1m[35m (1.1ms)[0m  COMMIT
+Migrating to CreateVsscSchedules (22)
+  [1m[36m (28.6ms)[0m  [1mCREATE TABLE `vssc_schedules` (`id` int(11) auto_increment PRIMARY KEY, `schedulable_id` int(11), `schedulable_type` varchar(255), `end_date` date, `start_date` date, `is_only_by_appointment` tinyint(1), `is_or_by_appointment` tinyint(1), `is_subject_to_change` tinyint(1), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (31.2ms)[0m  CREATE  INDEX `vssc_schedulable`  ON `vssc_schedules` (`schedulable_id`, `schedulable_type`) 
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('22')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVsscSpatialDimensions (23)
+  [1m[35m (31.9ms)[0m  CREATE TABLE `vssc_spatial_dimensions` (`id` int(11) auto_increment PRIMARY KEY, `spatial_extent_id` int(11), `map_uri` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (31.2ms)[0m  [1mCREATE  INDEX `vssc_spatial_dimension_spatial_extent`  ON `vssc_spatial_dimensions` (`spatial_extent_id`) [0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('23')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+Migrating to CreateVsscSpatialExtents (24)
+  [1m[36m (30.8ms)[0m  [1mCREATE TABLE `vssc_spatial_extents` (`id` int(11) auto_increment PRIMARY KEY, `coordinates` text, `format` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (1.8ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('24')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+Migrating to CreateVsscTerms (25)
+  [1m[36m (31.4ms)[0m  [1mCREATE TABLE `vssc_terms` (`id` int(11) auto_increment PRIMARY KEY, `end_date` date, `start_date` date, `office_term_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('25')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+  [1m[35m (0.8ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_selection_candidate_id_refs'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_ballot_selection_candidate_id_refs`[0m
+  [1m[35m (0.3ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_selection_endorsement_party_id_refs'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_ballot_selection_endorsement_party_id_refs`[0m
+  [1m[35m (0.3ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_selection_party_id_refs'
+
+  [1m[36m (0.2ms)[0m  [1mSHOW CREATE TABLE `vssc_ballot_selection_party_id_refs`[0m
+  [1m[35m (0.3ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_selections'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_ballot_selections`[0m
+  [1m[35m (0.3ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_style_gp_unit_id_refs'
+
+  [1m[36m (0.2ms)[0m  [1mSHOW CREATE TABLE `vssc_ballot_style_gp_unit_id_refs`[0m
+  [1m[35m (0.3ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_style_party_id_refs'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_ballot_style_party_id_refs`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_styles'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_ballot_styles`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_candidates'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_candidates`[0m
+  [1m[35m (2.6ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_codes'
+
+  [1m[36m (0.2ms)[0m  [1mSHOW CREATE TABLE `vssc_codes`[0m
+  [1m[35m (0.4ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_contact_information'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_contact_information`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_contest_office_id_refs'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_contest_office_id_refs`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_contests'
+
+  [1m[36m (0.2ms)[0m  [1mSHOW CREATE TABLE `vssc_contests`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_count_statuses'
+
+  [1m[36m (0.2ms)[0m  [1mSHOW CREATE TABLE `vssc_count_statuses`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_counts'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_counts`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_devices'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_devices`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_election_reports'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_election_reports`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_elections'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_elections`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_gp_unit_authority_id_refs'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_gp_unit_authority_id_refs`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_gp_unit_composing_gp_unit_id_refs'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_gp_unit_composing_gp_unit_id_refs`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_gp_units'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_gp_units`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_hours'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_hours`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_internationalized_texts'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_internationalized_texts`[0m
+  [1m[35m (0.3ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_language_strings'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_language_strings`[0m
+  [1m[35m (0.3ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_office_group_office_ids'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_office_group_office_ids`[0m
+  [1m[35m (0.4ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_office_groups'
+
+  [1m[36m (0.2ms)[0m  [1mSHOW CREATE TABLE `vssc_office_groups`[0m
+  [1m[35m (0.4ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_office_office_holder_id_refs'
+
+  [1m[36m (0.2ms)[0m  [1mSHOW CREATE TABLE `vssc_office_office_holder_id_refs`[0m
+  [1m[35m (0.3ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_offices'
+
+  [1m[36m (0.2ms)[0m  [1mSHOW CREATE TABLE `vssc_offices`[0m
+  [1m[35m (0.3ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ordered_contest_ballot_selection_id_refs'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_ordered_contest_ballot_selection_id_refs`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ordered_contests'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_ordered_contests`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_parties'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_parties`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_party_party_id_refs'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_party_party_id_refs`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_party_registrations'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_party_registrations`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_people'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_people`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_schedules'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_schedules`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_spatial_dimensions'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_spatial_dimensions`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_spatial_extents'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_spatial_extents`[0m
+  [1m[35m (0.2ms)[0m  SELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_terms'
+
+  [1m[36m (0.1ms)[0m  [1mSHOW CREATE TABLE `vssc_terms`[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.3ms)[0m  SELECT `schema_migrations`.* FROM `schema_migrations`
+  [1m[36m (0.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_selection_candidate_id_refs'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_ballot_selection_candidate_id_refs`
+  [1m[36m (0.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_selection_endorsement_party_id_refs'
+[0m
+  [1m[35m (0.3ms)[0m  SHOW CREATE TABLE `vssc_ballot_selection_endorsement_party_id_refs`
+  [1m[36m (0.8ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_selection_party_id_refs'
+[0m
+  [1m[35m (0.3ms)[0m  SHOW CREATE TABLE `vssc_ballot_selection_party_id_refs`
+  [1m[36m (0.4ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_selections'
+[0m
+  [1m[35m (0.2ms)[0m  SHOW CREATE TABLE `vssc_ballot_selections`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_style_gp_unit_id_refs'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_ballot_style_gp_unit_id_refs`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_style_party_id_refs'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_ballot_style_party_id_refs`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ballot_styles'
+[0m
+  [1m[35m (0.2ms)[0m  SHOW CREATE TABLE `vssc_ballot_styles`
+  [1m[36m (0.6ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_candidates'
+[0m
+  [1m[35m (0.3ms)[0m  SHOW CREATE TABLE `vssc_candidates`
+  [1m[36m (0.4ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_codes'
+[0m
+  [1m[35m (0.2ms)[0m  SHOW CREATE TABLE `vssc_codes`
+  [1m[36m (0.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_contact_information'
+[0m
+  [1m[35m (0.2ms)[0m  SHOW CREATE TABLE `vssc_contact_information`
+  [1m[36m (0.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_contest_office_id_refs'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_contest_office_id_refs`
+  [1m[36m (0.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_contests'
+[0m
+  [1m[35m (0.2ms)[0m  SHOW CREATE TABLE `vssc_contests`
+  [1m[36m (0.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_count_statuses'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_count_statuses`
+  [1m[36m (0.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_counts'
+[0m
+  [1m[35m (0.2ms)[0m  SHOW CREATE TABLE `vssc_counts`
+  [1m[36m (0.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_devices'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_devices`
+  [1m[36m (0.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_election_reports'
+[0m
+  [1m[35m (0.2ms)[0m  SHOW CREATE TABLE `vssc_election_reports`
+  [1m[36m (2.1ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_elections'
+[0m
+  [1m[35m (0.2ms)[0m  SHOW CREATE TABLE `vssc_elections`
+  [1m[36m (0.5ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_gp_unit_authority_id_refs'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_gp_unit_authority_id_refs`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_gp_unit_composing_gp_unit_id_refs'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_gp_unit_composing_gp_unit_id_refs`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_gp_units'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_gp_units`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_hours'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_hours`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_internationalized_texts'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_internationalized_texts`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_language_strings'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_language_strings`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_office_group_office_ids'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_office_group_office_ids`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_office_groups'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_office_groups`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_office_office_holder_id_refs'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_office_office_holder_id_refs`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_offices'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_offices`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ordered_contest_ballot_selection_id_refs'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_ordered_contest_ballot_selection_id_refs`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_ordered_contests'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_ordered_contests`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_parties'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_parties`
+  [1m[36m (0.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_party_party_id_refs'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_party_party_id_refs`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_party_registrations'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_party_registrations`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_people'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_people`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_schedules'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_schedules`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_spatial_dimensions'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_spatial_dimensions`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_spatial_extents'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_spatial_extents`
+  [1m[36m (0.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'vssc_rails_development'
+  AND fk.table_name = 'vssc_terms'
+[0m
+  [1m[35m (0.1ms)[0m  SHOW CREATE TABLE `vssc_terms`
+  [1m[36m (19.4ms)[0m  [1mDROP DATABASE IF EXISTS `vssc_rails_test`[0m
+  [1m[35m (6.6ms)[0m  CREATE DATABASE `vssc_rails_test` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_unicode_ci`
+  [1m[36m (31.9ms)[0m  [1mCREATE TABLE `vssc_ballot_selection_candidate_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ballot_selection_id` int(11), `candidate_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (49.5ms)[0m  CREATE  INDEX `vssc_candidate_selection_candidates` USING btree ON `vssc_ballot_selection_candidate_id_refs` (`ballot_selection_id`, `candidate_id_ref`) 
+  [1m[36m (23.0ms)[0m  [1mCREATE TABLE `vssc_ballot_selection_endorsement_party_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ballot_selection_id` int(11), `party_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (28.7ms)[0m  CREATE  INDEX `vssc_candidate_selection_parties` USING btree ON `vssc_ballot_selection_endorsement_party_id_refs` (`ballot_selection_id`, `party_id_ref`) 
+  [1m[36m (24.3ms)[0m  [1mCREATE TABLE `vssc_ballot_selection_party_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ballot_selection_id` int(11), `party_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (49.6ms)[0m  CREATE  INDEX `vssc_party_selection_parties` USING btree ON `vssc_ballot_selection_party_id_refs` (`ballot_selection_id`, `party_id_ref`) 
+  [1m[36m (32.0ms)[0m  [1mCREATE TABLE `vssc_ballot_selections` (`id` int(11) auto_increment PRIMARY KEY, `contest_id` int(11), `type` varchar(255), `object_id` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL, `selection_id` int(11), `is_write_in` tinyint(1)) ENGINE=InnoDB[0m
+  [1m[35m (34.8ms)[0m  CREATE  INDEX `vssc_ballot_selection_contest` USING btree ON `vssc_ballot_selections` (`contest_id`) 
+  [1m[36m (32.3ms)[0m  [1mCREATE  INDEX `vssc_ballot_selection_object_id` USING btree ON `vssc_ballot_selections` (`object_id`) [0m
+  [1m[35m (32.7ms)[0m  CREATE  INDEX `vssc_ballot_measure_selections` USING btree ON `vssc_ballot_selections` (`selection_id`) 
+  [1m[36m (29.7ms)[0m  [1mCREATE TABLE `vssc_ballot_style_gp_unit_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ballot_style_id` int(11), `gp_unit_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (25.5ms)[0m  CREATE  INDEX `vssc_ballot_style_gp_units` USING btree ON `vssc_ballot_style_gp_unit_id_refs` (`gp_unit_id_ref`, `ballot_style_id`) 
+  [1m[36m (21.8ms)[0m  [1mCREATE TABLE `vssc_ballot_style_party_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ballot_style_id` int(11), `party_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (30.1ms)[0m  CREATE  INDEX `vssc_ballot_style_parties` USING btree ON `vssc_ballot_style_party_id_refs` (`party_id_ref`, `ballot_style_id`) 
+  [1m[36m (25.8ms)[0m  [1mCREATE TABLE `vssc_ballot_styles` (`id` int(11) auto_increment PRIMARY KEY, `election_id` int(11), `image_uri` varchar(255), `ballot_style_identifier` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (28.4ms)[0m  CREATE  INDEX `vssc_ballot_style_election` USING btree ON `vssc_ballot_styles` (`election_id`) 
+  [1m[36m (28.3ms)[0m  [1mCREATE TABLE `vssc_candidates` (`id` int(11) auto_increment PRIMARY KEY, `election_id` int(11), `ballot_name_id` int(11), `party_identifier` varchar(255), `person_identifier` varchar(255), `object_id` varchar(255), `file_date` date, `candidate_identifier` varchar(255), `is_incumbent` tinyint(1), `is_top_ticket` tinyint(1), `post_election_status` varchar(255), `pre_election_status` varchar(255), `sequence_order` int(11), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (44.3ms)[0m  CREATE  INDEX `vssc_candidate_ballot_name` USING btree ON `vssc_candidates` (`ballot_name_id`) 
+  [1m[36m (33.8ms)[0m  [1mCREATE  INDEX `vssc_candidate_election` USING btree ON `vssc_candidates` (`election_id`) [0m
+  [1m[35m (35.4ms)[0m  CREATE  INDEX `vssc_candidate_object_id` USING btree ON `vssc_candidates` (`object_id`) 
+  [1m[36m (24.8ms)[0m  [1mCREATE TABLE `vssc_codes` (`id` int(11) auto_increment PRIMARY KEY, `codeable_type` varchar(255), `codeable_id` int(11), `other_type` varchar(255), `code_type` varchar(255), `value` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (30.5ms)[0m  CREATE  INDEX `vssc_codeable` USING btree ON `vssc_codes` (`codeable_type`, `codeable_id`) 
+  [1m[36m (26.8ms)[0m  [1mCREATE TABLE `vssc_contact_information` (`id` int(11) auto_increment PRIMARY KEY, `contactable_id` int(11), `contactable_type` varchar(255), `address_line` text, `email` text, `fax` text, `name` varchar(255), `phone` text, `uri` text, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (34.9ms)[0m  CREATE  INDEX `vssc_contactable` USING btree ON `vssc_contact_information` (`contactable_id`, `contactable_type`) 
+  [1m[36m (27.7ms)[0m  [1mCREATE TABLE `vssc_contest_office_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `contest_id` int(11), `office_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (38.0ms)[0m  CREATE  INDEX `vssc_contest_offices` USING btree ON `vssc_contest_office_id_refs` (`contest_id`, `office_id_ref`) 
+  [1m[36m (26.4ms)[0m  [1mCREATE TABLE `vssc_contests` (`id` int(11) auto_increment PRIMARY KEY, `type` varchar(255), `election_id` int(11), `ballot_sub_title_id` int(11), `ballot_title_id` int(11), `jurisdictional_scope_identifier` varchar(255), `name` varchar(255), `object_id` varchar(255), `abbreviation` varchar(255), `has_rotation` tinyint(1), `other_vote_variation_type` varchar(255), `sequence_order` int(11), `sub_units_reported` int(11), `total_sub_units` int(11), `vote_variation_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL, `con_statement_id` int(11), `effect_of_abstain_id` int(11), `full_text_id` int(11), `passage_threshold_id` int(11), `pro_statement_id` int(11), `summary_text_id` int(11), `other_type` varchar(255), `ballot_measure_type` varchar(255), `primary_party_identifier` varchar(255), `number_elected` int(11), `votes_allowed` int(11), `candidate_identifier` varchar(255), `office_identifier` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (35.1ms)[0m  CREATE  INDEX `vssc_contest_ballot_sub_title` USING btree ON `vssc_contests` (`ballot_sub_title_id`) 
+  [1m[36m (32.5ms)[0m  [1mCREATE  INDEX `vssc_contest_ballot_title` USING btree ON `vssc_contests` (`ballot_title_id`) [0m
+  [1m[35m (30.8ms)[0m  CREATE  INDEX `vssc_ret_con_candidate` USING btree ON `vssc_contests` (`candidate_identifier`) 
+  [1m[36m (31.7ms)[0m  [1mCREATE  INDEX `vssc_ballot_measure_con_statement` USING btree ON `vssc_contests` (`con_statement_id`) [0m
+  [1m[35m (27.0ms)[0m  CREATE  INDEX `vssc_ballot_measure_effect_of_abstain` USING btree ON `vssc_contests` (`effect_of_abstain_id`) 
+  [1m[36m (32.5ms)[0m  [1mCREATE  INDEX `vssc_contest_election` USING btree ON `vssc_contests` (`election_id`) [0m
+  [1m[35m (48.3ms)[0m  CREATE  INDEX `vssc_ballot_measure_full_text` USING btree ON `vssc_contests` (`full_text_id`) 
+  [1m[36m (29.3ms)[0m  [1mCREATE  INDEX `vssc_contest_object_id` USING btree ON `vssc_contests` (`object_id`) [0m
+  [1m[35m (26.5ms)[0m  CREATE  INDEX `vssc_ret_con_office` USING btree ON `vssc_contests` (`office_identifier`) 
+  [1m[36m (34.4ms)[0m  [1mCREATE  INDEX `vssc_ballot_measure_passage_threshold` USING btree ON `vssc_contests` (`passage_threshold_id`) [0m
+  [1m[35m (27.2ms)[0m  CREATE  INDEX `vssc_can_con_primary_party` USING btree ON `vssc_contests` (`primary_party_identifier`) 
+  [1m[36m (25.9ms)[0m  [1mCREATE  INDEX `vssc_ballot_measure_pro_statement` USING btree ON `vssc_contests` (`pro_statement_id`) [0m
+  [1m[35m (29.0ms)[0m  CREATE  INDEX `vssc_ballot_measure_summary_text` USING btree ON `vssc_contests` (`summary_text_id`) 
+  [1m[36m (23.1ms)[0m  [1mCREATE TABLE `vssc_count_statuses` (`id` int(11) auto_increment PRIMARY KEY, `count_statusable_id` int(11), `count_statusable_type` varchar(255), `other_type` varchar(255), `status` varchar(255), `count_item_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (29.1ms)[0m  CREATE  INDEX `vssc_count_statusable` USING btree ON `vssc_count_statuses` (`count_statusable_id`, `count_statusable_type`) 
+  [1m[36m (23.0ms)[0m  [1mCREATE TABLE `vssc_counts` (`id` int(11) auto_increment PRIMARY KEY, `type` varchar(255), `countable_id` int(11), `countable_type` varchar(255), `device_id` int(11), `gp_unit_identifier` varchar(255), `other_type` varchar(255), `count_item_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL, `ballots_cast` int(11), `ballots_outstanding` int(11), `ballots_rejected` int(11), `overvotes` int(11), `undervotes` int(11), `write_ins` int(11), `summary_countable_id` int(11), `summary_countable_type` varchar(255), `count` float(24)) ENGINE=InnoDB[0m
+  [1m[35m (22.9ms)[0m  CREATE  INDEX `vssc_countable` USING btree ON `vssc_counts` (`countable_id`, `countable_type`) 
+  [1m[36m (32.8ms)[0m  [1mCREATE  INDEX `vssc_counts_device` USING btree ON `vssc_counts` (`device_id`) [0m
+  [1m[35m (32.7ms)[0m  CREATE  INDEX `vssc_counts_gp_unit` USING btree ON `vssc_counts` (`gp_unit_identifier`) 
+  [1m[36m (28.4ms)[0m  [1mCREATE  INDEX `vssc_counts_summary_countable` USING btree ON `vssc_counts` (`summary_countable_id`, `summary_countable_type`) [0m
+  [1m[35m (31.7ms)[0m  CREATE  INDEX `vssc_counts_type` USING btree ON `vssc_counts` (`type`) 
+  [1m[36m (29.1ms)[0m  [1mCREATE TABLE `vssc_devices` (`id` int(11) auto_increment PRIMARY KEY, `manufacturer` varchar(255), `model` varchar(255), `device_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (23.8ms)[0m  CREATE TABLE `vssc_election_reports` (`id` int(11) auto_increment PRIMARY KEY, `message` varchar(255), `election_id` int(11), `notes` text, `format` varchar(255), `generated_date` datetime, `issuer` varchar(255), `issuer_abbreviation` varchar(255), `is_test` tinyint(1), `sequence` int(11), `sequence_end` int(11), `status` varchar(255), `test_type` varchar(255), `vendor_application_identifier` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (32.0ms)[0m  [1mCREATE  INDEX `vssc_election_reports_election` USING btree ON `vssc_election_reports` (`election_id`) [0m
+  [1m[35m (27.0ms)[0m  CREATE TABLE `vssc_elections` (`id` int(11) auto_increment PRIMARY KEY, `contact_information_id` int(11), `election_scope_identifier` varchar(255), `name_id` int(11), `date` date, `end_date` date, `election_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (32.0ms)[0m  [1mCREATE  INDEX `vssc_election_contact_information` USING btree ON `vssc_elections` (`contact_information_id`) [0m
+  [1m[35m (40.5ms)[0m  CREATE  INDEX `vssc_elections_gp_scope` USING btree ON `vssc_elections` (`election_scope_identifier`) 
+  [1m[36m (36.3ms)[0m  [1mCREATE  INDEX `vssc_elections_name` USING btree ON `vssc_elections` (`name_id`) [0m
+  [1m[35m (28.2ms)[0m  CREATE TABLE `vssc_gp_unit_authority_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `gp_unit_id` int(11), `authority_id_ref` varchar(255)) ENGINE=InnoDB
+  [1m[36m (24.1ms)[0m  [1mCREATE  INDEX `vssc_gp_unit_authorities` USING btree ON `vssc_gp_unit_authority_id_refs` (`gp_unit_id`, `authority_id_ref`) [0m
+  [1m[35m (29.7ms)[0m  CREATE TABLE `vssc_gp_unit_composing_gp_unit_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `gp_unit_id` int(11), `composing_gp_unit_id_ref` varchar(255)) ENGINE=InnoDB
+  [1m[36m (32.0ms)[0m  [1mCREATE  INDEX `vssc_gp_unit_composing_units` USING btree ON `vssc_gp_unit_composing_gp_unit_id_refs` (`gp_unit_id`, `composing_gp_unit_id_ref`) [0m
+  [1m[35m (23.6ms)[0m  CREATE TABLE `vssc_gp_units` (`id` int(11) auto_increment PRIMARY KEY, `type` varchar(255), `election_report_id` int(11), `object_id` varchar(255), `name` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL, `device_id` int(11), `serial_number` varchar(255), `contact_information_id` int(11), `count_statuses` text, `spatial_dimension_id` int(11), `is_electoral_district` tinyint(1), `other_type` varchar(255), `sub_units_reported` int(11), `total_sub_units` int(11), `reporting_unit_type` varchar(255), `voters_participated` int(11), `voters_registered` int(11)) ENGINE=InnoDB
+  [1m[36m (26.1ms)[0m  [1mCREATE  INDEX `vssc_gp_unit_contact_info` USING btree ON `vssc_gp_units` (`contact_information_id`) [0m
+  [1m[35m (30.2ms)[0m  CREATE  INDEX `vscc_gp_unit_election_report` USING btree ON `vssc_gp_units` (`election_report_id`) 
+  [1m[36m (35.4ms)[0m  [1mCREATE  INDEX `vssc_gp_unit_object_id` USING btree ON `vssc_gp_units` (`object_id`) [0m
+  [1m[35m (31.1ms)[0m  CREATE  INDEX `vssc_gp_unit_spatial_dimension` USING btree ON `vssc_gp_units` (`spatial_dimension_id`) 
+  [1m[36m (27.3ms)[0m  [1mCREATE  INDEX `vssc_gp_unit_type` USING btree ON `vssc_gp_units` (`type`) [0m
+  [1m[35m (31.8ms)[0m  CREATE TABLE `vssc_hours` (`id` int(11) auto_increment PRIMARY KEY, `hourable_id` int(11), `hourable_type` varchar(255), `day` varchar(255), `end_time` datetime, `start_time` datetime, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (25.8ms)[0m  [1mCREATE  INDEX `vssc_hourable` USING btree ON `vssc_hours` (`hourable_id`, `hourable_type`) [0m
+  [1m[35m (25.3ms)[0m  CREATE TABLE `vssc_internationalized_texts` (`id` int(11) auto_increment PRIMARY KEY, `identifier` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (20.6ms)[0m  [1mCREATE TABLE `vssc_language_strings` (`id` int(11) auto_increment PRIMARY KEY, `internationalized_text_id` int(11), `language` varchar(255), `text` text, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (32.6ms)[0m  CREATE  INDEX `vssc_language_string_internationalized_text` USING btree ON `vssc_language_strings` (`internationalized_text_id`) 
+  [1m[36m (28.8ms)[0m  [1mCREATE TABLE `vssc_office_group_office_ids` (`id` int(11) auto_increment PRIMARY KEY, `office_id` int(11), `office_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (29.7ms)[0m  CREATE  INDEX `vssc_office_group_office_refs` USING btree ON `vssc_office_group_office_ids` (`office_id`, `office_id_ref`) 
+  [1m[36m (26.3ms)[0m  [1mCREATE TABLE `vssc_office_groups` (`id` int(11) auto_increment PRIMARY KEY, `office_groupable_id` int(11), `office_groupable_type` varchar(255), `name` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (27.4ms)[0m  CREATE  INDEX `vssc_office_groupable` USING btree ON `vssc_office_groups` (`office_groupable_id`, `office_groupable_type`) 
+  [1m[36m (21.8ms)[0m  [1mCREATE TABLE `vssc_office_office_holder_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `office_id` int(11), `office_holder_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (27.9ms)[0m  CREATE  INDEX `vssc_office_office_holder_ref` USING btree ON `vssc_office_office_holder_id_refs` (`office_id`, `office_holder_id_ref`) 
+  [1m[36m (20.5ms)[0m  [1mCREATE TABLE `vssc_offices` (`id` int(11) auto_increment PRIMARY KEY, `office_group_id` int(11), `election_report_id` int(11), `contact_information_id` int(11), `jurisdictional_scope_identifier` varchar(255), `name_id` int(11), `term_id` int(11), `object_id` varchar(255), `filing_deadline` datetime, `is_partisan` tinyint(1), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (28.4ms)[0m  CREATE  INDEX `vssc_office_contact_information` USING btree ON `vssc_offices` (`contact_information_id`) 
+  [1m[36m (30.9ms)[0m  [1mCREATE  INDEX `vssc_office_election_report` USING btree ON `vssc_offices` (`election_report_id`) [0m
+  [1m[35m (28.4ms)[0m  CREATE  INDEX `vssc_office_jurisdiction_scope` USING btree ON `vssc_offices` (`jurisdictional_scope_identifier`) 
+  [1m[36m (32.5ms)[0m  [1mCREATE  INDEX `vssc_office_name` USING btree ON `vssc_offices` (`name_id`) [0m
+  [1m[35m (37.8ms)[0m  CREATE  INDEX `vssc_office_object_id` USING btree ON `vssc_offices` (`object_id`) 
+  [1m[36m (34.7ms)[0m  [1mCREATE  INDEX `vssc_office_office_group` USING btree ON `vssc_offices` (`office_group_id`) [0m
+  [1m[35m (27.8ms)[0m  CREATE  INDEX `vssc_office_term` USING btree ON `vssc_offices` (`term_id`) 
+  [1m[36m (23.3ms)[0m  [1mCREATE TABLE `vssc_ordered_contest_ballot_selection_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `ordered_contest_id` int(11), `ballot_selection_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (33.8ms)[0m  CREATE  INDEX `vssc_ordered_contest_ballot_selection_ref` USING btree ON `vssc_ordered_contest_ballot_selection_id_refs` (`ordered_contest_id`, `ballot_selection_id_ref`) 
+  [1m[36m (22.8ms)[0m  [1mCREATE TABLE `vssc_ordered_contests` (`id` int(11) auto_increment PRIMARY KEY, `ballot_style_id` int(11), `contest_identifier` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (28.9ms)[0m  CREATE  INDEX `vscc_ordered_contest_ballot_style` USING btree ON `vssc_ordered_contests` (`ballot_style_id`) 
+  [1m[36m (31.4ms)[0m  [1mCREATE  INDEX `vssc_ordered_contest_identifier` USING btree ON `vssc_ordered_contests` (`contest_identifier`) [0m
+  [1m[35m (27.5ms)[0m  CREATE TABLE `vssc_parties` (`id` int(11) auto_increment PRIMARY KEY, `election_report_id` int(11), `name_id` int(11), `object_id` varchar(255), `abbreviation` varchar(255), `color` varchar(255), `logo_uri` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL, `contest_identifier` varchar(255)) ENGINE=InnoDB
+  [1m[36m (31.3ms)[0m  [1mCREATE  INDEX `vssc_party_contest` USING btree ON `vssc_parties` (`contest_identifier`) [0m
+  [1m[35m (32.7ms)[0m  CREATE  INDEX `vssc_party_election_report` USING btree ON `vssc_parties` (`election_report_id`) 
+  [1m[36m (28.2ms)[0m  [1mCREATE  INDEX `vssc_party_name` USING btree ON `vssc_parties` (`name_id`) [0m
+  [1m[35m (41.6ms)[0m  CREATE  INDEX `vssc_party_object_id` USING btree ON `vssc_parties` (`object_id`) 
+  [1m[36m (28.9ms)[0m  [1mCREATE TABLE `vssc_party_party_id_refs` (`id` int(11) auto_increment PRIMARY KEY, `party_id` int(11), `party_id_ref` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (29.9ms)[0m  CREATE  INDEX `vssc_party_party_id_ref` USING btree ON `vssc_party_party_id_refs` (`party_id`, `party_id_ref`) 
+  [1m[36m (24.8ms)[0m  [1mCREATE TABLE `vssc_party_registrations` (`id` int(11) auto_increment PRIMARY KEY, `type` varchar(255), `election_report_id` int(11), `party_identifier` varchar(255), `count` int(11), `party_registrationable_id` int(11), `party_registrationable_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (25.8ms)[0m  CREATE  INDEX `vssc_party_registration_election_report` USING btree ON `vssc_party_registrations` (`election_report_id`) 
+  [1m[36m (35.4ms)[0m  [1mCREATE  INDEX `vssc_party_reg_identifier` USING btree ON `vssc_party_registrations` (`party_identifier`) [0m
+  [1m[35m (30.3ms)[0m  CREATE  INDEX `vssc_party_registrationable` USING btree ON `vssc_party_registrations` (`party_registrationable_id`, `party_registrationable_type`) 
+  [1m[36m (30.5ms)[0m  [1mCREATE TABLE `vssc_people` (`id` int(11) auto_increment PRIMARY KEY, `election_report_id` int(11), `first_name` varchar(255), `full_name_id` int(11), `last_name` varchar(255), `middle_names` text, `nickname` varchar(255), `party_identifier` varchar(255), `prefix` varchar(255), `profession_id` int(11), `sufix` varchar(255), `title_id` int(11), `object_id` varchar(255), `date_of_birth` date, `gender` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (27.3ms)[0m  CREATE  INDEX `vssc_person_election_report` USING btree ON `vssc_people` (`election_report_id`) 
+  [1m[36m (25.4ms)[0m  [1mCREATE  INDEX `vssc_person_full_name` USING btree ON `vssc_people` (`full_name_id`) [0m
+  [1m[35m (51.7ms)[0m  CREATE  INDEX `vssc_person_object_id` USING btree ON `vssc_people` (`object_id`) 
+  [1m[36m (33.2ms)[0m  [1mCREATE  INDEX `vssc_person_profession` USING btree ON `vssc_people` (`profession_id`) [0m
+  [1m[35m (30.2ms)[0m  CREATE  INDEX `vssc_perspon_title` USING btree ON `vssc_people` (`title_id`) 
+  [1m[36m (28.0ms)[0m  [1mCREATE TABLE `vssc_schedules` (`id` int(11) auto_increment PRIMARY KEY, `schedulable_id` int(11), `schedulable_type` varchar(255), `end_date` date, `start_date` date, `is_only_by_appointment` tinyint(1), `is_or_by_appointment` tinyint(1), `is_subject_to_change` tinyint(1), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (28.8ms)[0m  CREATE  INDEX `vssc_schedulable` USING btree ON `vssc_schedules` (`schedulable_id`, `schedulable_type`) 
+  [1m[36m (23.2ms)[0m  [1mCREATE TABLE `vssc_spatial_dimensions` (`id` int(11) auto_increment PRIMARY KEY, `spatial_extent_id` int(11), `map_uri` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (45.7ms)[0m  CREATE  INDEX `vssc_spatial_dimension_spatial_extent` USING btree ON `vssc_spatial_dimensions` (`spatial_extent_id`) 
+  [1m[36m (27.2ms)[0m  [1mCREATE TABLE `vssc_spatial_extents` (`id` int(11) auto_increment PRIMARY KEY, `coordinates` text, `format` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (26.8ms)[0m  CREATE TABLE `vssc_terms` (`id` int(11) auto_increment PRIMARY KEY, `end_date` date, `start_date` date, `office_term_type` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (26.0ms)[0m  [1mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (32.5ms)[0m  CREATE UNIQUE INDEX `unique_schema_migrations`  ON `schema_migrations` (`version`) 
+  [1m[36m (0.3ms)[0m  [1mSELECT version FROM `schema_migrations`[0m
+  [1m[35m (1.2ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('25')
+  [1m[36m (0.8ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('1')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('2')
+  [1m[36m (1.7ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('3')[0m
+  [1m[35m (0.6ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('4')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('5')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('6')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('7')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('8')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('9')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('10')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('11')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('12')
+  [1m[36m (0.2ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('13')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('14')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('15')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('16')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('17')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('18')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('19')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('20')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('21')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('22')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO `schema_migrations` (version) VALUES ('23')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO `schema_migrations` (version) VALUES ('24')

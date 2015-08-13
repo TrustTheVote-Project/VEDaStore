@@ -12,8 +12,6 @@ gemspec
 
 # To use a debugger
 group :development, :test do
-  gem 'byebug'
   gem 'equivalent-xml', "~> 0.6.0", :git => "https://github.com/mbklein/equivalent-xml"
-  gem 'rspec-rails', '~> 3.0'
 end
 

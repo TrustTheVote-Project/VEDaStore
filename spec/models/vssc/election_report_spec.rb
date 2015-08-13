@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'spec_helper'
 
 RSpec.describe Vssc::ElectionReport, type: :model do
   # let(:e) { Vssc::ElectionReport.new }
@@ -69,7 +69,16 @@ RSpec.describe Vssc::ElectionReport, type: :model do
       
       e = Vssc::ElectionReport.last
       
-      expect(e.to_xml_node.doc.root).to be_equivalent_to(doc.root)
+      eq = EquivalentXml.equivalent?(e.to_xml_node.doc.root, doc.root, opts = { :element_order => false, :normalize_whitespace => true }) do |a,b, result|
+        # if result==false
+        #   puts a
+        #   puts b
+        # end
+        # result
+      end
+      expect(eq).to be(true)
+      
+      #expect(e.to_xml_node.doc.root).to be_equivalent_to(doc.root)
     end
   end
   
