@@ -11,7 +11,7 @@ Set up a rails app
 
 Add this to your Gemfile
 
-  gem "vssc_rails", "0.0.1", :git=>https://github.com/trustthevote-project/vssc_rails
+  gem "vssc_rails", "0.0.1", :git=>"https://github.com/trustthevote-project/vssc_rails"
   
   
 Install the gems, install the db migrations and migrate
@@ -33,25 +33,35 @@ To generate a VSSC file from a report you run
 
   > report = Vssc::ElectionReport.last
   > noko_doc = report.to_xml_node.doc
-  > File.write("MyWrittenOutFile.xml", "w+") {|f| f.write noto_doc.to_s }
+  > File.open("MyWrittenOutFile.xml", "w+") {|f| f.write noko_doc.to_s }
   
 VSSC objects can also be created directly. For example
 
-  > authority = Vssc::Person.new
-  > authority.object_id = "AuthorityObjectIDRef"
-  > authority.first_name = "Name One"
-  > authority2 = Vssc::Person.new
-  > authority2.object_id = "AuthorityObjectIDRef"
-  > authority2.first_name = "Name Two"
-  > authority.save!
   > district = Vssc::ReportingUnit.new
-  > district.authorities << authority
-
-or 
-
-  > district.gp_unit_authority_id_refs << Vssc::GpUnitAuthorityIdRef.new(authority: authority2)
   > district.is_electoral_district = true
   > district.save!
-  > puts district.to_xml_node
 
+  > authority = Vssc::Person.new
+  > authority.object_id = "AuthorityObjectIDRefOne"
+  > authority.first_name = "Name One"
+  > district.authorities << authority
+
+  > district.save!
+  
+
+or 
+  
+  > authority2 = Vssc::Person.new
+  > authority2.object_id = "AuthorityObjectIDRefTwo"
+  > authority2.first_name = "Name Two"
+  > authority2.save!
+  > district.gp_unit_authority_id_refs << Vssc::GpUnitAuthorityIdRef.new(authority: authority2)
+  > district.save!
+  > puts district.to_xml_node.doc.to_s
+
+  <?xml version="1.0"?>
+  <ReportingUnit IsElectoralDistrict="true">
+    <AuthorityId>AuthorityObjectIDRefOne</AuthorityId>
+    <AuthorityId>AuthorityObjectIDRefTwo</AuthorityId>
+  </ReportingUnit>
   
