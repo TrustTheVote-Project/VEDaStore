@@ -90,11 +90,11 @@ module VsscFunctions
     
     
   def vssc_before_save_callback
-    puts "Saving: #{self.class}"
+    #puts "Saving: #{self.class}"
   end
   
   def vssc_after_save_callback
-    puts "Saved! #{self.class}"
+    #puts "Saved! #{self.class}"
   end
   
   def is_valid_date_time?(value)

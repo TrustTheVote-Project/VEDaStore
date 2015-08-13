@@ -37,7 +37,9 @@ class Vssc::Contest < ActiveRecord::Base
 
   define_element("JurisdictionalScopeId", method: :jurisdictional_scope_identifier)
   
-  define_element("Name")
+  # TODO: Attribute or element?
+  # define_element("Name")
+  define_attribute("Name")
   
   define_element("SummaryCounts", type: Vssc::SummaryCounts, method: :summary_counts)
   has_many :summary_counts, as: :summary_countable, class_name: "Vssc::SummaryCounts"
