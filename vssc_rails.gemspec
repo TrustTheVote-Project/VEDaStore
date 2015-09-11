@@ -5,11 +5,11 @@ require "vssc_rails/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "vssc_rails"
+  s.name        = "VEDaStore"
   s.version     = VsscRails::VERSION
   s.authors     = ["Alex Mekelburg"]
   s.email       = ["alex.mekelburg@gmail.com"]
-  s.homepage    = "https://github.com/trustthevote-project/vssc_rails"
+  s.homepage    = "https://github.com/trustthevote-project/VEDaStore"
   s.summary     = "Parser and DB structure for VSSC election data schema"
   s.description = "Parses VSSC election data schema and saves to the DB. Exports from the DB into valid VSSC format."
   s.license     = "MIT"
