@@ -21,9 +21,9 @@ module VsscEnum
       @enums = []
       args.each do |val|
         v = val.underscore
-        inst = self.new(v)
+        inst = self.new(val)
         @enums << inst
-        @enums << v
+        @enums << val
         self.class.instance_eval do
           define_method(v.gsub('-','_')) { inst }
         end

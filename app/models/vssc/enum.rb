@@ -1,5 +1,5 @@
 module Vssc::Enum
   def self.table_name_prefix
-    'vssc_enum'
+    'vssc_enum_'
   end
 end
