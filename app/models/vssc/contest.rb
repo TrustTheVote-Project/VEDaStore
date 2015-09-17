@@ -32,7 +32,7 @@ class Vssc::Contest < ActiveRecord::Base
   define_element("Code", type: Vssc::Code, method: :codes)
   has_many :codes, as: :codeable
   
-  define_element("CountStatus", type: Vssc::Enum::CountStatus, method: :count_statuses)
+  define_element("CountStatus", type: Vssc::CountStatus, method: :count_statuses)
   has_many :count_statuses, as: :count_statusable
 
   define_element("JurisdictionalScopeId", method: :jurisdictional_scope_identifier)
