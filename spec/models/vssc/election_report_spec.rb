@@ -1,19 +1,20 @@
 require 'spec_helper'
 
 RSpec.describe Vssc::ElectionReport, type: :model do
-  # let(:e) { Vssc::ElectionReport.new }
-  # before(:each) do
-  #   e.object_id = "oid"
-  #   e.date = DateTime.now.iso8601
-  #   #e.format = Vssc::ReportFormat.precinct_level
-  #   #e.status = Vssc::ReportStatus.test
-  #   e.issuer = "issuer"
-  #   e.sequence = 1
-  #   e.sequence_end = 5
-  #   e.state_abbreviation = "ma"
-  #   e.vendor_application_id = "ID"
-  # end
-  # subject { e }
+  let(:e) { Vssc::ElectionReport.new }
+  before(:each) do
+    #e.object_id = "oid"
+    e.generated_date = DateTime.now.iso8601
+    e.format = Vssc::Enum::ReportDetailLevel.precinct_level
+    #e.status = Vssc::ReportStatus.test
+    e.issuer = "california"
+    e.issuer_abbreviation = "ca"
+    e.status = Vssc::Enum::ResultsStatus.unofficial_partial
+    e.vendor_application_identifier = "oset"
+    e.sequence = 1
+    e.sequence_end = 5
+  end
+  subject { e }
     #
   # it { should have_element("Message") }
   # it { should have_element("GPUnitCollection") }
@@ -32,8 +33,10 @@ RSpec.describe Vssc::ElectionReport, type: :model do
   # it { should have_attribute("date") }
   # it { should validate_presence_of_attribute("date") }
   # it { should validate_attribute_type("date", DateTime.now.iso8601) }
-  # it { should have_attribute("format") }
-  # it { should validate_presence_of_attribute("format") }
+  
+  it { should have_attribute("Format") }
+  it { should validate_presence_of_attribute("Format") }
+  
   # it { should validate_attribute_type("format", VSSC::ReportFormat.precinct_level) }
   # it { should have_attribute("status") }
   # it { should validate_presence_of_attribute("status") }

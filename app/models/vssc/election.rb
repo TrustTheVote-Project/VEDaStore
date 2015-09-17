@@ -56,7 +56,7 @@ class Vssc::Election < ActiveRecord::Base
   has_many :count_statuses, as: :count_statusable
   
   
-  define_attribute("Date", required: true, type: Date, required: true)
+  define_attribute("Date", required: true, type: Date)
   define_attribute("EndDate", required: true, type: Date)
   define_attribute("Type", required: true, type: Vssc::Enum::ElectionType, method: "election_type")
   

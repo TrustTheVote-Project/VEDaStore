@@ -20,11 +20,12 @@ module VsscEnum
     def set_enum_values(*args)
       @enums = []
       args.each do |val|
-        inst = self.new(val)
+        v = val.underscore
+        inst = self.new(v)
         @enums << inst
-        @enums << val
+        @enums << v
         self.class.instance_eval do
-          define_method(val.gsub('-','_')) { inst }
+          define_method(v.gsub('-','_')) { inst }
         end
       end
     end
