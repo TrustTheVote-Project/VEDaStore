@@ -13,11 +13,11 @@ class Vssc::Enum::ElectionType
   include VsscEnum
   
   set_enum_values "General",
-                  "Other",
                   "PartisanPrimaryClosed",
                   "PartisanPrimaryOpen",
                   "Primary",
                   "Runoff",
+                  "Special",
                   "Other"    
   
 end
