@@ -9,12 +9,10 @@ class CreateVsscCandidates < ActiveRecord::Migration
       
       t.string :object_id
       t.date :file_date
-      t.string :candidate_identifier
       t.boolean :is_incumbent
       t.boolean :is_top_ticket
       t.string :post_election_status
       t.string :pre_election_status
-      t.integer :sequence_order
       
       t.timestamps null: false
     end

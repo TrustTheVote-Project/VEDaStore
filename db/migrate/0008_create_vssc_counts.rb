@@ -9,6 +9,7 @@ class CreateVsscCounts < ActiveRecord::Migration
       t.integer :device_id
       
       t.string :gp_unit_identifier
+      t.boolean :is_suppressed_for_privacy
       t.string :other_type
       t.string :count_item_type
       

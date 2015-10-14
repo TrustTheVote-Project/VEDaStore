@@ -1,93 +1,88 @@
 # <xsd:complexType name="ElectionReport">
 #   <xsd:sequence>
-#     <xsd:element name="Code" type="Code" minOccurs="0" maxOccurs="unbounded"/>
-#     <xsd:element name="Election" type="Election" minOccurs="0"/>
-#     <xsd:element name="GpUnitCollection" minOccurs="0">
+#     <xsd:element name="Election" type="Election" minOccurs="0" maxOccurs="unbounded"/>
+#     <xsd:element name="ExternalIdentifiers" type="ExternalIdentifiers" minOccurs="0"/>
+#     <xsd:element name="Format" type="ReportDetailLevel"/>
+#     <xsd:element name="GeneratedDate" type="xsd:dateTime"/>
+#     <xsd:element name="GpUnitCollection" minOccurs="0" maxOccurs="unbounded">
 #       <xsd:complexType>
 #         <xsd:sequence>
-#           <xsd:element name="GpUnit" type="GpUnit" minOccurs="1" maxOccurs="unbounded"/>
+#           <xsd:element name="GpUnit" type="GpUnit" maxOccurs="unbounded"/>
 #         </xsd:sequence>
 #       </xsd:complexType>
 #     </xsd:element>
+#     <xsd:element name="Issuer" type="xsd:string"/>
+#     <xsd:element name="IssuerAbbreviation" type="xsd:string"/>
+#     <xsd:element name="IsTest" type="xsd:boolean" minOccurs="0"/>
 #     <xsd:element name="Notes" type="xsd:string" minOccurs="0"/>
-#     <xsd:element name="OfficeCollection" minOccurs="0">
+#     <xsd:element name="OfficeCollection" minOccurs="0" maxOccurs="unbounded">
 #       <xsd:complexType>
 #         <xsd:sequence>
-#           <xsd:element name="Office" type="Office" minOccurs="1" maxOccurs="unbounded"/>
+#           <xsd:element name="Office" type="Office" maxOccurs="unbounded"/>
 #           <xsd:element name="OfficeGroup" type="OfficeGroup" minOccurs="0" maxOccurs="unbounded"/>
 #         </xsd:sequence>
 #       </xsd:complexType>
 #     </xsd:element>
-#     <xsd:element name="PartyCollection" minOccurs="0">
+#     <xsd:element name="PartyCollection" minOccurs="0" maxOccurs="unbounded">
 #       <xsd:complexType>
 #         <xsd:sequence>
-#           <xsd:element name="Party" type="Party" minOccurs="1" maxOccurs="unbounded"/>
+#           <xsd:element name="Party" type="Party" maxOccurs="unbounded"/>
 #         </xsd:sequence>
 #       </xsd:complexType>
 #     </xsd:element>
-#     <xsd:element name="PersonCollection" minOccurs="0">
+#     <xsd:element name="PersonCollection" minOccurs="0" maxOccurs="unbounded">
 #       <xsd:complexType>
 #         <xsd:sequence>
-#           <xsd:element name="Person" type="Person" minOccurs="1" maxOccurs="unbounded"/>
+#           <xsd:element name="Person" type="Person" maxOccurs="unbounded"/>
 #         </xsd:sequence>
 #       </xsd:complexType>
 #     </xsd:element>
+#     <xsd:element name="SequenceStart" type="xsd:integer"/>
+#     <xsd:element name="SequenceEnd" type="xsd:integer"/>
+#     <xsd:element name="Status" type="ResultsStatus"/>
+#     <xsd:element name="TestType" type="xsd:string" minOccurs="0"/>
+#     <xsd:element name="VendorApplicationId" type="xsd:string"/>
 #     <xsd:element ref="ds:Signature" minOccurs="0"/>
 #   </xsd:sequence>
-#   <xsd:attribute name="Format" type="ReportDetailLevel" use="required"/>
-#   <xsd:attribute name="GeneratedDate" type="xsd:dateTime" use="required"/>
-#   <xsd:attribute name="Issuer" type="xsd:string" use="required"/>
-#   <xsd:attribute name="IssuerAbbreviation" type="xsd:string" use="required"/>
-#   <xsd:attribute name="IsTest" type="xsd:boolean"/>
-#   <xsd:attribute name="Sequence" type="xsd:integer" use="required"/>
-#   <xsd:attribute name="SequenceEnd" type="xsd:integer" use="required"/>
-#   <xsd:attribute name="Status" type="ResultsStatus" use="required"/>
-#   <xsd:attribute name="TestType" type="xsd:string"/>
-#   <xsd:attribute name="VendorApplicationId" type="xsd:string" use="required"/>
 # </xsd:complexType>
+
 require 'csv'
 class Vssc::ElectionReport < ActiveRecord::Base
-  
   include VsscFunctions
   
-  define_element("Code", type: Vssc::Code, method: :codes)
-  has_many :codes, as: :codeable
+  # TODO: Election should be multiple??
+  define_element("Election", type: Vssc::Election, belongs_to: true)
   
-  define_element("Message")
+  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collections)
+  has_many :external_identifier_collections, :as=>:identifiable
+  
+  define_element("Format", type: Vssc::Enum::ReportDetailLevel)
+  define_element("GeneratedDate", type: "xsd:dateTime")
 
   define_element("GpUnitCollection", type: Vssc::GpUnit, method: :gp_units, passthrough: "GpUnit")
   has_many :gp_units, dependent: :destroy
-  
+
+  define_element("Issuer", required: true)
+  define_element("IssuerAbbreviation", required: true)
+  define_element("IsTest", type: "xsd:boolean")
   define_element("Notes")
-  
-  define_element("PartyCollection", type: Vssc::Party, method: :parties, passthrough: "Party")
-  has_many :parties, dependent: :destroy
 
-
+  # need Office / OfficeGroup
   define_element("OfficeCollection", type: Vssc::Office, method: :offices, passthrough: "Office")
   has_many :office_groups, as: :office_groupable
   has_many :offices, dependent: :destroy
-  # need Office / OfficeGroup
 
+  define_element("PartyCollection", type: Vssc::Party, method: :parties, passthrough: "Party")
+  has_many :parties, dependent: :destroy
   
-
   define_element("PersonCollection", type: Vssc::Person, method: :people, passthrough: "Person")
   has_many :people, dependent: :destroy
   
-  define_element("Election", type: Vssc::Election, belongs_to: true)
-  
-  
-  
-  define_attribute("Format", required: true, type: Vssc::Enum::ReportDetailLevel)
-  define_attribute("GeneratedDate", required: true, type: "xsd:dateTime")
-  define_attribute("Issuer", required: true)
-  define_attribute("IssuerAbbreviation", required: true)
-  define_attribute("IsTest", type: "xsd:boolean")
-  define_attribute("Sequence", required: true, type: Fixnum)
-  define_attribute("SequenceEnd", required: true, type: Fixnum)
-  define_attribute("Status", required: true, type: Vssc::Enum::ResultsStatus)
+  define_attribute("SequenceStart", type: Fixnum)
+  define_attribute("SequenceEnd", type: Fixnum)
+  define_attribute("Status", type: Vssc::Enum::ResultsStatus)
   define_attribute("TestType")
-  define_attribute("VendorApplicationId", required: true, method: :vendor_application_identifier)
+  define_attribute("VendorApplicationId", method: :vendor_application_identifier)
   
   def xml_attributes_hash_with_root(node_name)
     attr_hash = xml_attributes_hash_without_root(node_name)

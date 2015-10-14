@@ -4,6 +4,7 @@
 #     <xsd:element name="OrderedBallotSelectionId" type="xsd:IDREF" minOccurs="0" maxOccurs="unbounded"/>
 #   </xsd:sequence>
 # </xsd:complexType>
+
 class Vssc::OrderedContest < ActiveRecord::Base
   include VsscFunctions
   

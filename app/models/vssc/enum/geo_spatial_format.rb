@@ -1,19 +1,19 @@
 # <xsd:simpleType name="GeoSpatialFormat">
 #   <xsd:restriction base="xsd:string">
-#     <xsd:enumeration value="GeoJson"/>
-#     <xsd:enumeration value="Gml"/>
-#     <xsd:enumeration value="Kml"/>
-#     <xsd:enumeration value="Shp"/>
-#     <xsd:enumeration value="Wkt"/>
+#     <xsd:enumeration value="geo-json"/>
+#     <xsd:enumeration value="gml"/>
+#     <xsd:enumeration value="kml"/>
+#     <xsd:enumeration value="shp"/>
+#     <xsd:enumeration value="wkt"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
 class Vssc::Enum::GeoSpatialFormat
   include VsscEnum
   
-  set_enum_values "GeoJson",
-                  "Gml",
-                  "Kml",
-                  "Shp",
-                  "Wkt"
+  set_enum_values "geo-json",
+                  "gml",
+                  "kml",
+                  "shp",
+                  "wkt"
                   
 end

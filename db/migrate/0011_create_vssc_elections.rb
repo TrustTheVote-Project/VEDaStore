@@ -7,7 +7,7 @@ class CreateVsscElections < ActiveRecord::Migration
       
       t.integer :name_id
       
-      t.date :date
+      t.date :start_date
       t.date :end_date
       t.string :election_type
       

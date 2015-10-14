@@ -10,6 +10,8 @@ class CreateVsscSchedules < ActiveRecord::Migration
       t.boolean :is_or_by_appointment
       t.boolean :is_subject_to_change
       
+      t.string :label
+      
       t.timestamps null: false
     end
     add_index :vssc_schedules, [:schedulable_id, :schedulable_type], name: :vssc_schedulable

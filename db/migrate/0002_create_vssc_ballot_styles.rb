@@ -3,7 +3,7 @@ class CreateVsscBallotStyles < ActiveRecord::Migration
     create_table :vssc_ballot_styles do |t|
       t.integer :election_id
       t.string :image_uri
-      t.string :ballot_style_identifier
+      t.string :object_id
       
       t.timestamps null: false
     end

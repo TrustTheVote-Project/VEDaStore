@@ -1,7 +1,6 @@
 class CreateVsscElectionReports < ActiveRecord::Migration
   def change
     create_table :vssc_election_reports do |t|
-      t.string :message
       t.integer :election_id
       
       t.text :notes
@@ -11,7 +10,7 @@ class CreateVsscElectionReports < ActiveRecord::Migration
       t.string :issuer
       t.string :issuer_abbreviation
       t.boolean :is_test
-      t.integer :sequence
+      t.integer :sequence_start
       t.integer :sequence_end
       t.string :status
       t.string :test_type

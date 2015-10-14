@@ -5,6 +5,8 @@ class CreateVsscTerms < ActiveRecord::Migration
       t.date :start_date
       t.string :office_term_type
       
+      t.string :label
+      
       t.timestamps null: false
     end
   end  

@@ -9,6 +9,8 @@ class CreateVsscHours < ActiveRecord::Migration
       t.datetime :end_time
       t.datetime :start_time
       
+      t.string :label
+      
       t.timestamps null: false
     end
     add_index :vssc_hours, [:hourable_id, :hourable_type], name: :vssc_hourable

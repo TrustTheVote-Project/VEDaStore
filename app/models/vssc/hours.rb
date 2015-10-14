@@ -1,15 +1,21 @@
 # <xsd:complexType name="Hours">
-#   <xsd:attribute name="Day" type="DayType"/>
-#   <xsd:attribute name="EndTime" type="TimeWithZone" use="required"/>
-#   <xsd:attribute name="StartTime" type="TimeWithZone" use="required"/>
+#   <xsd:sequence>
+#     <xsd:element name="Day" type="DayType" minOccurs="0"/>
+#     <xsd:element name="StartTime" type="TimeWithZone"/>
+#     <xsd:element name="EndTime" type="TimeWithZone"/>
+#   </xsd:sequence>
+#   <xsd:attribute name="label" type="xsd:string"/>
 # </xsd:complexType>
+
 class Vssc::Hours < ActiveRecord::Base
   include VsscFunctions
 
   belongs_to :hourable, polymorphic: true
   
-  define_attribute("Day", type: Vssc::Enum::DayType, required: true)
-  define_attribute("EndTime", type: DateTime, required: true)
-  define_attribute("StartTime", type: DateTime, required: true)
+  define_element("Day", type: Vssc::Enum::DayType, required: true)
+  define_element("StartTime", type: DateTime, required: true)
+  define_element("EndTime", type: DateTime, required: true)
+  
+  define_attribute("label")
   
 end

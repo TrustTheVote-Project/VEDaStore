@@ -7,6 +7,7 @@
 #     </xsd:extension>
 #   </xsd:complexContent>
 # </xsd:complexType>
+
 class Vssc::PartySelection < Vssc::BallotSelection
   
   define_element("PartyId", type: Vssc::BallotSelectionPartyIdRef, method: :ballot_selection_party_id_refs)

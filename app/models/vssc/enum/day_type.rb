@@ -1,28 +1,29 @@
 # <xsd:simpleType name="DayType">
 #   <xsd:restriction base="xsd:string">
-#     <xsd:enumeration value="Sunday"/>
-#     <xsd:enumeration value="Monday"/>
-#     <xsd:enumeration value="Tuesday"/>
-#     <xsd:enumeration value="Wednesday"/>
-#     <xsd:enumeration value="Thursday"/>
-#     <xsd:enumeration value="Friday"/>
-#     <xsd:enumeration value="Saturday"/>
-#     <xsd:enumeration value="Weekday"/>
-#     <xsd:enumeration value="Weekend"/>
-#     <xsd:enumeration value="All"/>
+#     <xsd:enumeration value="all"/>
+#     <xsd:enumeration value="sunday"/>
+#     <xsd:enumeration value="monday"/>
+#     <xsd:enumeration value="tuesday"/>
+#     <xsd:enumeration value="wednesday"/>
+#     <xsd:enumeration value="thursday"/>
+#     <xsd:enumeration value="friday"/>
+#     <xsd:enumeration value="saturday"/>
+#     <xsd:enumeration value="weekday"/>
+#     <xsd:enumeration value="weekend"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
 class Vssc::Enum::DayType
   include VsscEnum
   
-  set_enum_values "Sunday",
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday",
-                  "Saturday",
-                  "Weekday",
-                  "Weekend",
-                  "All"
+  set_enum_values "all",
+                  "sunday",
+                  "monday",
+                  "tuesday",
+                  "wednesday",
+                  "thursday",
+                  "friday",
+                  "saturday",
+                  "weekday",
+                  "weekend"
+
 end

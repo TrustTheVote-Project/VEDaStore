@@ -1,13 +1,21 @@
-# <xsd:complexType name="Term">
-#   <xsd:attribute name="EndDate" type="xsd:date"/>
-#   <xsd:attribute name="StartDate" type="xsd:date"/>
-#   <xsd:attribute name="Type" type="OfficeTermType"/>
-# </xsd:complexType>
+#     <xsd:element name="Term" minOccurs="0">
+#       <xsd:complexType>
+#         <xsd:sequence>
+#           <xsd:element name="StartDate" type="xsd:date" minOccurs="0"/>
+#           <xsd:element name="EndDate" type="xsd:date" minOccurs="0"/>
+#           <xsd:element name="Type" type="OfficeTermType" minOccurs="0"/>
+#         </xsd:sequence>
+#         <xsd:attribute name="label" type="xsd:string"/>
+#       </xsd:complexType>
+#     </xsd:element>
+
 class Vssc::Term < ActiveRecord::Base
   include VsscFunctions
   
-  define_attribute("EndDate", type: Date)
-  define_attribute("StartDate", type: Date)
-  define_attribute("Type", type: Vssc::Enum::OfficeTermType, method: :office_term_type)
+  define_element("StartDate", type: Date)
+  define_element("EndDate", type: Date)
+  define_element("Type", type: Vssc::Enum::OfficeTermType, method: :office_term_type)
+  
+  define_attribute("label")
   
 end

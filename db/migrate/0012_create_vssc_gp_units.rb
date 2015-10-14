@@ -16,12 +16,16 @@ class CreateVsscGpUnits < ActiveRecord::Migration
       
       #reporting_unit  
       t.integer :contact_information_id
-  
+      t.integer :election_administration_id
+      
       t.text :count_statuses
 
       t.integer :spatial_dimension_id
 
-      t.boolean :is_electoral_district
+      t.boolean :is_districted
+      t.boolean :is_mail_only
+      
+      t.string :number
       t.string :other_type
       t.integer :sub_units_reported
       t.integer :total_sub_units

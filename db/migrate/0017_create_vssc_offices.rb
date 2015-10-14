@@ -6,7 +6,7 @@ class CreateVsscOffices < ActiveRecord::Migration
       
       t.integer :contact_information_id
       
-      t.string :jurisdictional_scope_identifier
+      t.string :electoral_district_identifier
       t.integer :name_id
       
       t.integer :term_id
@@ -20,7 +20,7 @@ class CreateVsscOffices < ActiveRecord::Migration
     add_index :vssc_offices, :election_report_id, name: :vssc_office_election_report
     add_index :vssc_offices, :office_group_id, name: :vssc_office_office_group
     add_index :vssc_offices, :contact_information_id, name: :vssc_office_contact_information
-    add_index :vssc_offices, :jurisdictional_scope_identifier, name: :vssc_office_jurisdiction_scope
+    add_index :vssc_offices, :electoral_district_identifier, name: :vssc_office_jurisdiction_scope
     add_index :vssc_offices, :name_id, name: :vssc_office_name
     add_index :vssc_offices, :term_id, name: :vssc_office_term
     add_index :vssc_offices, :object_id, name: :vssc_office_object_id

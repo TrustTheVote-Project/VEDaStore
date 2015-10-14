@@ -5,6 +5,7 @@ class CreateVsscOfficeGroups < ActiveRecord::Migration
       t.string :office_groupable_type
       
       t.string :name
+      t.string :label
       
       t.timestamps null: false
     end

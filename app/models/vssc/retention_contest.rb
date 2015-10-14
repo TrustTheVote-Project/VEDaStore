@@ -8,6 +8,7 @@
 #     </xsd:extension>
 #   </xsd:complexContent>
 # </xsd:complexType>
+
 class Vssc::RetentionContest < Vssc::BallotMeasureContest
   
   define_element("CandidateId", method :candidate_identifier)

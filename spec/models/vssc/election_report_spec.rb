@@ -11,7 +11,7 @@ RSpec.describe Vssc::ElectionReport, type: :model do
     e.issuer_abbreviation = "ca"
     e.status = Vssc::Enum::ResultsStatus.unofficial_partial
     e.vendor_application_identifier = "oset"
-    e.sequence = 1
+    e.sequence_start = 1
     e.sequence_end = 5
   end
   subject { e }
@@ -34,8 +34,7 @@ RSpec.describe Vssc::ElectionReport, type: :model do
   # it { should validate_presence_of_attribute("date") }
   # it { should validate_attribute_type("date", DateTime.now.iso8601) }
   
-  it { should have_attribute("Format") }
-  it { should validate_presence_of_attribute("Format") }
+  it { should have_element("Format") }
   
   # it { should validate_attribute_type("format", VSSC::ReportFormat.precinct_level) }
   # it { should have_attribute("status") }

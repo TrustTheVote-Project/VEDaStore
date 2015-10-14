@@ -26,6 +26,12 @@ class CreateVsscParties < ActiveRecord::Migration
       t.string :party_id_ref
     end
     add_index :vssc_party_party_id_refs, [:party_id, :party_id_ref], name: :vssc_party_party_id_ref
+
+    create_table :vssc_party_contest_id_refs do |t|
+      t.integer :party_id
+      t.string :contest_id_ref
+    end
+    add_index :vssc_party_contest_id_refs, [:party_id, :contest_id_ref], name: :vssc_party_contest_id_ref
     
 
   end  

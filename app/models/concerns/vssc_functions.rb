@@ -29,9 +29,10 @@ module VsscFunctions
       # this is for those "collections"
       self.send(accessor_group)[element_name][:passthrough] = opts[:passthrough]
       
-      if opts[:required]
-        validates_presence_of method_name.to_sym
-      end
+      
+      # if opts[:required]
+      #   TODO: validate presence in *export*
+      # end
       
       if opts[:belongs_to]
         belongs_to method_name.to_sym, class_name: element_type.to_s, foreign_key: "#{method_name}_id".to_sym

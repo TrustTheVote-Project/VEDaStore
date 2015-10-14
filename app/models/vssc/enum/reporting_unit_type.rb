@@ -1,63 +1,64 @@
 # <xsd:simpleType name="ReportingUnitType">
 #   <xsd:restriction base="xsd:string">
-#     <xsd:enumeration value="BallotBatch"/>
-#     <xsd:enumeration value="City"/>
-#     <xsd:enumeration value="CityCouncil"/>
-#     <xsd:enumeration value="CombinedPrecinct"/>
-#     <xsd:enumeration value="Congressional"/>
-#     <xsd:enumeration value="County"/>
-#     <xsd:enumeration value="CountyCouncil"/>
-#     <xsd:enumeration value="DropBox"/>
-#     <xsd:enumeration value="Judicial"/>
-#     <xsd:enumeration value="Municipality"/>
-#     <xsd:enumeration value="National"/>
-#     <xsd:enumeration value="PollingPlace"/>
-#     <xsd:enumeration value="Precinct"/>
-#     <xsd:enumeration value="School"/>
-#     <xsd:enumeration value="Special"/>
-#     <xsd:enumeration value="SplitPrecinct"/>
-#     <xsd:enumeration value="State"/>
-#     <xsd:enumeration value="StateHouse"/>
-#     <xsd:enumeration value="StateSenate"/>
-#     <xsd:enumeration value="Town"/>
-#     <xsd:enumeration value="Township"/>
-#     <xsd:enumeration value="Utility"/>
-#     <xsd:enumeration value="Village"/>
-#     <xsd:enumeration value="VoteCenter"/>
-#     <xsd:enumeration value="Ward"/>
-#     <xsd:enumeration value="Water"/>
-#     <xsd:enumeration value="Other"/>
+#     <xsd:enumeration value="ballot-batch"/>
+#     <xsd:enumeration value="ballot-style-area"/>
+#     <xsd:enumeration value="city"/>
+#     <xsd:enumeration value="city-council"/>
+#     <xsd:enumeration value="combined-precinct"/>
+#     <xsd:enumeration value="congressional"/>
+#     <xsd:enumeration value="county"/>
+#     <xsd:enumeration value="county-council"/>
+#     <xsd:enumeration value="drop-box"/>
+#     <xsd:enumeration value="judicial"/>
+#     <xsd:enumeration value="municipality"/>
+#     <xsd:enumeration value="polling-place"/>
+#     <xsd:enumeration value="precinct"/>
+#     <xsd:enumeration value="school"/>
+#     <xsd:enumeration value="special"/>
+#     <xsd:enumeration value="split-precinct"/>
+#     <xsd:enumeration value="state"/>
+#     <xsd:enumeration value="state-house"/>
+#     <xsd:enumeration value="state-senate"/>
+#     <xsd:enumeration value="town"/>
+#     <xsd:enumeration value="township"/>
+#     <xsd:enumeration value="utility"/>
+#     <xsd:enumeration value="village"/>
+#     <xsd:enumeration value="vote-center"/>
+#     <xsd:enumeration value="ward"/>
+#     <xsd:enumeration value="water"/>
+#     <xsd:enumeration value="other"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
 class Vssc::Enum::ReportingUnitType
   include VsscEnum
   
-  set_enum_values "BallotBatch",
-                  "City",
-                  "CityCouncil",
-                  "CombinedPrecinct",
-                  "Congressional",
-                  "County",
-                  "CountyCouncil",
-                  "DropBox",
-                  "Judicial",
-                  "Municipality",
-                  "National",
-                  "PollingPlace",
-                  "Precinct",
-                  "School",
-                  "Special",
-                  "SplitPrecinct",
-                  "State",
-                  "StateHouse",
-                  "StateSenate",
-                  "Town",
-                  "Township",
-                  "Utility",
-                  "Village",
-                  "VoteCenter",
-                  "Ward",
-                  "Water",
-                  "Other"  
+  set_enum_values "ballot-batch",
+                  "ballot-style-area",
+                  "city",
+                  "city-council",
+                  "combined-precinct",
+                  "congressional",
+                  "county",
+                  "county-council",
+                  "drop-box",
+                  "judicial",
+                  "municipality",
+                  "polling-place",
+                  "precinct",
+                  "school",
+                  "special",
+                  "split-precinct",
+                  "state",
+                  "state-house",
+                  "state-senate",
+                  "town",
+                  "township",
+                  "utility",
+                  "village",
+                  "vote-center",
+                  "ward",
+                  "water",
+                  "other"
+  
   
 end 

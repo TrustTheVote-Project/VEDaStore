@@ -8,7 +8,7 @@ class CreateVsscContests < ActiveRecord::Migration
       t.integer :ballot_sub_title_id
       t.integer :ballot_title_id
       
-      t.string :jurisdictional_scope_identifier
+      t.string :electoral_district_identifier
       t.string :name
       
       t.string :object_id

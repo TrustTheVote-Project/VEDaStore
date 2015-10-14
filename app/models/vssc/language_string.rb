@@ -1,10 +1,11 @@
 # <xsd:complexType name="LanguageString">
 #   <xsd:simpleContent>
 #     <xsd:extension base="xsd:string">
-#       <xsd:attribute name="Language" type="xsd:language" use="required"/>
+#       <xsd:attribute name="language" type="xsd:language" use="required"/>
 #     </xsd:extension>
 #   </xsd:simpleContent>
 # </xsd:complexType>
+
 class Vssc::LanguageString < ActiveRecord::Base
   include VsscFunctions
   

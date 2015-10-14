@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 25) do
+ActiveRecord::Schema.define(version: 27) do
 
   create_table "vssc_ballot_selection_candidate_id_refs", force: :cascade do |t|
     t.integer "ballot_selection_id", limit: 4
@@ -35,12 +35,13 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_ballot_selection_party_id_refs", ["ballot_selection_id", "party_id_ref"], name: "vssc_party_selection_parties", using: :btree
 
   create_table "vssc_ballot_selections", force: :cascade do |t|
-    t.integer  "contest_id",   limit: 4
-    t.string   "type",         limit: 255
-    t.string   "object_id",    limit: 255
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.integer  "selection_id", limit: 4
+    t.integer  "contest_id",     limit: 4
+    t.integer  "sequence_order", limit: 4
+    t.string   "type",           limit: 255
+    t.string   "object_id",      limit: 255
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "selection_id",   limit: 4
     t.boolean  "is_write_in"
   end
 
@@ -63,11 +64,11 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_ballot_style_party_id_refs", ["party_id_ref", "ballot_style_id"], name: "vssc_ballot_style_parties", using: :btree
 
   create_table "vssc_ballot_styles", force: :cascade do |t|
-    t.integer  "election_id",             limit: 4
-    t.string   "image_uri",               limit: 255
-    t.string   "ballot_style_identifier", limit: 255
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.integer  "election_id", limit: 4
+    t.string   "image_uri",   limit: 255
+    t.string   "object_id",   limit: 255
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   add_index "vssc_ballot_styles", ["election_id"], name: "vssc_ballot_style_election", using: :btree
@@ -79,12 +80,10 @@ ActiveRecord::Schema.define(version: 25) do
     t.string   "person_identifier",    limit: 255
     t.string   "object_id",            limit: 255
     t.date     "file_date"
-    t.string   "candidate_identifier", limit: 255
     t.boolean  "is_incumbent"
     t.boolean  "is_top_ticket"
     t.string   "post_election_status", limit: 255
     t.string   "pre_election_status",  limit: 255
-    t.integer  "sequence_order",       limit: 4
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
   end
@@ -93,19 +92,7 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_candidates", ["election_id"], name: "vssc_candidate_election", using: :btree
   add_index "vssc_candidates", ["object_id"], name: "vssc_candidate_object_id", using: :btree
 
-  create_table "vssc_codes", force: :cascade do |t|
-    t.string   "codeable_type", limit: 255
-    t.integer  "codeable_id",   limit: 4
-    t.string   "other_type",    limit: 255
-    t.string   "code_type",     limit: 255
-    t.string   "value",         limit: 255
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  add_index "vssc_codes", ["codeable_type", "codeable_id"], name: "vssc_codeable", using: :btree
-
-  create_table "vssc_contact_information", force: :cascade do |t|
+  create_table "vssc_contact_informations", force: :cascade do |t|
     t.integer  "contactable_id",   limit: 4
     t.string   "contactable_type", limit: 255
     t.text     "address_line",     limit: 65535
@@ -118,7 +105,7 @@ ActiveRecord::Schema.define(version: 25) do
     t.datetime "updated_at",                     null: false
   end
 
-  add_index "vssc_contact_information", ["contactable_id", "contactable_type"], name: "vssc_contactable", using: :btree
+  add_index "vssc_contact_informations", ["contactable_id", "contactable_type"], name: "vssc_contactable", using: :btree
 
   create_table "vssc_contest_office_id_refs", force: :cascade do |t|
     t.integer "contest_id",    limit: 4
@@ -128,35 +115,35 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_contest_office_id_refs", ["contest_id", "office_id_ref"], name: "vssc_contest_offices", using: :btree
 
   create_table "vssc_contests", force: :cascade do |t|
-    t.string   "type",                            limit: 255
-    t.integer  "election_id",                     limit: 4
-    t.integer  "ballot_sub_title_id",             limit: 4
-    t.integer  "ballot_title_id",                 limit: 4
-    t.string   "jurisdictional_scope_identifier", limit: 255
-    t.string   "name",                            limit: 255
-    t.string   "object_id",                       limit: 255
-    t.string   "abbreviation",                    limit: 255
+    t.string   "type",                          limit: 255
+    t.integer  "election_id",                   limit: 4
+    t.integer  "ballot_sub_title_id",           limit: 4
+    t.integer  "ballot_title_id",               limit: 4
+    t.string   "electoral_district_identifier", limit: 255
+    t.string   "name",                          limit: 255
+    t.string   "object_id",                     limit: 255
+    t.string   "abbreviation",                  limit: 255
     t.boolean  "has_rotation"
-    t.string   "other_vote_variation_type",       limit: 255
-    t.integer  "sequence_order",                  limit: 4
-    t.integer  "sub_units_reported",              limit: 4
-    t.integer  "total_sub_units",                 limit: 4
-    t.string   "vote_variation_type",             limit: 255
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
-    t.integer  "con_statement_id",                limit: 4
-    t.integer  "effect_of_abstain_id",            limit: 4
-    t.integer  "full_text_id",                    limit: 4
-    t.integer  "passage_threshold_id",            limit: 4
-    t.integer  "pro_statement_id",                limit: 4
-    t.integer  "summary_text_id",                 limit: 4
-    t.string   "other_type",                      limit: 255
-    t.string   "ballot_measure_type",             limit: 255
-    t.string   "primary_party_identifier",        limit: 255
-    t.integer  "number_elected",                  limit: 4
-    t.integer  "votes_allowed",                   limit: 4
-    t.string   "candidate_identifier",            limit: 255
-    t.string   "office_identifier",               limit: 255
+    t.string   "other_vote_variation_type",     limit: 255
+    t.integer  "sequence_order",                limit: 4
+    t.integer  "sub_units_reported",            limit: 4
+    t.integer  "total_sub_units",               limit: 4
+    t.string   "vote_variation_type",           limit: 255
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.integer  "con_statement_id",              limit: 4
+    t.integer  "effect_of_abstain_id",          limit: 4
+    t.integer  "full_text_id",                  limit: 4
+    t.integer  "passage_threshold_id",          limit: 4
+    t.integer  "pro_statement_id",              limit: 4
+    t.integer  "summary_text_id",               limit: 4
+    t.string   "other_type",                    limit: 255
+    t.string   "ballot_measure_type",           limit: 255
+    t.string   "primary_party_identifier",      limit: 255
+    t.integer  "number_elected",                limit: 4
+    t.integer  "votes_allowed",                 limit: 4
+    t.string   "candidate_identifier",          limit: 255
+    t.string   "office_identifier",             limit: 255
   end
 
   add_index "vssc_contests", ["ballot_sub_title_id"], name: "vssc_contest_ballot_sub_title", using: :btree
@@ -186,24 +173,25 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_count_statuses", ["count_statusable_id", "count_statusable_type"], name: "vssc_count_statusable", using: :btree
 
   create_table "vssc_counts", force: :cascade do |t|
-    t.string   "type",                   limit: 255
-    t.integer  "countable_id",           limit: 4
-    t.string   "countable_type",         limit: 255
-    t.integer  "device_id",              limit: 4
-    t.string   "gp_unit_identifier",     limit: 255
-    t.string   "other_type",             limit: 255
-    t.string   "count_item_type",        limit: 255
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.integer  "ballots_cast",           limit: 4
-    t.integer  "ballots_outstanding",    limit: 4
-    t.integer  "ballots_rejected",       limit: 4
-    t.integer  "overvotes",              limit: 4
-    t.integer  "undervotes",             limit: 4
-    t.integer  "write_ins",              limit: 4
-    t.integer  "summary_countable_id",   limit: 4
-    t.string   "summary_countable_type", limit: 255
-    t.float    "count",                  limit: 24
+    t.string   "type",                      limit: 255
+    t.integer  "countable_id",              limit: 4
+    t.string   "countable_type",            limit: 255
+    t.integer  "device_id",                 limit: 4
+    t.string   "gp_unit_identifier",        limit: 255
+    t.boolean  "is_suppressed_for_privacy"
+    t.string   "other_type",                limit: 255
+    t.string   "count_item_type",           limit: 255
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.integer  "ballots_cast",              limit: 4
+    t.integer  "ballots_outstanding",       limit: 4
+    t.integer  "ballots_rejected",          limit: 4
+    t.integer  "overvotes",                 limit: 4
+    t.integer  "undervotes",                limit: 4
+    t.integer  "write_ins",                 limit: 4
+    t.integer  "summary_countable_id",      limit: 4
+    t.string   "summary_countable_type",    limit: 255
+    t.float    "count",                     limit: 24
   end
 
   add_index "vssc_counts", ["countable_id", "countable_type"], name: "vssc_countable", using: :btree
@@ -220,8 +208,23 @@ ActiveRecord::Schema.define(version: 25) do
     t.datetime "updated_at",               null: false
   end
 
+  create_table "vssc_election_administration_official_id_refs", force: :cascade do |t|
+    t.integer "election_administration_id", limit: 4
+    t.string  "election_official_id_ref",   limit: 255
+  end
+
+  add_index "vssc_election_administration_official_id_refs", ["election_administration_id", "election_official_id_ref"], name: "vssc_election_admin_official_ref", using: :btree
+
+  create_table "vssc_election_administrations", force: :cascade do |t|
+    t.integer  "contact_information_id", limit: 4
+    t.string   "name",                   limit: 255
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "vssc_election_administrations", ["contact_information_id"], name: "vssc_election_admin_contact_information", using: :btree
+
   create_table "vssc_election_reports", force: :cascade do |t|
-    t.string   "message",                       limit: 255
     t.integer  "election_id",                   limit: 4
     t.text     "notes",                         limit: 65535
     t.string   "format",                        limit: 255
@@ -229,7 +232,7 @@ ActiveRecord::Schema.define(version: 25) do
     t.string   "issuer",                        limit: 255
     t.string   "issuer_abbreviation",           limit: 255
     t.boolean  "is_test"
-    t.integer  "sequence",                      limit: 4
+    t.integer  "sequence_start",                limit: 4
     t.integer  "sequence_end",                  limit: 4
     t.string   "status",                        limit: 255
     t.string   "test_type",                     limit: 255
@@ -244,7 +247,7 @@ ActiveRecord::Schema.define(version: 25) do
     t.integer  "contact_information_id",    limit: 4
     t.string   "election_scope_identifier", limit: 255
     t.integer  "name_id",                   limit: 4
-    t.date     "date"
+    t.date     "start_date"
     t.date     "end_date"
     t.string   "election_type",             limit: 255
     t.datetime "created_at",                            null: false
@@ -254,6 +257,26 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_elections", ["contact_information_id"], name: "vssc_election_contact_information", using: :btree
   add_index "vssc_elections", ["election_scope_identifier"], name: "vssc_elections_gp_scope", using: :btree
   add_index "vssc_elections", ["name_id"], name: "vssc_elections_name", using: :btree
+
+  create_table "vssc_external_identifier_collections", force: :cascade do |t|
+    t.string   "identifiable_type", limit: 255
+    t.integer  "identifiable_id",   limit: 4
+    t.string   "label",             limit: 255
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "vssc_external_identifier_collections", ["identifiable_type", "identifiable_id"], name: "vssc_identifiable", using: :btree
+
+  create_table "vssc_external_identifiers", force: :cascade do |t|
+    t.integer  "external_identifier_collection_id", limit: 4
+    t.string   "identifier_type",                   limit: 255
+    t.string   "other_type",                        limit: 255
+    t.string   "value",                             limit: 255
+    t.string   "label",                             limit: 255
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+  end
 
   create_table "vssc_gp_unit_authority_id_refs", force: :cascade do |t|
     t.integer "gp_unit_id",       limit: 4
@@ -270,24 +293,27 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_gp_unit_composing_gp_unit_id_refs", ["gp_unit_id", "composing_gp_unit_id_ref"], name: "vssc_gp_unit_composing_units", using: :btree
 
   create_table "vssc_gp_units", force: :cascade do |t|
-    t.string   "type",                   limit: 255
-    t.integer  "election_report_id",     limit: 4
-    t.string   "object_id",              limit: 255
-    t.string   "name",                   limit: 255
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.integer  "device_id",              limit: 4
-    t.string   "serial_number",          limit: 255
-    t.integer  "contact_information_id", limit: 4
-    t.text     "count_statuses",         limit: 65535
-    t.integer  "spatial_dimension_id",   limit: 4
-    t.boolean  "is_electoral_district"
-    t.string   "other_type",             limit: 255
-    t.integer  "sub_units_reported",     limit: 4
-    t.integer  "total_sub_units",        limit: 4
-    t.string   "reporting_unit_type",    limit: 255
-    t.integer  "voters_participated",    limit: 4
-    t.integer  "voters_registered",      limit: 4
+    t.string   "type",                       limit: 255
+    t.integer  "election_report_id",         limit: 4
+    t.string   "object_id",                  limit: 255
+    t.string   "name",                       limit: 255
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.integer  "device_id",                  limit: 4
+    t.string   "serial_number",              limit: 255
+    t.integer  "contact_information_id",     limit: 4
+    t.integer  "election_administration_id", limit: 4
+    t.text     "count_statuses",             limit: 65535
+    t.integer  "spatial_dimension_id",       limit: 4
+    t.boolean  "is_districted"
+    t.boolean  "is_mail_only"
+    t.string   "number",                     limit: 255
+    t.string   "other_type",                 limit: 255
+    t.integer  "sub_units_reported",         limit: 4
+    t.integer  "total_sub_units",            limit: 4
+    t.string   "reporting_unit_type",        limit: 255
+    t.integer  "voters_participated",        limit: 4
+    t.integer  "voters_registered",          limit: 4
   end
 
   add_index "vssc_gp_units", ["contact_information_id"], name: "vssc_gp_unit_contact_info", using: :btree
@@ -302,6 +328,7 @@ ActiveRecord::Schema.define(version: 25) do
     t.string   "day",           limit: 255
     t.datetime "end_time"
     t.datetime "start_time"
+    t.string   "label",         limit: 255
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
@@ -309,7 +336,7 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_hours", ["hourable_id", "hourable_type"], name: "vssc_hourable", using: :btree
 
   create_table "vssc_internationalized_texts", force: :cascade do |t|
-    t.string   "identifier", limit: 255
+    t.string   "label",      limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
@@ -335,6 +362,7 @@ ActiveRecord::Schema.define(version: 25) do
     t.integer  "office_groupable_id",   limit: 4
     t.string   "office_groupable_type", limit: 255
     t.string   "name",                  limit: 255
+    t.string   "label",                 limit: 255
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
   end
@@ -349,22 +377,22 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_office_office_holder_id_refs", ["office_id", "office_holder_id_ref"], name: "vssc_office_office_holder_ref", using: :btree
 
   create_table "vssc_offices", force: :cascade do |t|
-    t.integer  "office_group_id",                 limit: 4
-    t.integer  "election_report_id",              limit: 4
-    t.integer  "contact_information_id",          limit: 4
-    t.string   "jurisdictional_scope_identifier", limit: 255
-    t.integer  "name_id",                         limit: 4
-    t.integer  "term_id",                         limit: 4
-    t.string   "object_id",                       limit: 255
+    t.integer  "office_group_id",               limit: 4
+    t.integer  "election_report_id",            limit: 4
+    t.integer  "contact_information_id",        limit: 4
+    t.string   "electoral_district_identifier", limit: 255
+    t.integer  "name_id",                       limit: 4
+    t.integer  "term_id",                       limit: 4
+    t.string   "object_id",                     limit: 255
     t.datetime "filing_deadline"
     t.boolean  "is_partisan"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
   end
 
   add_index "vssc_offices", ["contact_information_id"], name: "vssc_office_contact_information", using: :btree
   add_index "vssc_offices", ["election_report_id"], name: "vssc_office_election_report", using: :btree
-  add_index "vssc_offices", ["jurisdictional_scope_identifier"], name: "vssc_office_jurisdiction_scope", using: :btree
+  add_index "vssc_offices", ["electoral_district_identifier"], name: "vssc_office_jurisdiction_scope", using: :btree
   add_index "vssc_offices", ["name_id"], name: "vssc_office_name", using: :btree
   add_index "vssc_offices", ["object_id"], name: "vssc_office_object_id", using: :btree
   add_index "vssc_offices", ["office_group_id"], name: "vssc_office_office_group", using: :btree
@@ -403,6 +431,13 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_parties", ["election_report_id"], name: "vssc_party_election_report", using: :btree
   add_index "vssc_parties", ["name_id"], name: "vssc_party_name", using: :btree
   add_index "vssc_parties", ["object_id"], name: "vssc_party_object_id", using: :btree
+
+  create_table "vssc_party_contest_id_refs", force: :cascade do |t|
+    t.integer "party_id",       limit: 4
+    t.string  "contest_id_ref", limit: 255
+  end
+
+  add_index "vssc_party_contest_id_refs", ["party_id", "contest_id_ref"], name: "vssc_party_contest_id_ref", using: :btree
 
   create_table "vssc_party_party_id_refs", force: :cascade do |t|
     t.integer "party_id",     limit: 4
@@ -451,6 +486,13 @@ ActiveRecord::Schema.define(version: 25) do
   add_index "vssc_people", ["profession_id"], name: "vssc_person_profession", using: :btree
   add_index "vssc_people", ["title_id"], name: "vssc_perspon_title", using: :btree
 
+  create_table "vssc_rails_vssc_annotated_strings", force: :cascade do |t|
+    t.text     "value",      limit: 65535
+    t.string   "annotation", limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
   create_table "vssc_schedules", force: :cascade do |t|
     t.integer  "schedulable_id",         limit: 4
     t.string   "schedulable_type",       limit: 255
@@ -459,6 +501,7 @@ ActiveRecord::Schema.define(version: 25) do
     t.boolean  "is_only_by_appointment"
     t.boolean  "is_or_by_appointment"
     t.boolean  "is_subject_to_change"
+    t.string   "label",                  limit: 255
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
   end
@@ -485,6 +528,7 @@ ActiveRecord::Schema.define(version: 25) do
     t.date     "end_date"
     t.date     "start_date"
     t.string   "office_term_type", limit: 255
+    t.string   "label",            limit: 255
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
   end

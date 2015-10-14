@@ -1,19 +1,17 @@
 # <xsd:simpleType name="BallotMeasureType">
 #   <xsd:restriction base="xsd:string">
-#     <xsd:enumeration value="BallotMeasure"/>
-#     <xsd:enumeration value="Initiative"/>
-#     <xsd:enumeration value="Other"/>
-#     <xsd:enumeration value="Referendum"/>
-#     <xsd:enumeration value="Retention"/>
+#     <xsd:enumeration value="ballot-measure"/>
+#     <xsd:enumeration value="initiative"/>
+#     <xsd:enumeration value="referendum"/>
+#     <xsd:enumeration value="other"/>
 #   </xsd:restriction>
 # </xsd:simpleType>
 class Vssc::Enum::BallotMeasureType
   include VsscEnum
   
-  set_enum_values "BallotMeasure",
-                  "Initiative",
-                  "Other",
-                  "Referendum",
-                  "Retention"
+  set_enum_values "ballot-measure",
+                  "initiative",
+                  "other",
+                  "referendum"
 
 end
