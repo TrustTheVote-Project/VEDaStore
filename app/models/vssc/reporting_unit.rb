@@ -44,7 +44,7 @@ class Vssc::ReportingUnit < Vssc::GpUnit
   define_element("SpatialDimension", type: Vssc::SpatialDimension, belongs_to: true)
   define_element("SubUnitsReported", type: Fixnum)
   define_element("TotalSubUnits", type: Fixnum)
-  define_element("Type", type: Vssc::Enum::ReportingUnitType, required: true, method: :reporting_unit_type)
+  define_element("Type", type: Vssc::Enum::ReportingUnitType, method: :reporting_unit_type)
   define_element("OtherType")
   define_element("VotersParticipated", type: Fixnum)
   define_element("VotersRegistered", type: Fixnum)

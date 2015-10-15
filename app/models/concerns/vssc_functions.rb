@@ -191,8 +191,20 @@ module VsscFunctions
   end
   
   def convert_element_to_type(element, element_name, obj_type)
-    if obj_type.to_s == "String"
-      element.children.first.to_s
+    value = element.text
+    case obj_type.to_s
+    when "String"
+      return value.to_s
+    when "Fixnum"
+      return value.blank? ? nil : value.to_i
+    when "Float"
+      return value.blank? ? nil : value.to_f
+    when "xsd:dateTime", "DateTime"
+      return value.blank? ? nil : DateTime.iso8601(value)
+    when "xsd:date", "Date"
+      return value.blank? ? nil : Date.parse(value)
+    when "xsd:boolean"
+      return (!value.blank? && !["0","false","nil","null"].include?(value.to_s.downcase))
     else
       klass = nil
       begin
@@ -208,7 +220,9 @@ module VsscFunctions
         # klass = "Vssc::#{(element.xml_attributes['type'].value || element.xml_attributes['xsi:type'].value || element_name)}".constantize
         end
       rescue Exception => e
-        puts "Didn't parse element: #{self.class} - #{element_name} - #{element} - #{e.backtrace.join("\n")}"
+        if !(obj_type.to_s =~ /Vssc::Enum/)
+          puts "Didn't parse element: #{self.class} - #{element_name} - #{element} - #{obj_type} - #{e.backtrace.join("\n")}"
+        end
         klass = obj_type
         klass = klass.constantize if klass.is_a?(String)
       end
@@ -272,7 +286,7 @@ module VsscFunctions
       node_name = options[:passthrough]
     end
     if !value.nil? && (!is_many?(options[:method]) || !value.empty?)       
-      if options[:type].to_s =~ /Vssc::/
+      if options[:type].to_s =~ /Vssc::/ && !(options[:type].to_s =~ /Vssc::Enum/)
         if !is_many?(options[:method])
           value = [value]
         end

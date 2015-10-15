@@ -124,11 +124,11 @@ ActiveRecord::Schema.define(version: 27) do
     t.string   "object_id",                     limit: 255
     t.string   "abbreviation",                  limit: 255
     t.boolean  "has_rotation"
-    t.string   "other_vote_variation_type",     limit: 255
+    t.string   "other_vote_variation",          limit: 255
     t.integer  "sequence_order",                limit: 4
     t.integer  "sub_units_reported",            limit: 4
     t.integer  "total_sub_units",               limit: 4
-    t.string   "vote_variation_type",           limit: 255
+    t.string   "vote_variation",                limit: 255
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
     t.integer  "con_statement_id",              limit: 4

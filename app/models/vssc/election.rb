@@ -56,8 +56,8 @@ class Vssc::Election < ActiveRecord::Base
   define_element("Name", type: Vssc::InternationalizedText, belongs_to: true)
   
   
-  define_attribute("StartDate", required: true, type: Date)
-  define_attribute("EndDate", required: true, type: Date)
-  define_attribute("Type", required: true, type: Vssc::Enum::ElectionType, method: "election_type")
+  define_element("StartDate", type: Date)
+  define_element("EndDate", type: Date)
+  define_element("Type", type: Vssc::Enum::ElectionType, method: "election_type")
   
 end

@@ -17,8 +17,10 @@ class Vssc::ExternalIdentifierCollection < ActiveRecord::Base
   include VsscFunctions
   
   belongs_to :identifiable, polymorphic: true
+
+  define_element("ExternalIdentifier", type: Vssc::ExternalIdentifier, method: :external_identifiers)
   has_many :external_identifiers
-  
+
   define_attribute("label")
   
 end

@@ -29,7 +29,16 @@ module VsscEnum
         end
       end
     end
+  
+    def parse_vssc(node)
+      return self.new(node.text)
+    end
+  
+  
   end
+  
+  
+  
   
   def self.included(base)
     base.extend ClassMethods

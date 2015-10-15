@@ -14,11 +14,11 @@ class CreateVsscContests < ActiveRecord::Migration
       t.string :object_id
       t.string :abbreviation
       t.boolean :has_rotation
-      t.string :other_vote_variation_type
+      t.string :other_vote_variation
       t.integer :sequence_order
       t.integer :sub_units_reported
       t.integer :total_sub_units
-      t.string :vote_variation_type
+      t.string :vote_variation
       
       t.timestamps null: false
       

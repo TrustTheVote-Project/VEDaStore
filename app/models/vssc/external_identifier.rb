@@ -18,9 +18,9 @@ class Vssc::ExternalIdentifier < ActiveRecord::Base
   
   belongs_to :external_identifier_collection
   
-  define_attribute("Type", type: Vssc::Enum::IdentifierType, method: :identifier_type, required:true)
-  define_attribute("OtherType")  
-  define_attribute("Value", required: true)
+  define_element("Type", type: Vssc::Enum::IdentifierType, method: :identifier_type, required:true)
+  define_element("OtherType")  
+  define_element("Value", required: true)
 
   define_attribute("label")
   

@@ -78,11 +78,11 @@ class Vssc::ElectionReport < ActiveRecord::Base
   define_element("PersonCollection", type: Vssc::Person, method: :people, passthrough: "Person")
   has_many :people, dependent: :destroy
   
-  define_attribute("SequenceStart", type: Fixnum)
-  define_attribute("SequenceEnd", type: Fixnum)
-  define_attribute("Status", type: Vssc::Enum::ResultsStatus)
-  define_attribute("TestType")
-  define_attribute("VendorApplicationId", method: :vendor_application_identifier)
+  define_element("SequenceStart", type: Fixnum)
+  define_element("SequenceEnd", type: Fixnum)
+  define_element("Status", type: Vssc::Enum::ResultsStatus)
+  define_element("TestType")
+  define_element("VendorApplicationId", method: :vendor_application_identifier)
   
   def xml_attributes_hash_with_root(node_name)
     attr_hash = xml_attributes_hash_without_root(node_name)
