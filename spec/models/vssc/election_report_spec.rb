@@ -78,6 +78,7 @@ RSpec.describe Vssc::ElectionReport, type: :model do
         # end
         # result
       end
+      #puts e.to_xml_node.doc.root
       expect(eq).to be(true)
       
       #expect(e.to_xml_node.doc.root).to be_equivalent_to(doc.root)

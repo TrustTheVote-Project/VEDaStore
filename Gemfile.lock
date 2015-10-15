@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    VEDaStore (1.0.0)
+    VEDaStore (1.0.1)
       nokogiri (~> 1.6.0)
       rails (~> 4.2.1)
 

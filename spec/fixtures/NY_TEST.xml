@@ -425,7 +425,7 @@
     </ExternalIdentifiers>
     <ElectionScopeId>STATE_NEWYORK_001</ElectionScopeId>
     <BallotStyleCollection>
-      <BallotStyle>
+      <BallotStyle objectId="BallotStyle-1">
         <OrderedContest>
           <ContestId>CONTEST_101</ContestId>
           <OrderedBallotSelectionId>BS_0001</OrderedBallotSelectionId>
@@ -538,7 +538,7 @@
         <GpUnitId>PRECINCT_219</GpUnitId>
         <GpUnitId>PRECINCT_220</GpUnitId>
       </BallotStyle>
-      <BallotStyle>
+      <BallotStyle objectId="BallotStyle-2">
         <OrderedContest>
           <ContestId>CONTEST_102</ContestId>
           <OrderedBallotSelectionId>BS_0009</OrderedBallotSelectionId>

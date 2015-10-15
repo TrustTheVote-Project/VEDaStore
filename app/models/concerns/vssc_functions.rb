@@ -118,7 +118,14 @@ module VsscFunctions
     attr_hash = {}
     self.xml_attributes.map do |k, options|
       v = convert_type_to_value(self.send(options[:method]), options[:type])
-      attr_hash[k] = v unless v.nil?
+      if k.to_s == "objectId" && v.blank?
+        raise "No id field for #{self} to auto-generate an objectId" if !self.respond_to?(:id) || self.id.blank?
+        oId = "#{self.class.name}-#{self.id}"
+        puts "Warning: Auto-generating objectId for #{node_name} as #{oId}"
+        attr_hash[k] = oId
+      else
+        attr_hash[k] = v unless v.nil?
+      end
     end
     if node_name != class_node_name && is_type?(node_name)
       attr_hash['xsi:type'] = class_node_name
