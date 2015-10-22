@@ -50,8 +50,8 @@ class Vssc::Election < ActiveRecord::Base
   
   define_element("ElectionScopeId", method: :election_scope_identifier)
   
-  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collections)
-  has_many :external_identifier_collections, :as=>:identifiable
+  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collection)
+  has_one :external_identifier_collection, :as=>:identifiable
   
   define_element("Name", type: Vssc::InternationalizedText, belongs_to: true)
   

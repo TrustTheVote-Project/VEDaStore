@@ -53,8 +53,8 @@ class Vssc::ElectionReport < ActiveRecord::Base
   # TODO: Election should be multiple??
   define_element("Election", type: Vssc::Election, belongs_to: true)
   
-  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collections)
-  has_many :external_identifier_collections, :as=>:identifiable
+  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collection)
+  has_one :external_identifier_collection, :as=>:identifiable
   
   define_element("Format", type: Vssc::Enum::ReportDetailLevel)
   define_element("GeneratedDate", type: "xsd:dateTime")

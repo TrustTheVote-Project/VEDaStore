@@ -17,8 +17,8 @@ class Vssc::GpUnit < ActiveRecord::Base
   has_many :gp_unit_composing_gp_unit_id_refs
   has_many :composing_gp_units, through: :gp_unit_composing_gp_unit_id_refs
 
-  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collections)
-  has_many :external_identifier_collections, :as=>:identifiable
+  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collection)
+  has_one :external_identifier_collection, :as=>:identifiable
   
   define_element("Name")
     

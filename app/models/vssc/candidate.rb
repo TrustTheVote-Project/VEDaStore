@@ -19,8 +19,8 @@ class Vssc::Candidate < ActiveRecord::Base
   
   define_element("BallotName", type: Vssc::InternationalizedText, belongs_to: true)
 
-  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collections)
-  has_many :external_identifier_collections, :as=>:identifiable
+  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collection)
+  has_one :external_identifier_collection, :as=>:identifiable
   
   define_element("FileDate", type: "xsd:date")  
   define_element("IsIncumbent", type: "xsd:boolean")  

@@ -30,8 +30,8 @@ class Vssc::Office < ActiveRecord::Base
   define_element("ContactInformation", type: Vssc::ContactInformation, belongs_to: true)
   define_element("ElectoralDistrictId", method: :electoral_district_identifier)
   
-  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collections)
-  has_many :external_identifier_collections, :as=>:identifiable
+  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collection)
+  has_one :external_identifier_collection, :as=>:identifiable
   
   define_element("FilingDeadline", type: "xsd:date")
   define_element("IsPartisan", type: "xsd:boolean")

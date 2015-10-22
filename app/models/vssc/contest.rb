@@ -37,8 +37,8 @@ class Vssc::Contest < ActiveRecord::Base
 
   define_element("ElectoralDistrictId", method: :electoral_district_identifier)
 
-  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collections)
-  has_many :external_identifier_collections, :as=>:identifiable
+  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collection)
+  has_one :external_identifier_collection, :as=>:identifiable
   
   define_element("HasRotation", type: "xsd:boolean")
   
