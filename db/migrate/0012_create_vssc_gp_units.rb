@@ -1,6 +1,6 @@
 class CreateVsscGpUnits < ActiveRecord::Migration
   def change
-    create_table :vssc_gp_units do |t|
+    create_table :vedastore_gp_units do |t|
       t.string :type
 
       t.integer :election_report_id
@@ -34,24 +34,24 @@ class CreateVsscGpUnits < ActiveRecord::Migration
       t.integer :voters_registered
       
     end
-    add_index :vssc_gp_units, :election_report_id, name: :vscc_gp_unit_election_report
-    add_index :vssc_gp_units, :type, name: :vssc_gp_unit_type
-    add_index :vssc_gp_units, :object_id, name: :vssc_gp_unit_object_id
-    add_index :vssc_gp_units, :contact_information_id, name: :vssc_gp_unit_contact_info
-    add_index :vssc_gp_units, :spatial_dimension_id, name: :vssc_gp_unit_spatial_dimension
+    add_index :vedastore_gp_units, :election_report_id, name: :vscc_gp_unit_election_report
+    add_index :vedastore_gp_units, :type, name: :vedastore_gp_unit_type
+    add_index :vedastore_gp_units, :object_id, name: :vedastore_gp_unit_object_id
+    add_index :vedastore_gp_units, :contact_information_id, name: :vedastore_gp_unit_contact_info
+    add_index :vedastore_gp_units, :spatial_dimension_id, name: :vedastore_gp_unit_spatial_dimension
     
-    create_table :vssc_gp_unit_composing_gp_unit_id_refs do |t|
+    create_table :vedastore_gp_unit_composing_gp_unit_id_refs do |t|
       t.integer :gp_unit_id
       t.string :composing_gp_unit_id_ref
     end
-    add_index :vssc_gp_unit_composing_gp_unit_id_refs, [:gp_unit_id, :composing_gp_unit_id_ref], name: :vssc_gp_unit_composing_units
+    add_index :vedastore_gp_unit_composing_gp_unit_id_refs, [:gp_unit_id, :composing_gp_unit_id_ref], name: :vedastore_gp_unit_composing_units
     
     #reporting_unit
-    create_table :vssc_gp_unit_authority_id_refs do |t|
+    create_table :vedastore_gp_unit_authority_id_refs do |t|
       t.integer :gp_unit_id
       t.string :authority_id_ref
     end
-    add_index :vssc_gp_unit_authority_id_refs, [:gp_unit_id, :authority_id_ref], name: :vssc_gp_unit_authorities
+    add_index :vedastore_gp_unit_authority_id_refs, [:gp_unit_id, :authority_id_ref], name: :vedastore_gp_unit_authorities
     
     
   end  

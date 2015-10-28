@@ -1,6 +1,6 @@
 class CreateVsscDevices < ActiveRecord::Migration
   def change
-    create_table :vssc_devices do |t|
+    create_table :vedastore_devices do |t|
       t.string :manufacturer
       t.string :model
       t.string :device_type

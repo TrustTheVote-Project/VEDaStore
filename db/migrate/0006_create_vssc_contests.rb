@@ -1,6 +1,6 @@
 class CreateVsscContests < ActiveRecord::Migration
   def change
-    create_table :vssc_contests do |t|
+    create_table :vedastore_contests do |t|
       t.string :type
       
       t.integer :election_id
@@ -44,30 +44,30 @@ class CreateVsscContests < ActiveRecord::Migration
       t.string :candidate_identifier
       t.string :office_identifier      
     end
-    add_index :vssc_contests, :election_id, name: :vssc_contest_election
-    add_index :vssc_contests, :ballot_sub_title_id, name: :vssc_contest_ballot_sub_title
-    add_index :vssc_contests, :ballot_title_id, name: :vssc_contest_ballot_title
-    add_index :vssc_contests, :object_id, name: :vssc_contest_object_id
+    add_index :vedastore_contests, :election_id, name: :vedastore_contest_election
+    add_index :vedastore_contests, :ballot_sub_title_id, name: :vedastore_contest_ballot_sub_title
+    add_index :vedastore_contests, :ballot_title_id, name: :vedastore_contest_ballot_title
+    add_index :vedastore_contests, :object_id, name: :vedastore_contest_object_id
     
-    add_index :vssc_contests, :con_statement_id, name: :vssc_ballot_measure_con_statement
-    add_index :vssc_contests, :effect_of_abstain_id, name: :vssc_ballot_measure_effect_of_abstain
-    add_index :vssc_contests, :full_text_id, name: :vssc_ballot_measure_full_text
-    add_index :vssc_contests, :passage_threshold_id, name: :vssc_ballot_measure_passage_threshold
-    add_index :vssc_contests, :pro_statement_id, name: :vssc_ballot_measure_pro_statement
-    add_index :vssc_contests, :summary_text_id, name: :vssc_ballot_measure_summary_text
+    add_index :vedastore_contests, :con_statement_id, name: :vedastore_ballot_measure_con_statement
+    add_index :vedastore_contests, :effect_of_abstain_id, name: :vedastore_ballot_measure_effect_of_abstain
+    add_index :vedastore_contests, :full_text_id, name: :vedastore_ballot_measure_full_text
+    add_index :vedastore_contests, :passage_threshold_id, name: :vedastore_ballot_measure_passage_threshold
+    add_index :vedastore_contests, :pro_statement_id, name: :vedastore_ballot_measure_pro_statement
+    add_index :vedastore_contests, :summary_text_id, name: :vedastore_ballot_measure_summary_text
     
-    add_index :vssc_contests, :primary_party_identifier, name: :vssc_can_con_primary_party
+    add_index :vedastore_contests, :primary_party_identifier, name: :vedastore_can_con_primary_party
     
-    add_index :vssc_contests, :candidate_identifier, name: :vssc_ret_con_candidate
-    add_index :vssc_contests, :office_identifier, name: :vssc_ret_con_office
+    add_index :vedastore_contests, :candidate_identifier, name: :vedastore_ret_con_candidate
+    add_index :vedastore_contests, :office_identifier, name: :vedastore_ret_con_office
     
     
     #candidate_contest
-    create_table :vssc_contest_office_id_refs do |t|
+    create_table :vedastore_contest_office_id_refs do |t|
       t.integer :contest_id
       t.string :office_id_ref
     end
-    add_index :vssc_contest_office_id_refs, [:contest_id, :office_id_ref], name: :vssc_contest_offices
+    add_index :vedastore_contest_office_id_refs, [:contest_id, :office_id_ref], name: :vedastore_contest_offices
     
   end  
 end

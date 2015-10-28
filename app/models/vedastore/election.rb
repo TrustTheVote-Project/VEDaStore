@@ -32,32 +32,33 @@
 #   </xsd:sequence>
 # </xsd:complexType>
 
-class Vssc::Election < ActiveRecord::Base
-  include VsscFunctions
+class Vedastore::Election < ActiveRecord::Base
+  include XsdRailsFunctions
+  include Vedaspace::Election
   
-  define_element("BallotStyleCollection", type: Vssc::BallotStyle, method: :ballot_styles, passthrough: "BallotStyle")
-  has_many :ballot_styles, dependent: :destroy
-  define_element("CandidateCollection", type: Vssc::Candidate, method: :candidates, passthrough: "Candidate")
-  has_many :candidates, dependent: :destroy
-  
-  define_element("ContactInformation", type: Vssc::ContactInformation, belongs_to: true)
-  
-  define_element("ContestCollection", type: Vssc::Contest, method: :contests, passthrough: "Contest")
-  has_many :contests, dependent: :destroy
-  
-  define_element("CountStatus", type: Vssc::CountStatus, method: :count_statuses)
-  has_many :count_statuses, as: :count_statusable
-  
-  define_element("ElectionScopeId", method: :election_scope_identifier)
-  
-  define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collection)
-  has_one :external_identifier_collection, :as=>:identifiable
-  
-  define_element("Name", type: Vssc::InternationalizedText, belongs_to: true)
-  
-  
-  define_element("StartDate", type: Date)
-  define_element("EndDate", type: Date)
-  define_element("Type", type: Vssc::Enum::ElectionType, method: "election_type")
+  # define_element("BallotStyleCollection", type: Vssc::BallotStyle, method: :ballot_styles, passthrough: "BallotStyle")
+#   has_many :ballot_styles, dependent: :destroy
+#   define_element("CandidateCollection", type: Vssc::Candidate, method: :candidates, passthrough: "Candidate")
+#   has_many :candidates, dependent: :destroy
+#
+#   define_element("ContactInformation", type: Vssc::ContactInformation, belongs_to: true)
+#
+#   define_element("ContestCollection", type: Vssc::Contest, method: :contests, passthrough: "Contest")
+#   has_many :contests, dependent: :destroy
+#
+#   define_element("CountStatus", type: Vssc::CountStatus, method: :count_statuses)
+#   has_many :count_statuses, as: :count_statusable
+#
+#   define_element("ElectionScopeId", method: :election_scope_identifier)
+#
+#   define_element("ExternalIdentifiers", type: Vssc::ExternalIdentifierCollection, method: :external_identifier_collection)
+#   has_one :external_identifier_collection, :as=>:identifiable
+#
+#   define_element("Name", type: Vssc::InternationalizedText, belongs_to: true)
+#
+#
+#   define_element("StartDate", type: Date)
+#   define_element("EndDate", type: Date)
+#   define_element("Type", type: Vssc::Enum::ElectionType, method: "election_type")
   
 end

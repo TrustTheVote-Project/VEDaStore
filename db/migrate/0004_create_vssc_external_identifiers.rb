@@ -1,6 +1,6 @@
 class CreateVsscExternalIdentifiers < ActiveRecord::Migration
   def change
-    create_table :vssc_external_identifier_collections do |t|
+    create_table :vedastore_external_identifier_collections do |t|
       t.string :identifiable_type
       t.integer :identifiable_id
       t.string :label
@@ -8,7 +8,7 @@ class CreateVsscExternalIdentifiers < ActiveRecord::Migration
       t.timestamps null: false
     end
     
-    create_table :vssc_external_identifiers do |t|
+    create_table :vedastore_external_identifiers do |t|
       t.integer :external_identifier_collection_id
       
       t.string :identifier_type
@@ -19,6 +19,6 @@ class CreateVsscExternalIdentifiers < ActiveRecord::Migration
       
       t.timestamps null: false
     end
-    add_index :vssc_external_identifier_collections, [:identifiable_type, :identifiable_id], name: :vssc_identifiable
+    add_index :vedastore_external_identifier_collections, [:identifiable_type, :identifiable_id], name: :vedastore_identifiable
   end  
 end

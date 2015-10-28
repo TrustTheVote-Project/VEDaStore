@@ -1,6 +1,6 @@
 class CreateVsscElectionReports < ActiveRecord::Migration
   def change
-    create_table :vssc_election_reports do |t|
+    create_table :vedastore_election_reports do |t|
       t.integer :election_id
       
       t.text :notes
@@ -18,7 +18,7 @@ class CreateVsscElectionReports < ActiveRecord::Migration
       
       t.timestamps null: false
     end
-    add_index :vssc_election_reports, :election_id, name: :vssc_election_reports_election
+    add_index :vedastore_election_reports, :election_id, name: :vedastore_election_reports_election
 
   end  
 end

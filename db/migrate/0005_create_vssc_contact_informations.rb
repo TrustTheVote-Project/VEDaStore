@@ -1,6 +1,6 @@
 class CreateVsscContactInformations < ActiveRecord::Migration
   def change
-    create_table :vssc_contact_informations do |t|
+    create_table :vedastore_contact_informations do |t|
       t.integer :contactable_id
       t.string :contactable_type
 
@@ -13,7 +13,7 @@ class CreateVsscContactInformations < ActiveRecord::Migration
       t.text :uri
       t.timestamps null: false
     end
-    add_index :vssc_contact_informations, [:contactable_id, :contactable_type], name: :vssc_contactable
+    add_index :vedastore_contact_informations, [:contactable_id, :contactable_type], name: :vedastore_contactable
 
   end  
 end

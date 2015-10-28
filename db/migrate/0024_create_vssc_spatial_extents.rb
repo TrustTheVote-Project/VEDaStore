@@ -1,6 +1,6 @@
 class CreateVsscSpatialExtents < ActiveRecord::Migration
   def change
-    create_table :vssc_spatial_extents do |t|
+    create_table :vedastore_spatial_extents do |t|
       t.text :coordinates
       t.string :format
       

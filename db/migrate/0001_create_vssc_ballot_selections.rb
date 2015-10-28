@@ -1,6 +1,6 @@
 class CreateVsscBallotSelections < ActiveRecord::Migration
   def change
-    create_table :vssc_ballot_selections do |t|
+    create_table :vedastore_ballot_selections do |t|
       t.integer :contest_id
       t.integer :sequence_order
       
@@ -19,30 +19,30 @@ class CreateVsscBallotSelections < ActiveRecord::Migration
       
             
     end  
-    add_index :vssc_ballot_selections, :contest_id, name: :vssc_ballot_selection_contest  
-    add_index :vssc_ballot_selections, :selection_id, name: :vssc_ballot_measure_selections
-    add_index :vssc_ballot_selections, :object_id, name: :vssc_ballot_selection_object_id
+    add_index :vedastore_ballot_selections, :contest_id, name: :vedastore_ballot_selection_contest  
+    add_index :vedastore_ballot_selections, :selection_id, name: :vedastore_ballot_measure_selections
+    add_index :vedastore_ballot_selections, :object_id, name: :vedastore_ballot_selection_object_id
     
     #candidate_selection
-    create_table :vssc_ballot_selection_candidate_id_refs do |t|
+    create_table :vedastore_ballot_selection_candidate_id_refs do |t|
       t.integer :ballot_selection_id
       t.string :candidate_id_ref
     end
-    add_index :vssc_ballot_selection_candidate_id_refs, [:ballot_selection_id, :candidate_id_ref], name: :vssc_candidate_selection_candidates
+    add_index :vedastore_ballot_selection_candidate_id_refs, [:ballot_selection_id, :candidate_id_ref], name: :vedastore_candidate_selection_candidates
     
-    create_table :vssc_ballot_selection_endorsement_party_id_refs do |t|
+    create_table :vedastore_ballot_selection_endorsement_party_id_refs do |t|
       t.integer :ballot_selection_id
       t.string :party_id_ref
     end
-    add_index :vssc_ballot_selection_endorsement_party_id_refs, [:ballot_selection_id, :party_id_ref], name: :vssc_candidate_selection_parties
+    add_index :vedastore_ballot_selection_endorsement_party_id_refs, [:ballot_selection_id, :party_id_ref], name: :vedastore_candidate_selection_parties
     
     
     #party_selection
-    create_table :vssc_ballot_selection_party_id_refs do |t|
+    create_table :vedastore_ballot_selection_party_id_refs do |t|
       t.integer :ballot_selection_id
       t.string :party_id_ref
     end
-    add_index :vssc_ballot_selection_party_id_refs, [:ballot_selection_id, :party_id_ref], name: :vssc_party_selection_parties
+    add_index :vedastore_ballot_selection_party_id_refs, [:ballot_selection_id, :party_id_ref], name: :vedastore_party_selection_parties
     
   end  
 end

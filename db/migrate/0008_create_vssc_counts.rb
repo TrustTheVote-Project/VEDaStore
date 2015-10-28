@@ -1,6 +1,6 @@
 class CreateVsscCounts < ActiveRecord::Migration
   def change
-    create_table :vssc_counts do |t|
+    create_table :vedastore_counts do |t|
       t.string :type
 
       t.integer :countable_id
@@ -29,11 +29,11 @@ class CreateVsscCounts < ActiveRecord::Migration
       #vote counts
       t.float :count      
     end
-    add_index :vssc_counts, :type, name: :vssc_counts_type
-    add_index :vssc_counts, [:countable_id, :countable_type], name: :vssc_countable
-    add_index :vssc_counts, :device_id, name: :vssc_counts_device
-    add_index :vssc_counts, :gp_unit_identifier, name: :vssc_counts_gp_unit
-    add_index :vssc_counts, [:summary_countable_id, :summary_countable_type], name: :vssc_counts_summary_countable
+    add_index :vedastore_counts, :type, name: :vedastore_counts_type
+    add_index :vedastore_counts, [:countable_id, :countable_type], name: :vedastore_countable
+    add_index :vedastore_counts, :device_id, name: :vedastore_counts_device
+    add_index :vedastore_counts, :gp_unit_identifier, name: :vedastore_counts_gp_unit
+    add_index :vedastore_counts, [:summary_countable_id, :summary_countable_type], name: :vedastore_counts_summary_countable
     
   end  
 end

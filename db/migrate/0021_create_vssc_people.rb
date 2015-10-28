@@ -1,6 +1,6 @@
 class CreateVsscPeople < ActiveRecord::Migration
   def change
-    create_table :vssc_people do |t|
+    create_table :vedastore_people do |t|
       t.integer :election_report_id
       t.string :first_name
       t.integer :full_name_id
@@ -19,11 +19,11 @@ class CreateVsscPeople < ActiveRecord::Migration
       
       t.timestamps null: false
     end
-    add_index :vssc_people, :election_report_id, name: :vssc_person_election_report
-    add_index :vssc_people, :full_name_id, name: :vssc_person_full_name
-    add_index :vssc_people, :profession_id, name: :vssc_person_profession
-    add_index :vssc_people, :title_id, name: :vssc_perspon_title
-    add_index :vssc_people, :object_id, name: :vssc_person_object_id
+    add_index :vedastore_people, :election_report_id, name: :vedastore_person_election_report
+    add_index :vedastore_people, :full_name_id, name: :vedastore_person_full_name
+    add_index :vedastore_people, :profession_id, name: :vedastore_person_profession
+    add_index :vedastore_people, :title_id, name: :vedastore_perspon_title
+    add_index :vedastore_people, :object_id, name: :vedastore_person_object_id
     
   end  
 end

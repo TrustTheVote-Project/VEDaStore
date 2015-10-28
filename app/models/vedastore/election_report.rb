@@ -48,8 +48,8 @@
 
 require 'csv'
 class Vedastore::ElectionReport < ActiveRecord::Base
-  include Vedaspace::ElectionReport
   include XsdRailsFunctions
+  include Vedaspace::ElectionReport
   
   has_one :external_identifier_collection, :as=>:identifiable
   has_many :gp_units, dependent: :destroy

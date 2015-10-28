@@ -1,6 +1,6 @@
 class CreateVsscHours < ActiveRecord::Migration
   def change
-    create_table :vssc_hours do |t|
+    create_table :vedastore_hours do |t|
       
       t.integer :hourable_id
       t.string :hourable_type
@@ -13,6 +13,6 @@ class CreateVsscHours < ActiveRecord::Migration
       
       t.timestamps null: false
     end
-    add_index :vssc_hours, [:hourable_id, :hourable_type], name: :vssc_hourable
+    add_index :vedastore_hours, [:hourable_id, :hourable_type], name: :vedastore_hourable
   end  
 end
