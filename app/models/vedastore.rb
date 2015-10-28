@@ -1,5 +1,5 @@
 require 'xsd_rails_functions'
-module Vssc
+module Vedastore
   def self.table_name_prefix
     'vssc_'
   end

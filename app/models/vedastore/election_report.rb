@@ -47,7 +47,7 @@
 # </xsd:complexType>
 
 require 'csv'
-class Vssc::ElectionReport < ActiveRecord::Base
+class Vedastore::ElectionReport < ActiveRecord::Base
   include Vedaspace::ElectionReport
   include XsdRailsFunctions
   

@@ -1,2 +1,2 @@
-VsscRails::Engine.routes.draw do
+Vedastore::Engine.routes.draw do
 end
