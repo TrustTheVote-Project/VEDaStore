@@ -1,14 +1,5 @@
-# <xsd:complexType name="BallotMeasureSelection">
-#   <xsd:complexContent>
-#     <xsd:extension base="BallotSelection">
-#       <xsd:sequence>
-#         <xsd:element name="Selection" type="InternationalizedText"/>
-#       </xsd:sequence>
-#     </xsd:extension>
-#   </xsd:complexContent>
-# </xsd:complexType>
-class Vssc::BallotMeasureSelection < Vssc::BallotSelection
+class Vedastore::BallotMeasureSelection < Vedastore::BallotSelection
+  include XsdRailsFunctions
+  include Vedaspace::BallotMeasureSelection
 
-  define_attribute("Selection", type: Vssc::InternationalizedText,  belongs_to: true)
-  
 end

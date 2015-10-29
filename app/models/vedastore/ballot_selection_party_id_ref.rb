@@ -1,10 +1,8 @@
-class Vssc::BallotSelectionPartyIdRef < ActiveRecord::Base
-  include VsscFunctions
+class Vedastore::BallotSelectionPartyIdRef < ActiveRecord::Base
+  include XsdRailsFunctions
+  include Vedaspace::BallotSelectionPartyIdRef
   
   belongs_to :ballot_selection
-  belongs_to :party, primary_key: :object_id, foreign_key: :party_id_ref, class_name: "Vssc::Party"
+  belongs_to :party, primary_key: :object_id, foreign_key: :party_id_ref, class_name: "Vedastore::Party"
   
-  define_text_node(:party_id_ref)
-  
-
 end

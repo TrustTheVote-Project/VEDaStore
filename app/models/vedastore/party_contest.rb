@@ -3,5 +3,8 @@
 #     <xsd:extension base="Contest"/>
 #   </xsd:complexContent>
 # </xsd:complexType>
-class Vssc::PartyContest < Vssc::Contest  
+class Vedastore::PartyContest < Vssc::Contest
+  include XsdRailsFunctions
+  include Vedaspace::PartyContest
+  
 end

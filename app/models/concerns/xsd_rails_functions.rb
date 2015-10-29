@@ -16,7 +16,7 @@ module XsdRailsFunctions
         if element_type.is_a?(Class)
           klass = element_type
         else 
-          klass = element_type.implementing_classes.first
+          klass = element_type.concrete_class_name.constantize
         end
         belongs_to method_name.to_sym, class_name: klass.to_s, foreign_key: "#{method_name}_id".to_sym
       end

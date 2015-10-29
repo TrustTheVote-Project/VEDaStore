@@ -8,14 +8,8 @@
 #         <xsd:attribute name="label" type="xsd:string"/>
 #       </xsd:complexType>
 #     </xsd:element>
-
-class Vssc::Term < ActiveRecord::Base
-  include VsscFunctions
-  
-  define_element("StartDate", type: Date)
-  define_element("EndDate", type: Date)
-  define_element("Type", type: Vssc::Enum::OfficeTermType, method: :office_term_type)
-  
-  define_attribute("label")
-  
+class Vedastore::Term < ActiveRecord::Base
+  include XsdRailsFunctions
+  include Vedaspace::Term
+    
 end

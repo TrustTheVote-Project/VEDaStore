@@ -11,16 +11,11 @@
 #   </xsd:sequence>
 #   <xsd:attribute name="objectId" type="xsd:ID" use="required"/>
 # </xsd:complexType>
-class Vssc::BallotSelection < ActiveRecord::Base
-  include VsscFunctions
+class Vedastore::BallotSelection < ActiveRecord::Base
+  include XsdRailsFunctions
+  include Vedaspace::BallotSelection
   
   belongs_to :contest
-  
-  define_element("SequenceOrder", type: Fixnum)
-  define_element("VoteCountsCollection", type: Vssc::VoteCounts, method: :counts, passthrough: "VoteCounts")
-  has_many :counts, as: :countable, class_name: "Vssc::VoteCounts"
-  
-  define_attribute("objectId", :required=>true)
-  
+  has_many :counts, as: :countable, class_name: "Vedastore::VoteCounts"
   
 end

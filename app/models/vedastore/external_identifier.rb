@@ -14,14 +14,9 @@
 #   <xsd:attribute name="label" type="xsd:string"/>
 # </xsd:complexType>
 class Vssc::ExternalIdentifier < ActiveRecord::Base
-  include VsscFunctions
+  include XsdRailsFunctions
+  include Vedaspace::ExternalIdentifier
   
   belongs_to :external_identifier_collection
-  
-  define_element("Type", type: Vssc::Enum::IdentifierType, method: :identifier_type, required:true)
-  define_element("OtherType")  
-  define_element("Value", required: true)
-
-  define_attribute("label")
   
 end

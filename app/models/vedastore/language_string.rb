@@ -1,21 +1,7 @@
-# <xsd:complexType name="LanguageString">
-#   <xsd:simpleContent>
-#     <xsd:extension base="xsd:string">
-#       <xsd:attribute name="language" type="xsd:language" use="required"/>
-#     </xsd:extension>
-#   </xsd:simpleContent>
-# </xsd:complexType>
-
-class Vssc::LanguageString < ActiveRecord::Base
-  include VsscFunctions
+class Vedastore::LanguageString < ActiveRecord::Base
+  include XsdRailsFunctions
+  include Vedaspace::LanguageString
   
   belongs_to :internationalized_text
-  
-  define_attribute("Language") #type: "xsd:language"
-  # inner text is actual value
-  
-  define_text_node(:text)
-
-  
   
 end
