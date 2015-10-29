@@ -3,7 +3,7 @@
 #     <xsd:extension base="Contest"/>
 #   </xsd:complexContent>
 # </xsd:complexType>
-class Vedastore::PartyContest < Vssc::Contest
+class Vedastore::PartyContest < Vedastore::Contest
   include XsdRailsFunctions
   include Vedaspace::PartyContest
   

@@ -9,7 +9,7 @@
 #     </xsd:extension>
 #   </xsd:complexContent>
 # </xsd:complexType>
-class Vedastore::CandidateSelection < Vssc::BallotSelection
+class Vedastore::CandidateSelection < Vedastore::BallotSelection
   include XsdRailsFunctions
   include Vedaspace::CandidateSelection
   

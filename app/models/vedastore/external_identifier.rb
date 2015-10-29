@@ -13,7 +13,7 @@
 #   </xsd:sequence>
 #   <xsd:attribute name="label" type="xsd:string"/>
 # </xsd:complexType>
-class Vssc::ExternalIdentifier < ActiveRecord::Base
+class Vedastore::ExternalIdentifier < ActiveRecord::Base
   include XsdRailsFunctions
   include Vedaspace::ExternalIdentifier
   

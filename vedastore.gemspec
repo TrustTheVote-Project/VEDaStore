@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Alex Mekelburg"]
   s.email       = ["alex.mekelburg@gmail.com"]
   s.homepage    = "https://github.com/trustthevote-project/VEDaStore"
-  s.summary     = "Parser and DB structure for VSSC election data schema"
-  s.description = "Parses Nist Err election data schema and saves to the DB. Exports from the DB into valid VSSC format."
+  s.summary     = "Parser and DB structure for NIST ERR election data schema"
+  s.description = "Parses Nist Err election data schema and saves to the DB. Exports from the DB into valid NIST ERR format."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]

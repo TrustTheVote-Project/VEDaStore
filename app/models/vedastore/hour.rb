@@ -1,6 +1,6 @@
-class Vedastore::Hours < ActiveRecord::Base
+class Vedastore::Hour < ActiveRecord::Base
   include XsdRailsFunctions
-  include Vedaspace::Hours
+  include Vedaspace::Hour
 
   belongs_to :hourable, polymorphic: true
   

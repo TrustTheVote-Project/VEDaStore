@@ -2,8 +2,8 @@ module XsdRailsFunctions
   extend ActiveSupport::Concern
   
   included do
-    before_save :vssc_before_save_callback
-    after_save  :vssc_after_save_callback
+    before_save :vedastore_before_save_callback
+    after_save  :vedastore_after_save_callback
     
   end
   
@@ -23,11 +23,11 @@ module XsdRailsFunctions
     end
   end
   
-  def vssc_before_save_callback
+  def vedastore_before_save_callback
     #puts "Saving: #{self.class}"
   end
   
-  def vssc_after_save_callback
+  def vedastore_after_save_callback
     #puts "Saved! #{self.class}"
   end
   

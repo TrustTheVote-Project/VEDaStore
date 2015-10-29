@@ -1,4 +1,4 @@
-class Vedastore::Coalition < Vssc::Party
+class Vedastore::Coalition < Vedastore::Party
   include XsdRailsFunctions
   include Vedaspace::Coalition
   

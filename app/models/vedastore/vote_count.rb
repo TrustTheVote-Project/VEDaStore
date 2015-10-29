@@ -1,4 +1,4 @@
-class Vssc::VoteCount < Vssc::Count
+class Vedastore::VoteCount < Vedastore::Count
   include XsdRailsFunctions
   include Vedaspace::VoteCounts
   
