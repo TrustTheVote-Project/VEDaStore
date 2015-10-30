@@ -7,7 +7,7 @@ Set up a rails app
 
 Add this to your Gemfile
 
-    gem "VEDaStore", "0.0.1", :git=>"https://github.com/TrustTheVote-Project/VEDaStore", require: 'vedastore'
+    gem "VEDaStore", "1.1.0", :git=>"https://github.com/TrustTheVote-Project/VEDaStore", require: 'vedastore', branch: 'extract-vedaspace'
   
   
 Install the gems, install the db migrations and migrate
