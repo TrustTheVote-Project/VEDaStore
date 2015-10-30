@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    VEDaStore (1.1.0)
+    vedastore (1.1.1)
       nokogiri (~> 1.6.0)
       rails (~> 4.2.1)
       vedaspace (~> 1.1.0)
@@ -136,8 +136,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  VEDaStore!
   byebug
   equivalent-xml (~> 0.6.0)!
   mysql2
   rspec-rails (~> 3.0)
+  vedastore!
