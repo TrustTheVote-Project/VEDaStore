@@ -5,7 +5,7 @@ require "vedastore/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "VEDaStore"
+  s.name        = "vedastore"
   s.version     = Vedastore::VERSION
   s.authors     = ["Alex Mekelburg"]
   s.email       = ["alex.mekelburg@gmail.com"]
