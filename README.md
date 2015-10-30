@@ -13,7 +13,7 @@ Add this to your Gemfile
 Install the gems, install the db migrations and migrate
 
     $ bundle install
-    $ rake vedatore:install:migrations
+    $ rake vedastore:install:migrations
     $ rake db:migrate
   
 
