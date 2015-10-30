@@ -65,7 +65,7 @@ RSpec.describe Vedastore::ElectionReport, type: :model do
         doc = Nokogiri::XML(f)
       end
       File.open(xml_file) do |f|
-        e = Vedastore::ElectionReport.parse_vssc_file(f)
+        e = Vedastore::ElectionReport.parse_ved_file(f)
         e.save!
       end
       

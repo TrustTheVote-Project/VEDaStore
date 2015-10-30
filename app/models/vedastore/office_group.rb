@@ -1,6 +1,6 @@
 class Vedastore::OfficeGroup < ActiveRecord::Base
   include XsdRailsFunctions
-  include Vedastore::OfficeGroup
+  include Vedaspace::OfficeGroup
   
   has_many :office_group_office_id_refs
   has_many :offices, through: :office_group_office_id_refs

@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 4.2.1"
   s.add_dependency "nokogiri", "~> 1.6.0"
-  s.add_dependency "vedaspace", "~> 1.0.0"
+  s.add_dependency "vedaspace", "~> 1.1.0"
 
   s.add_development_dependency "mysql2"
   s.add_development_dependency 'byebug'

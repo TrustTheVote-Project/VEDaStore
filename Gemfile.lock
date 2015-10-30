@@ -8,10 +8,10 @@ GIT
 PATH
   remote: .
   specs:
-    VEDaStore (1.0.5)
+    VEDaStore (1.1.0)
       nokogiri (~> 1.6.0)
       rails (~> 4.2.1)
-      vedaspace (~> 1.0.0)
+      vedaspace (~> 1.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -127,7 +127,7 @@ GEM
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    vedaspace (1.0.0)
+    vedaspace (1.1.0)
       activemodel (~> 4)
       activesupport (~> 4)
       nokogiri (~> 1.6)

@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :vssc_rails do
+# task :vedastore do
 #   # Task goes here
 # end

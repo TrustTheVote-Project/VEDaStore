@@ -16,6 +16,6 @@ class Vedastore::BallotSelection < ActiveRecord::Base
   include Vedaspace::BallotSelection
   
   belongs_to :contest
-  has_many :counts, as: :countable, class_name: "Vedastore::VoteCounts"
+  has_many :counts, as: :countable, class_name: "Vedastore::VoteCount"
   
 end

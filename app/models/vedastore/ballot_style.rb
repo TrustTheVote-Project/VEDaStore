@@ -1,6 +1,6 @@
 class Vedastore::BallotStyle < ActiveRecord::Base
   include XsdRailsFunctions
-  include Vedaspace::Election
+  include Vedaspace::BallotStyle
   
   belongs_to :election
   has_one :external_identifier_collection, :as=>:identifiable
