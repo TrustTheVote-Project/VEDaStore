@@ -1,4 +1,4 @@
-class CreateVsscOrderedContests < ActiveRecord::Migration
+class CreateVedastoreOrderedContests < ActiveRecord::Migration
   def change
     create_table :vedastore_ordered_contests do |t|
       t.integer  :ballot_style_id

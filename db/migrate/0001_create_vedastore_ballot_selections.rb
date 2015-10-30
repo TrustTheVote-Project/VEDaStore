@@ -1,4 +1,4 @@
-class CreateVsscBallotSelections < ActiveRecord::Migration
+class CreateVedastoreBallotSelections < ActiveRecord::Migration
   def change
     create_table :vedastore_ballot_selections do |t|
       t.integer :contest_id

@@ -1,4 +1,4 @@
-class CreateVsscHours < ActiveRecord::Migration
+class CreateVedastoreHours < ActiveRecord::Migration
   def change
     create_table :vedastore_hours do |t|
       

@@ -1,4 +1,4 @@
-class CreateVsscOffices < ActiveRecord::Migration
+class CreateVedastoreOffices < ActiveRecord::Migration
   def change
     create_table :vedastore_offices do |t|
       t.integer :office_group_id

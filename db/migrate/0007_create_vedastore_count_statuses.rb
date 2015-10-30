@@ -1,4 +1,4 @@
-class CreateVsscCountStatuses < ActiveRecord::Migration
+class CreateVedastoreCountStatuses < ActiveRecord::Migration
   def change
     create_table :vedastore_count_statuses do |t|
       t.integer :count_statusable_id

@@ -1,4 +1,4 @@
-class CreateVsscGpUnits < ActiveRecord::Migration
+class CreateVedastoreGpUnits < ActiveRecord::Migration
   def change
     create_table :vedastore_gp_units do |t|
       t.string :type

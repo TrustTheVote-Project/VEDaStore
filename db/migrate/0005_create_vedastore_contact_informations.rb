@@ -1,4 +1,4 @@
-class CreateVsscContactInformations < ActiveRecord::Migration
+class CreateVedastoreContactInformations < ActiveRecord::Migration
   def change
     create_table :vedastore_contact_informations do |t|
       t.integer :contactable_id

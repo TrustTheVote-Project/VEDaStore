@@ -1,4 +1,4 @@
-class CreateVsscCounts < ActiveRecord::Migration
+class CreateVedastoreCounts < ActiveRecord::Migration
   def change
     create_table :vedastore_counts do |t|
       t.string :type

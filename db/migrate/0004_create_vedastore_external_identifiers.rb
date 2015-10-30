@@ -1,4 +1,4 @@
-class CreateVsscExternalIdentifiers < ActiveRecord::Migration
+class CreateVedastoreExternalIdentifiers < ActiveRecord::Migration
   def change
     create_table :vedastore_external_identifier_collections do |t|
       t.string :identifiable_type

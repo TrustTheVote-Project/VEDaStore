@@ -1,4 +1,4 @@
-class CreateVsscInternationalizedTexts < ActiveRecord::Migration
+class CreateVedastoreInternationalizedTexts < ActiveRecord::Migration
   def change
     create_table :vedastore_internationalized_texts do |t|
       t.string :label

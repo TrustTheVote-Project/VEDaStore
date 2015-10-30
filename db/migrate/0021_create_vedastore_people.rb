@@ -1,4 +1,4 @@
-class CreateVsscPeople < ActiveRecord::Migration
+class CreateVedastorePeople < ActiveRecord::Migration
   def change
     create_table :vedastore_people do |t|
       t.integer :election_report_id

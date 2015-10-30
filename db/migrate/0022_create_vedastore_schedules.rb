@@ -1,4 +1,4 @@
-class CreateVsscSchedules < ActiveRecord::Migration
+class CreateVedastoreSchedules < ActiveRecord::Migration
   def change
     create_table :vedastore_schedules do |t|
       t.integer :schedulable_id

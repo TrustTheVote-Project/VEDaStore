@@ -1,4 +1,4 @@
-class CreateVsscParties < ActiveRecord::Migration
+class CreateVedastoreParties < ActiveRecord::Migration
   def change
     create_table :vedastore_parties do |t|
       t.integer :election_report_id

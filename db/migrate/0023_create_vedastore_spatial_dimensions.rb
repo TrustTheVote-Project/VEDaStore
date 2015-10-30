@@ -1,4 +1,4 @@
-class CreateVsscSpatialDimensions < ActiveRecord::Migration
+class CreateVedastoreSpatialDimensions < ActiveRecord::Migration
   def change
     create_table :vedastore_spatial_dimensions do |t|
       t.integer :spatial_extent_id

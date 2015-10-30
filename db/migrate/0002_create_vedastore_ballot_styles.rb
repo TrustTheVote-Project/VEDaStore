@@ -1,4 +1,4 @@
-class CreateVsscBallotStyles < ActiveRecord::Migration
+class CreateVedastoreBallotStyles < ActiveRecord::Migration
   def change
     create_table :vedastore_ballot_styles do |t|
       t.integer :election_id

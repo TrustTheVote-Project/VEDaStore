@@ -1,4 +1,4 @@
-class CreateVsscPartyRegistrations < ActiveRecord::Migration
+class CreateVedastorePartyRegistrations < ActiveRecord::Migration
   def change
     create_table :vedastore_party_registrations do |t|
       t.string :type

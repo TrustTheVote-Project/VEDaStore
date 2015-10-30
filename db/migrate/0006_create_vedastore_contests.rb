@@ -1,4 +1,4 @@
-class CreateVsscContests < ActiveRecord::Migration
+class CreateVedastoreContests < ActiveRecord::Migration
   def change
     create_table :vedastore_contests do |t|
       t.string :type

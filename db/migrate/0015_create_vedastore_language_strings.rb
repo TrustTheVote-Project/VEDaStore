@@ -1,5 +1,5 @@
 # define_attribute("Language") #type: "xsd:language"
-class CreateVsscLanguageStrings < ActiveRecord::Migration
+class CreateVedastoreLanguageStrings < ActiveRecord::Migration
   def change
     create_table :vedastore_language_strings do |t|
       t.integer :internationalized_text_id
