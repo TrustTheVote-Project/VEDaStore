@@ -61,3 +61,8 @@ or
       <AuthorityId>AuthorityObjectIDRefTwo</AuthorityId>
     </ReportingUnit>
   
+  
+# Background
+
+This rails engine uses the VEDaSpace gem (https://github.com/TrustTheVote-Project/VEDaSpace) to parse NIST ERR formatted election data. 
+http://www.nist.gov/itl/vote/ieee-swg-p1622.cfm
