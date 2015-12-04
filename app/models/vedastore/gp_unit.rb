@@ -1,6 +1,5 @@
 class Vedastore::GpUnit < ActiveRecord::Base
   include XsdRailsFunctions
-  include Vedaspace::GpUnit
   
   belongs_to :election_report
     
@@ -10,5 +9,6 @@ class Vedastore::GpUnit < ActiveRecord::Base
   has_one :external_identifier_collection, :as=>:identifiable
   
   has_many :summary_counts, as: :summary_countable, class_name: "Vedastore::SummaryCount"
+  include Vedaspace::GpUnit
   
 end

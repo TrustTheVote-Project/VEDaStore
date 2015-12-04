@@ -1,6 +1,5 @@
 class Vedastore::Office < ActiveRecord::Base
   include XsdRailsFunctions
-  include Vedaspace::Office
   
   belongs_to :office_group
   belongs_to :election_report
@@ -9,5 +8,6 @@ class Vedastore::Office < ActiveRecord::Base
   
   has_many :office_office_holder_id_refs
   has_many :office_holders, through: :office_office_holder_id_refs
+  include Vedaspace::Office
     
 end

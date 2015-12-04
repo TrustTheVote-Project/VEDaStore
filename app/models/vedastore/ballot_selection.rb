@@ -13,9 +13,9 @@
 # </xsd:complexType>
 class Vedastore::BallotSelection < ActiveRecord::Base
   include XsdRailsFunctions
-  include Vedaspace::BallotSelection
   
   belongs_to :contest
   has_many :counts, as: :countable, class_name: "Vedastore::VoteCount"
+  include Vedaspace::BallotSelection
   
 end

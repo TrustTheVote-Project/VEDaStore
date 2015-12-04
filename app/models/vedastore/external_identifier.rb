@@ -15,8 +15,8 @@
 # </xsd:complexType>
 class Vedastore::ExternalIdentifier < ActiveRecord::Base
   include XsdRailsFunctions
-  include Vedaspace::ExternalIdentifier
   
   belongs_to :external_identifier_collection
+  include Vedaspace::ExternalIdentifier
   
 end

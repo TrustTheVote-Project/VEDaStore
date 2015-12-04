@@ -1,6 +1,5 @@
 class Vedastore::ContactInformation < ActiveRecord::Base
   include XsdRailsFunctions
-  include Vedaspace::ContactInformation
   
   belongs_to :contactable, polymorphic: true
 
@@ -14,6 +13,8 @@ class Vedastore::ContactInformation < ActiveRecord::Base
 
   has_many :schedules, as: :schedulable
   
+  include Vedaspace::ContactInformation
+
   serialize :uri, Array
     
 end

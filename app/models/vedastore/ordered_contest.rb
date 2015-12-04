@@ -7,11 +7,11 @@
 
 class Vedastore::OrderedContest < ActiveRecord::Base
   include XsdRailsFunctions
-  include Vedaspace::OrderedContest
   
   belongs_to :ballot_style
   
   has_many :ordered_contest_ballot_selection_id_refs
   has_many :ballot_selections, through: :ordered_contest_ballot_selection_id_refs
+  include Vedaspace::OrderedContest
   
 end
