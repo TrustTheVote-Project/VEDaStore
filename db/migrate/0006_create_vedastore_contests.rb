@@ -23,6 +23,7 @@ class CreateVedastoreContests < ActiveRecord::Migration
       t.timestamps null: false
       
       #ballot_measure_contest
+      t.string  :info_uri
       t.integer :con_statement_id
       t.integer :effect_of_abstain_id
       t.integer :full_text_id
