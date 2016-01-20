@@ -1,3 +1,3 @@
 module Vedastore
-  VERSION = "1.1.2.8"
+  VERSION = "1.1.3.0"
 end
