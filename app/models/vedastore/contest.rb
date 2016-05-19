@@ -9,7 +9,7 @@ class Vedastore::Contest < ActiveRecord::Base
 
   has_one :external_identifier_collection, :as=>:identifiable
   
-  has_many :summary_counts, as: :summary_countable, class_name: "Vedastore::SummaryCount"
+  has_many :summary_counts, as: :countable, class_name: "Vedastore::SummaryCount"
   include Vedaspace::Contest
   
 end
