@@ -13,6 +13,7 @@ class CreateVedastoreOrderedContests < ActiveRecord::Migration
       t.integer :ordered_contest_id
       t.string :ballot_selection_id_ref
     end
+    add_index :vedastore_ordered_contest_ballot_selection_id_refs, :ordered_contest_id, name: :vedastore_ordered_contest_ballot_selection_id
     add_index :vedastore_ordered_contest_ballot_selection_id_refs, [:ordered_contest_id, :ballot_selection_id_ref], name: :vedastore_ordered_contest_ballot_selection_ref
     
   end  

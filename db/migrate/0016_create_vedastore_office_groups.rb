@@ -15,6 +15,7 @@ class CreateVedastoreOfficeGroups < ActiveRecord::Migration
       t.integer :office_id
       t.string :office_id_ref
     end
+    add_index :vedastore_office_group_office_ids, :office_id, name: :vedastore_office_group_office_id
     add_index :vedastore_office_group_office_ids, [:office_id, :office_id_ref], name: :vedastore_office_group_office_refs
     
   end  

@@ -25,12 +25,14 @@ class CreateVedastoreParties < ActiveRecord::Migration
       t.integer :party_id
       t.string :party_id_ref
     end
+    add_index :vedastore_party_party_id_refs, :party_id, name: :vedastore_party_party_id
     add_index :vedastore_party_party_id_refs, [:party_id, :party_id_ref], name: :vedastore_party_party_id_ref
 
     create_table :vedastore_party_contest_id_refs do |t|
       t.integer :party_id
       t.string :contest_id_ref
     end
+    add_index :vedastore_party_contest_id_refs, :party_id, name: :vedastore_party_contest_id
     add_index :vedastore_party_contest_id_refs, [:party_id, :contest_id_ref], name: :vedastore_party_contest_id_ref
     
 

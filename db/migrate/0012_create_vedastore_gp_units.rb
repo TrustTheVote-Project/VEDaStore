@@ -44,6 +44,7 @@ class CreateVedastoreGpUnits < ActiveRecord::Migration
       t.integer :gp_unit_id
       t.string :composing_gp_unit_id_ref
     end
+    add_index :vedastore_gp_unit_composing_gp_unit_id_refs, :gp_unit_id, name: :vedastore_gp_unit_composing_units_gp_unit_id
     add_index :vedastore_gp_unit_composing_gp_unit_id_refs, [:gp_unit_id, :composing_gp_unit_id_ref], name: :vedastore_gp_unit_composing_units
     
     #reporting_unit
@@ -51,6 +52,7 @@ class CreateVedastoreGpUnits < ActiveRecord::Migration
       t.integer :gp_unit_id
       t.string :authority_id_ref
     end
+    add_index :vedastore_gp_unit_authority_id_refs, :gp_unit_id, name: :vedastore_gp_unit_authorities_gp_unit_id
     add_index :vedastore_gp_unit_authority_id_refs, [:gp_unit_id, :authority_id_ref], name: :vedastore_gp_unit_authorities
     
     

@@ -68,6 +68,7 @@ class CreateVedastoreContests < ActiveRecord::Migration
       t.integer :contest_id
       t.string :office_id_ref
     end
+    add_index :vedastore_contest_office_id_refs, :contest_id, name: :vedastore_contest_office_contest_id
     add_index :vedastore_contest_office_id_refs, [:contest_id, :office_id_ref], name: :vedastore_contest_offices
     
   end  

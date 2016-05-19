@@ -30,6 +30,7 @@ class CreateVedastoreOffices < ActiveRecord::Migration
       t.integer :office_id
       t.string :office_holder_id_ref
     end
+    add_index :vedastore_office_office_holder_id_refs, :office_id, name: :vedastore_office_office_holder_id
     add_index :vedastore_office_office_holder_id_refs, [:office_id, :office_holder_id_ref], name: :vedastore_office_office_holder_ref
     
   end  
